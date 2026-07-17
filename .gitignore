@@ -1,9 +1,12 @@
+.pytest_tmp/
+**/.pytest_tmp/
 .pytest_cache/
+**/.pytest_cache/
 .ruff_cache/
 .venv/
 __pycache__/
 *.pyc
 .env
-artifacts/*.json
+artifacts/memory_mri.db
 artifacts/openai_cache/
 backend/.mypy_cache/

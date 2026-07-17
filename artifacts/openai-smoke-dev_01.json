@@ -1,0 +1,119 @@
+{
+  "trace_id": "trace_d3cce46878d640a7a1c63d35d1521982",
+  "scenario_id": "dev_01",
+  "run_id": "run_b7dd650e6c7a49e9a5d1db46bd02ef56",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "retrieved_memory_ids": [
+    "dev_01_mem_1",
+    "dev_01_mem_2",
+    "dev_01_mem_3"
+  ],
+  "memory_snapshot": [
+    {
+      "id": "dev_01_mem_1",
+      "entity_id": "release_2026_07_17",
+      "domain": "devops",
+      "content": "Temporary note from earlier this week: release may deploy only to staging.",
+      "source": "incident_channel_export",
+      "created_at": "2026-07-12T00:00:00Z",
+      "valid_from": "2026-07-12T00:00:00Z",
+      "valid_until": "2026-07-14T00:00:00Z",
+      "status": "stale",
+      "supersedes": [],
+      "confidence": 0.73,
+      "retrieval_priority": 99,
+      "tags": [
+        "freeze"
+      ],
+      "operational_metadata": {
+        "memory_role": "temporary",
+        "entity_match": true,
+        "temporal_scope": "outdated"
+      },
+      "benchmark_metadata": {
+        "fake_action_bias": "DEPLOY_STAGING",
+        "supports_action": "DEPLOY_STAGING",
+        "should_ignore": true
+      }
+    },
+    {
+      "id": "dev_01_mem_2",
+      "entity_id": "change_2026_07_17",
+      "domain": "devops",
+      "content": "Change approval updated: production deployment cleared after successful staging smoke tests.",
+      "source": "change_management",
+      "created_at": "2026-07-16T18:00:00Z",
+      "valid_from": "2026-07-16T18:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "supersedes": [
+        "dev_01_mem_1"
+      ],
+      "confidence": 0.99,
+      "retrieval_priority": 88,
+      "tags": [
+        "approval"
+      ],
+      "operational_metadata": {
+        "memory_role": "approval",
+        "entity_match": true,
+        "temporal_scope": "current"
+      },
+      "benchmark_metadata": {
+        "fake_action_bias": "DEPLOY_PRODUCTION",
+        "supports_action": "DEPLOY_PRODUCTION"
+      }
+    },
+    {
+      "id": "dev_01_mem_3",
+      "entity_id": "release_2026_07_17",
+      "domain": "devops",
+      "content": "Staging smoke test suite completed successfully with no Sev1 regressions.",
+      "source": "ci_pipeline",
+      "created_at": "2026-07-16T19:00:00Z",
+      "valid_from": "2026-07-16T19:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "supersedes": [],
+      "confidence": 0.98,
+      "retrieval_priority": 84,
+      "tags": [
+        "verification"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      },
+      "benchmark_metadata": {}
+    }
+  ],
+  "selected_action": "DEPLOY_PRODUCTION",
+  "action_arguments": {
+    "release": "2026.07.17",
+    "environment": "production"
+  },
+  "tool_call": {
+    "response_id": "resp_0a3a9a7b205513c9006a59e39e2ce0819abf6d6954af6cd8ea",
+    "cited_memory_ids": [
+      "dev_01_mem_2",
+      "dev_01_mem_3"
+    ],
+    "needs_human_review": false
+  },
+  "evaluator_result": {
+    "expected_action": "DEPLOY_PRODUCTION",
+    "selected_action": "DEPLOY_PRODUCTION",
+    "passed": true,
+    "reason": "selected action matched expected action"
+  },
+  "passed": true,
+  "latency_ms": 4803,
+  "token_usage": {
+    "input_tokens": 1035,
+    "output_tokens": 109,
+    "total_tokens": 1144
+  },
+  "created_at": "2026-07-17T08:11:14.128913Z"
+}

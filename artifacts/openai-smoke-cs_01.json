@@ -1,0 +1,121 @@
+{
+  "trace_id": "trace_dbe74eb89e6b432dae8248297243fe5f",
+  "scenario_id": "cs_01",
+  "run_id": "run_5d38b35d7a2c42d2915789c88f544eb6",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "retrieved_memory_ids": [
+    "cs_01_mem_1",
+    "cs_01_mem_2",
+    "cs_01_mem_3"
+  ],
+  "memory_snapshot": [
+    {
+      "id": "cs_01_mem_1",
+      "entity_id": "customer_8821",
+      "domain": "customer_support",
+      "content": "Old 2024 pilot note said duplicate-charge refunds required manager approval.",
+      "source": "legacy_policy_sync",
+      "created_at": "2024-02-01T00:00:00Z",
+      "valid_from": "2024-02-01T00:00:00Z",
+      "valid_until": "2024-12-31T00:00:00Z",
+      "status": "stale",
+      "supersedes": [],
+      "confidence": 0.81,
+      "retrieval_priority": 99,
+      "tags": [
+        "refund",
+        "duplicate-charge",
+        "legacy"
+      ],
+      "operational_metadata": {
+        "memory_role": "legacy_policy",
+        "entity_match": true,
+        "temporal_scope": "outdated"
+      },
+      "benchmark_metadata": {
+        "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
+        "supports_action": "REQUEST_MANAGER_APPROVAL",
+        "should_ignore": true
+      }
+    },
+    {
+      "id": "cs_01_mem_2",
+      "entity_id": "customer_8821",
+      "domain": "customer_support",
+      "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+      "source": "policy_portal",
+      "created_at": "2026-01-15T00:00:00Z",
+      "valid_from": "2026-01-15T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "supersedes": [
+        "cs_01_mem_1"
+      ],
+      "confidence": 0.97,
+      "retrieval_priority": 80,
+      "tags": [
+        "refund",
+        "current-policy"
+      ],
+      "operational_metadata": {
+        "memory_role": "policy",
+        "entity_match": true,
+        "temporal_scope": "current"
+      },
+      "benchmark_metadata": {
+        "fake_action_bias": "ISSUE_REFUND",
+        "supports_action": "ISSUE_REFUND"
+      }
+    },
+    {
+      "id": "cs_01_mem_3",
+      "entity_id": "order_8821",
+      "domain": "customer_support",
+      "content": "Billing ledger shows two settled charges within one minute for the same order.",
+      "source": "billing_ledger",
+      "created_at": "2026-07-01T09:00:00Z",
+      "valid_from": "2026-07-01T09:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "supersedes": [],
+      "confidence": 0.99,
+      "retrieval_priority": 70,
+      "tags": [
+        "evidence"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      },
+      "benchmark_metadata": {}
+    }
+  ],
+  "selected_action": "ASK_FOR_INFORMATION",
+  "action_arguments": {
+    "requested_information": "Please provide or confirm the duplicate charge amount so eligibility under the $500 direct-refund limit can be verified."
+  },
+  "tool_call": {
+    "response_id": "resp_0673b70695c3ebfc006a59e3832124819bbbb59604a5a4dda4",
+    "cited_memory_ids": [
+      "cs_01_mem_2",
+      "cs_01_mem_3"
+    ],
+    "needs_human_review": false
+  },
+  "evaluator_result": {
+    "expected_action": "ISSUE_REFUND",
+    "selected_action": "ASK_FOR_INFORMATION",
+    "passed": false,
+    "reason": "selected action differed"
+  },
+  "passed": false,
+  "latency_ms": 6081,
+  "token_usage": {
+    "input_tokens": 1020,
+    "output_tokens": 187,
+    "total_tokens": 1207
+  },
+  "created_at": "2026-07-17T08:10:48.332788Z"
+}

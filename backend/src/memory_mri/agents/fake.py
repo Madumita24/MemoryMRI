@@ -6,7 +6,16 @@ from datetime import UTC, datetime, timezone
 
 from memory_mri.agents.base import AgentRunner
 from memory_mri.evaluation import evaluate_action
-from memory_mri.schemas import AgentScenario, ExecutionTrace, Memory, new_run_id, new_trace_id
+from memory_mri.schemas import (
+    AgentScenario,
+    ExecutionTrace,
+    Memory,
+    StructuredAgentResponse,
+    TraceCacheStatus,
+    TraceEvaluation,
+    new_run_id,
+    new_trace_id,
+)
 
 
 @dataclass(frozen=True)
@@ -40,24 +49,51 @@ class FakeAgentRunner(AgentRunner):
         assessments = self._assess_memories(scenario, retrieved)
         selected_action = self._choose_action(scenario, assessments)
         evaluator_result = evaluate_action(scenario, selected_action)
+        action_arguments = {
+            "heuristic_version": self.prompt_version,
+            "top_memory_ids": ",".join(assessment.memory.id for assessment in assessments[:3]),
+        }
+        memory_snapshot = [memory.to_agent_input() for memory in retrieved]
+        agent_input = scenario.to_agent_input(retrieved)
         return ExecutionTrace(
             trace_id=new_trace_id(),
             scenario_id=scenario.id,
             run_id=new_run_id(),
+            domain=scenario.domain,
+            user_input=scenario.user_input,
+            agent_input=agent_input,
+            requested_model=self.model_name,
+            response_model=self.model_name,
             model=self.model_name,
             prompt_version=self.prompt_version,
             retrieved_memory_ids=[memory.id for memory in retrieved],
-            memory_snapshot=retrieved,
+            memory_snapshot=memory_snapshot,
+            structured_response=StructuredAgentResponse(
+                selected_action=selected_action,
+                action_arguments=action_arguments,
+                cited_memory_ids=[assessment.memory.id for assessment in assessments[:3]],
+                concise_rationale="Deterministic heuristic selected the highest-scoring action.",
+                uncertainty=0.0 if evaluator_result.passed else 0.35,
+                needs_human_review=False,
+            ),
             selected_action=selected_action,
-            action_arguments={
-                "heuristic_version": self.prompt_version,
-                "top_memory_ids": [assessment.memory.id for assessment in assessments[:3]],
-            },
+            action_arguments=action_arguments,
+            cited_memory_ids=[assessment.memory.id for assessment in assessments[:3]],
+            concise_rationale="Deterministic heuristic selected the highest-scoring action.",
+            uncertainty=0.0 if evaluator_result.passed else 0.35,
+            needs_human_review=False,
             tool_call=None,
-            evaluator_result=evaluator_result,
+            evaluation=TraceEvaluation(evaluator_result=evaluator_result),
             passed=evaluator_result.passed,
+            execution_source="deterministic",
+            cache_lookup_latency_ms=None,
+            original_model_latency_ms=None,
             latency_ms=1,
             token_usage={"input_tokens": 0, "output_tokens": 0, "total_tokens": 0},
+            request_token_usage={"input_tokens": 0, "output_tokens": 0, "total_tokens": 0},
+            cached_original_token_usage=None,
+            billable_api_call=False,
+            cache=TraceCacheStatus(enabled=False, hit=False),
             created_at=datetime.now(timezone.utc),
         )
 

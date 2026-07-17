@@ -1,0 +1,116 @@
+{
+  "trace_id": "trace_9a497e2d25524ec5bfbb3b98384c6a3a",
+  "scenario_id": "exp_01",
+  "run_id": "run_f672fd0fadf04d25afc2fa9ef5a28e96",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "retrieved_memory_ids": [
+    "exp_01_mem_1",
+    "exp_01_mem_2",
+    "exp_01_mem_3"
+  ],
+  "memory_snapshot": [
+    {
+      "id": "exp_01_mem_1",
+      "entity_id": "policy_travel",
+      "domain": "workplace_expense",
+      "content": "Old hotel cap is $180 per night for client travel.",
+      "source": "legacy_policy_pdf",
+      "created_at": "2025-01-01T00:00:00Z",
+      "valid_from": "2025-01-01T00:00:00Z",
+      "valid_until": "2025-12-31T00:00:00Z",
+      "status": "stale",
+      "supersedes": [],
+      "confidence": 0.79,
+      "retrieval_priority": 99,
+      "tags": [
+        "travel-cap"
+      ],
+      "operational_metadata": {
+        "memory_role": "legacy_policy",
+        "entity_match": true,
+        "temporal_scope": "outdated"
+      },
+      "benchmark_metadata": {
+        "fake_action_bias": "ESCALATE_MANAGER",
+        "supports_action": "ESCALATE_MANAGER",
+        "should_ignore": true
+      }
+    },
+    {
+      "id": "exp_01_mem_2",
+      "entity_id": "policy_travel",
+      "domain": "workplace_expense",
+      "content": "Current client-travel hotel cap is $250 per night with receipt.",
+      "source": "policy_portal",
+      "created_at": "2026-01-01T00:00:00Z",
+      "valid_from": "2026-01-01T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "supersedes": [
+        "exp_01_mem_1"
+      ],
+      "confidence": 0.98,
+      "retrieval_priority": 90,
+      "tags": [
+        "policy"
+      ],
+      "operational_metadata": {
+        "memory_role": "policy",
+        "entity_match": true,
+        "temporal_scope": "current"
+      },
+      "benchmark_metadata": {
+        "fake_action_bias": "AUTO_APPROVE",
+        "supports_action": "AUTO_APPROVE"
+      }
+    },
+    {
+      "id": "exp_01_mem_3",
+      "entity_id": "report_01",
+      "domain": "workplace_expense",
+      "content": "Receipt shows $220 per night for a three-night client onsite stay.",
+      "source": "expense_system",
+      "created_at": "2026-07-10T00:00:00Z",
+      "valid_from": "2026-07-10T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "supersedes": [],
+      "confidence": 0.99,
+      "retrieval_priority": 86,
+      "tags": [
+        "receipt"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      },
+      "benchmark_metadata": {}
+    }
+  ],
+  "selected_action": "AUTO_APPROVE",
+  "action_arguments": {},
+  "tool_call": {
+    "response_id": "resp_09e5065d310d307b006a59e39ccdb481988620780da51b83b9",
+    "cited_memory_ids": [
+      "exp_01_mem_2",
+      "exp_01_mem_3"
+    ],
+    "needs_human_review": false
+  },
+  "evaluator_result": {
+    "expected_action": "AUTO_APPROVE",
+    "selected_action": "AUTO_APPROVE",
+    "passed": true,
+    "reason": "selected action matched expected action"
+  },
+  "passed": true,
+  "latency_ms": 3650,
+  "token_usage": {
+    "input_tokens": 1022,
+    "output_tokens": 88,
+    "total_tokens": 1110
+  },
+  "created_at": "2026-07-17T08:11:11.438654Z"
+}

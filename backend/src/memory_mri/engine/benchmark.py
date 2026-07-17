@@ -28,6 +28,10 @@ class BenchmarkService:
         results: list[ScenarioResult] = []
         for case in cases:
             trace = self.runner.run_scenario(case.scenario, case.memories)
+            if trace.selected_action is None or trace.passed is None:
+                raise ValueError(
+                    f"benchmark trace for scenario {case.scenario.id} is missing evaluation output"
+                )
             self.repository.save_trace(trace)
             results.append(
                 ScenarioResult(

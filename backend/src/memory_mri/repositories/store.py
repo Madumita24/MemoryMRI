@@ -64,8 +64,35 @@ class BenchmarkRepository:
             )
         )
 
-    def list_traces(self) -> list[TraceRecord]:
-        return list(self.session.query(TraceRecord).all())
+    def get_trace(self, trace_id: str) -> ExecutionTrace | None:
+        record = self.session.get(TraceRecord, trace_id)
+        if record is None:
+            return None
+        return ExecutionTrace.model_validate_json(record.payload_json)
+
+    def list_traces(self) -> list[ExecutionTrace]:
+        return [
+            ExecutionTrace.model_validate_json(record.payload_json)
+            for record in self.session.query(TraceRecord).order_by(TraceRecord.created_at).all()
+        ]
+
+    def list_traces_for_scenario(self, scenario_id: str) -> list[ExecutionTrace]:
+        return [
+            ExecutionTrace.model_validate_json(record.payload_json)
+            for record in self.session.query(TraceRecord)
+            .filter(TraceRecord.scenario_id == scenario_id)
+            .order_by(TraceRecord.created_at)
+            .all()
+        ]
+
+    def list_failed_traces(self) -> list[ExecutionTrace]:
+        return [
+            ExecutionTrace.model_validate_json(record.payload_json)
+            for record in self.session.query(TraceRecord)
+            .filter(TraceRecord.passed.is_(False))
+            .order_by(TraceRecord.created_at)
+            .all()
+        ]
 
     def list_tables(self) -> dict[str, int]:
         return {

@@ -9,6 +9,8 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from memory_mri.domain.actions import DOMAIN_ACTIONS, DomainName
 
+AGENT_INPUT_SCHEMA_VERSION = "day2a-v1"
+
 
 class MemoryStatus(StrEnum):
     ACTIVE = "active"
@@ -128,6 +130,7 @@ class AgentInputMemory(BaseModel):
 class AgentInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    schema_version: str = AGENT_INPUT_SCHEMA_VERSION
     scenario_id: str
     domain: DomainName
     user_input: str
@@ -144,23 +147,80 @@ class EvaluatorResult(BaseModel):
     reason: str
 
 
+class StructuredAgentResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    selected_action: str
+    action_arguments: dict[str, Any] = Field(default_factory=dict)
+    cited_memory_ids: list[str] = Field(default_factory=list)
+    concise_rationale: str
+    uncertainty: float = Field(ge=0.0, le=1.0)
+    needs_human_review: bool
+
+
+class TraceEvaluation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    evaluator_result: EvaluatorResult | None = None
+
+
+class TraceCacheStatus(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    enabled: bool
+    request_hash: str | None = None
+    hit: bool | None = None
+    cache_path: str | None = None
+    cached_at: datetime | None = None
+
+
+class TraceErrorDetails(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    code: str
+    message: str
+    retryable: bool
+    attempts: int
+
+
 class ExecutionTrace(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     trace_id: str
     scenario_id: str
     run_id: str
+    domain: DomainName
+    user_input: str
+    agent_input: AgentInput
+    requested_model: str
+    response_model: str
     model: str
     prompt_version: str
+    prompt_content_hash: str | None = None
+    agent_input_schema_version: str = AGENT_INPUT_SCHEMA_VERSION
+    request_hash: str | None = None
     retrieved_memory_ids: list[str]
-    memory_snapshot: list[Memory]
-    selected_action: str
+    memory_snapshot: list[AgentInputMemory]
+    structured_response: StructuredAgentResponse | None = None
+    selected_action: str | None = None
     action_arguments: dict[str, Any] = Field(default_factory=dict)
+    cited_memory_ids: list[str] = Field(default_factory=list)
+    concise_rationale: str | None = None
+    uncertainty: float | None = Field(default=None, ge=0.0, le=1.0)
+    needs_human_review: bool | None = None
     tool_call: dict[str, Any] | None = None
-    evaluator_result: EvaluatorResult
-    passed: bool
+    evaluation: TraceEvaluation = Field(default_factory=TraceEvaluation)
+    passed: bool | None = None
+    execution_source: str = "live"
+    cache_lookup_latency_ms: int | None = Field(default=None, ge=0)
+    original_model_latency_ms: int | None = Field(default=None, ge=0)
     latency_ms: int = Field(ge=0)
     token_usage: dict[str, int] = Field(default_factory=dict)
+    request_token_usage: dict[str, int] | None = None
+    cached_original_token_usage: dict[str, int] | None = None
+    billable_api_call: bool = False
+    cache: TraceCacheStatus = Field(default_factory=lambda: TraceCacheStatus(enabled=False))
+    error: TraceErrorDetails | None = None
     created_at: datetime
 
 
@@ -272,10 +332,13 @@ def new_run_id() -> str:
 
 def build_agent_input(scenario: AgentScenario, memories: list[Memory]) -> AgentInput:
     memory_lookup = {memory.id: memory for memory in memories}
+    # The prompt consumes memories in scenario.memory_ids order, so we normalize
+    # to that canonical order before serialization and request hashing.
     ordered_memories = [
         memory_lookup[memory_id] for memory_id in scenario.memory_ids if memory_id in memory_lookup
     ]
     return AgentInput(
+        schema_version=AGENT_INPUT_SCHEMA_VERSION,
         scenario_id=scenario.id,
         domain=scenario.domain,
         user_input=scenario.user_input,

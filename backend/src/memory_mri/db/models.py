@@ -34,8 +34,8 @@ class TraceRecord(Base):
     trace_id: Mapped[str] = mapped_column(String, primary_key=True)
     scenario_id: Mapped[str] = mapped_column(String, index=True)
     run_id: Mapped[str] = mapped_column(String, index=True)
-    passed: Mapped[bool] = mapped_column(Boolean, index=True)
-    selected_action: Mapped[str] = mapped_column(String)
+    passed: Mapped[bool | None] = mapped_column(Boolean, index=True, nullable=True)
+    selected_action: Mapped[str | None] = mapped_column(String, nullable=True)
     payload_json: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
