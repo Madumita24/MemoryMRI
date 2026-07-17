@@ -3,5 +3,7 @@
 .venv/
 __pycache__/
 *.pyc
+.env
 artifacts/*.json
+artifacts/openai_cache/
 backend/.mypy_cache/

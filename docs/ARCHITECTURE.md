@@ -9,6 +9,7 @@ Memory MRI uses a single shared replay engine across all domains.
 - `build_agent_input(...)` and `AgentScenario.to_agent_input(...)` create the only agent-visible scenario payload.
 - `memory_mri.benchmark_loader` validates benchmark files into domain-neutral case objects.
 - `memory_mri.agents.fake.FakeAgentRunner` provides deterministic local execution without API credentials.
+- `memory_mri.agents.openai_runner.OpenAIAgentRunner` uses the OpenAI Responses API with strict structured output parsing.
 - `memory_mri.engine.benchmark.BenchmarkService` imports source data, executes scenarios, persists traces, and writes summary artifacts.
 - `memory_mri.db` stores imported benchmark copies, traces, repair proposals, benchmark runs, and verification artifacts in SQLite.
 
@@ -22,6 +23,17 @@ Benchmark cases now contain two different data classes:
   expected actions, known problematic memories, failure labels, evaluator settings, and deterministic fake-runner hints.
 
 The agent-visible serializer returns only the operational subset. Model-facing runners must use this serializer rather than raw `model_dump()` output from benchmark models.
+
+## GPT runner flow
+
+1. Load environment-backed OpenAI settings.
+2. Build an agent-visible payload with `build_agent_input(...)`.
+3. Load a versioned domain prompt file based on domain and configured prompt version.
+4. Call the OpenAI Responses API with a strict Pydantic response schema.
+5. Validate the selected action and cited memory IDs against the agent-visible payload.
+6. Persist the resulting development trace with latency and token-usage metadata when available.
+
+The GPT runner never receives benchmark-private fields and never stores hidden chain-of-thought. Only the short structured rationale is kept.
 
 ## Execution flow
 

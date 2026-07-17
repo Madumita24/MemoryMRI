@@ -22,6 +22,10 @@ The benchmark baseline must contain both passes and failures in each domain. Thi
 
 Benchmark cases include private answer-key fields that are necessary for deterministic evaluation but unsafe to expose to GPT-5.6. The codebase now uses an explicit serializer that emits only agent-visible operational data, while fake-runner hints and evaluation labels remain private benchmark data.
 
+### Responses API with strict schema parsing
+
+The GPT-backed runner uses the OpenAI Responses API with a strict Pydantic response schema. This keeps model output constrained to allowed actions, cited memory IDs, concise rationale, and uncertainty flags while rejecting malformed or out-of-policy responses before they reach the evaluator.
+
 ### SQLite first
 
 SQLite is sufficient for local benchmark imports, trace persistence, and artifact generation during the MVP foundation phase.

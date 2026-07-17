@@ -25,6 +25,17 @@ Benchmark source files contain both operational data and private evaluation data
 
 Only the explicit agent-input serializer may be used to prepare model-facing payloads.
 
+## GPT smoke testing
+
+Day 2B introduces a GPT-backed smoke-test runner for exactly one selected scenario at a time. These runs:
+
+- use the same safe agent-visible serialization boundary
+- use versioned domain prompts
+- persist development traces
+- are not treated as the final benchmark baseline
+
+The deterministic 22/30 fake baseline remains the regression reference until the GPT smoke path is proven stable across the three selected domains.
+
 The corrected Day 1.5 benchmark is intentionally mixed rather than all-failing. A realistic regression benchmark needs:
 
 - already-correct cases so later repairs can prove they did not break working behavior

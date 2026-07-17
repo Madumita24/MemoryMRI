@@ -11,9 +11,11 @@
 - Added benchmark-quality tests that reject 0 percent and 100 percent baselines.
 - Added an explicit agent-input serialization layer that keeps benchmark answer-key fields and fake-runner hints out of model-facing payloads.
 - Split memory metadata into agent-visible operational metadata and benchmark-private metadata.
+- Implemented the GPT-backed OpenAI runner with versioned prompts, strict structured output validation, mocked retry and error-path tests, and a one-scenario smoke-test CLI.
+- Completed live GPT-5.6 smoke tests for one scenario in each domain and saved development trace artifacts under `artifacts/openai-smoke-*.json`.
 
 ## Remaining Day 2 risks
 
-- The OpenAI-backed runner is intentionally a placeholder and still needs live API integration.
 - Repair proposal generation, replay interventions, pairwise interaction analysis, and verification artifacts are modeled but not yet orchestrated.
 - The frontend dashboard has not started yet.
+- The full 30-scenario GPT benchmark has not been executed yet; only the three-scenario Day 2B smoke test is complete.
