@@ -1,0 +1,1036 @@
+{
+  "domain": "customer_support",
+  "cases": [
+    {
+      "scenario": {
+        "id": "cs_01",
+        "title": "Refund blocked by stale old no-refund note",
+        "domain": "customer_support",
+        "user_input": "I was charged twice for order 8821 and need the duplicate reversed.",
+        "allowed_actions": [
+          "ISSUE_REFUND",
+          "REQUEST_MANAGER_APPROVAL",
+          "DENY_REFUND",
+          "ASK_FOR_INFORMATION"
+        ],
+        "expected_action": "ISSUE_REFUND",
+        "memory_ids": [
+          "cs_01_mem_1",
+          "cs_01_mem_2",
+          "cs_01_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "cs_01_mem_1"
+        ],
+        "failure_category": "stale-memory",
+        "explanation": "The duplicate charge is documented and a newer policy allows an immediate refund.",
+        "evaluator_config": {
+          "default_action": "ASK_FOR_INFORMATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "cs_01_mem_1",
+          "entity_id": "customer_8821",
+          "domain": "customer_support",
+          "content": "Old 2024 pilot note said duplicate-charge refunds required manager approval.",
+          "source": "legacy_policy_sync",
+          "created_at": "2024-02-01T00:00:00Z",
+          "valid_from": "2024-02-01T00:00:00Z",
+          "valid_until": "2024-12-31T00:00:00Z",
+          "status": "stale",
+          "supersedes": [],
+          "confidence": 0.81,
+          "retrieval_priority": 99,
+          "tags": [
+            "refund",
+            "duplicate-charge",
+            "legacy"
+          ],
+          "metadata": {
+            "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
+            "supports_action": "REQUEST_MANAGER_APPROVAL",
+            "memory_role": "legacy_policy",
+            "entity_match": true,
+            "temporal_scope": "outdated",
+            "should_ignore": true
+          }
+        },
+        {
+          "id": "cs_01_mem_2",
+          "entity_id": "customer_8821",
+          "domain": "customer_support",
+          "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+          "source": "policy_portal",
+          "created_at": "2026-01-15T00:00:00Z",
+          "valid_from": "2026-01-15T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [
+            "cs_01_mem_1"
+          ],
+          "confidence": 0.97,
+          "retrieval_priority": 80,
+          "tags": [
+            "refund",
+            "current-policy"
+          ],
+          "metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "cs_01_mem_3",
+          "entity_id": "order_8821",
+          "domain": "customer_support",
+          "content": "Billing ledger shows two settled charges within one minute for the same order.",
+          "source": "billing_ledger",
+          "created_at": "2026-07-01T09:00:00Z",
+          "valid_from": "2026-07-01T09:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 70,
+          "tags": [
+            "evidence"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "cs_02",
+        "title": "Contradictory refund thresholds",
+        "domain": "customer_support",
+        "user_input": "My annual subscription renewed after I cancelled it yesterday. Please reverse it.",
+        "allowed_actions": [
+          "ISSUE_REFUND",
+          "REQUEST_MANAGER_APPROVAL",
+          "DENY_REFUND",
+          "ASK_FOR_INFORMATION"
+        ],
+        "expected_action": "REQUEST_MANAGER_APPROVAL",
+        "memory_ids": [
+          "cs_02_mem_1",
+          "cs_02_mem_2",
+          "cs_02_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "cs_02_mem_1"
+        ],
+        "failure_category": "contradictory-memories",
+        "explanation": "The current policy requires manager approval for subscription reversals above $250.",
+        "evaluator_config": {
+          "default_action": "ASK_FOR_INFORMATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "cs_02_mem_1",
+          "entity_id": "customer_5502",
+          "domain": "customer_support",
+          "content": "Old retention script said any cancelled-renewal case can be refunded immediately.",
+          "source": "retention_script",
+          "created_at": "2025-03-12T00:00:00Z",
+          "valid_from": "2025-03-12T00:00:00Z",
+          "valid_until": null,
+          "status": "uncertain",
+          "supersedes": [],
+          "confidence": 0.6,
+          "retrieval_priority": 97,
+          "tags": [
+            "contradiction"
+          ],
+          "metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
+            "memory_role": "history",
+            "entity_match": true,
+            "temporal_scope": "ambiguous",
+            "salience_boost": 6.0
+          }
+        },
+        {
+          "id": "cs_02_mem_2",
+          "entity_id": "policy_refunds",
+          "domain": "customer_support",
+          "content": "Current policy requires manager approval for subscription reversals above $250.",
+          "source": "policy_portal",
+          "created_at": "2026-03-01T00:00:00Z",
+          "valid_from": "2026-03-01T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.95,
+          "retrieval_priority": 85,
+          "tags": [
+            "current-policy"
+          ],
+          "metadata": {
+            "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
+            "supports_action": "REQUEST_MANAGER_APPROVAL",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "cs_02_mem_3",
+          "entity_id": "subscription_5502",
+          "domain": "customer_support",
+          "content": "The renewal amount was $299 and the cancellation timestamp preceded the renewal.",
+          "source": "subscription_system",
+          "created_at": "2026-07-10T00:00:00Z",
+          "valid_from": "2026-07-10T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 88,
+          "tags": [
+            "amount",
+            "evidence"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "cs_03",
+        "title": "Wrong-user VIP memory causes mistaken refund",
+        "domain": "customer_support",
+        "user_input": "I want a refund for an opened software license key that I already redeemed.",
+        "allowed_actions": [
+          "ISSUE_REFUND",
+          "REQUEST_MANAGER_APPROVAL",
+          "DENY_REFUND",
+          "ASK_FOR_INFORMATION"
+        ],
+        "expected_action": "DENY_REFUND",
+        "memory_ids": [
+          "cs_03_mem_1",
+          "cs_03_mem_2",
+          "cs_03_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "cs_03_mem_1"
+        ],
+        "failure_category": "wrong-user-memory",
+        "explanation": "A redeemed software license is non-refundable and the VIP exception belongs to another customer.",
+        "evaluator_config": {
+          "default_action": "ASK_FOR_INFORMATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "cs_03_mem_1",
+          "entity_id": "customer_7799",
+          "domain": "customer_support",
+          "content": "VIP customer can receive courtesy refunds on redeemed keys.",
+          "source": "crm_note",
+          "created_at": "2026-04-01T00:00:00Z",
+          "valid_from": "2026-04-01T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.9,
+          "retrieval_priority": 98,
+          "tags": [
+            "vip",
+            "wrong-entity"
+          ],
+          "metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
+            "memory_role": "customer_status",
+            "entity_match": false,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "cs_03_mem_2",
+          "entity_id": "policy_digital",
+          "domain": "customer_support",
+          "content": "Redeemed digital software licenses are non-refundable unless the key is defective.",
+          "source": "policy_portal",
+          "created_at": "2026-02-20T00:00:00Z",
+          "valid_from": "2026-02-20T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 90,
+          "tags": [
+            "digital-goods"
+          ],
+          "metadata": {
+            "fake_action_bias": "DENY_REFUND",
+            "supports_action": "DENY_REFUND",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "cs_03_mem_3",
+          "entity_id": "license_3321",
+          "domain": "customer_support",
+          "content": "The key was redeemed successfully and no defect report exists.",
+          "source": "license_service",
+          "created_at": "2026-07-09T00:00:00Z",
+          "valid_from": "2026-07-09T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.96,
+          "retrieval_priority": 86,
+          "tags": [
+            "evidence"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "cs_04",
+        "title": "Hallucinated preference for store credit",
+        "domain": "customer_support",
+        "user_input": "My shoes arrived in the wrong size. I need help fixing this.",
+        "allowed_actions": [
+          "ISSUE_REFUND",
+          "REQUEST_MANAGER_APPROVAL",
+          "DENY_REFUND",
+          "ASK_FOR_INFORMATION"
+        ],
+        "expected_action": "ASK_FOR_INFORMATION",
+        "memory_ids": [
+          "cs_04_mem_1",
+          "cs_04_mem_2",
+          "cs_04_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "cs_04_mem_1"
+        ],
+        "failure_category": "hallucinated-preference",
+        "explanation": "The agent should ask whether the user wants a replacement or refund instead of inferring store-credit preference.",
+        "evaluator_config": {
+          "default_action": "ASK_FOR_INFORMATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "cs_04_mem_1",
+          "entity_id": "customer_4410",
+          "domain": "customer_support",
+          "content": "Customer probably prefers store credit because they shop frequently.",
+          "source": "agent_inference",
+          "created_at": "2026-06-10T00:00:00Z",
+          "valid_from": "2026-06-10T00:00:00Z",
+          "valid_until": null,
+          "status": "uncertain",
+          "supersedes": [],
+          "confidence": 0.41,
+          "retrieval_priority": 98,
+          "tags": [
+            "inference"
+          ],
+          "metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
+            "memory_role": "inference",
+            "entity_match": true,
+            "temporal_scope": "ambiguous",
+            "should_ignore": true
+          }
+        },
+        {
+          "id": "cs_04_mem_2",
+          "entity_id": "policy_returns",
+          "domain": "customer_support",
+          "content": "Wrong-size shipments qualify for either replacement or refund after confirming preference.",
+          "source": "policy_portal",
+          "created_at": "2026-01-20T00:00:00Z",
+          "valid_from": "2026-01-20T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.97,
+          "retrieval_priority": 87,
+          "tags": [
+            "returns"
+          ],
+          "metadata": {
+            "fake_action_bias": "ASK_FOR_INFORMATION",
+            "supports_action": "ASK_FOR_INFORMATION",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "cs_04_mem_3",
+          "entity_id": "order_4410",
+          "domain": "customer_support",
+          "content": "The shipment photo confirms size 8 was ordered and size 6 was sent.",
+          "source": "warehouse_audit",
+          "created_at": "2026-07-08T00:00:00Z",
+          "valid_from": "2026-07-08T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.95,
+          "retrieval_priority": 83,
+          "tags": [
+            "evidence"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "cs_05",
+        "title": "Obsolete return-window policy",
+        "domain": "customer_support",
+        "user_input": "I need to return a coffee maker that arrived broken last month.",
+        "allowed_actions": [
+          "ISSUE_REFUND",
+          "REQUEST_MANAGER_APPROVAL",
+          "DENY_REFUND",
+          "ASK_FOR_INFORMATION"
+        ],
+        "expected_action": "ISSUE_REFUND",
+        "memory_ids": [
+          "cs_05_mem_1",
+          "cs_05_mem_2",
+          "cs_05_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "cs_05_mem_1"
+        ],
+        "failure_category": "obsolete-policy",
+        "explanation": "Damage-on-arrival claims remain refundable beyond the normal window under the current policy.",
+        "evaluator_config": {
+          "default_action": "ASK_FOR_INFORMATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "cs_05_mem_1",
+          "entity_id": "policy_returns",
+          "domain": "customer_support",
+          "content": "Legacy script says returns older than 14 days must be denied.",
+          "source": "legacy_policy_sync",
+          "created_at": "2024-07-01T00:00:00Z",
+          "valid_from": "2024-07-01T00:00:00Z",
+          "valid_until": "2025-12-31T00:00:00Z",
+          "status": "superseded",
+          "supersedes": [],
+          "confidence": 0.84,
+          "retrieval_priority": 96,
+          "tags": [
+            "legacy",
+            "window"
+          ],
+          "metadata": {
+            "fake_action_bias": "DENY_REFUND",
+            "supports_action": "DENY_REFUND",
+            "memory_role": "legacy_policy",
+            "entity_match": true,
+            "temporal_scope": "outdated",
+            "should_ignore": true
+          }
+        },
+        {
+          "id": "cs_05_mem_2",
+          "entity_id": "policy_returns",
+          "domain": "customer_support",
+          "content": "Damage-on-arrival claims can be refunded within 60 days when evidence exists.",
+          "source": "policy_portal",
+          "created_at": "2026-01-01T00:00:00Z",
+          "valid_from": "2026-01-01T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [
+            "cs_05_mem_1"
+          ],
+          "confidence": 0.98,
+          "retrieval_priority": 88,
+          "tags": [
+            "current-policy",
+            "damage"
+          ],
+          "metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "cs_05_mem_3",
+          "entity_id": "order_5001",
+          "domain": "customer_support",
+          "content": "Uploaded photo shows the coffee maker carafe shattered on arrival 28 days ago.",
+          "source": "claims_portal",
+          "created_at": "2026-07-02T00:00:00Z",
+          "valid_from": "2026-07-02T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.96,
+          "retrieval_priority": 84,
+          "tags": [
+            "damage",
+            "evidence"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "cs_06",
+        "title": "Missing expiration on a goodwill exception",
+        "domain": "customer_support",
+        "user_input": "Can I get a refund for this conference ticket? I missed the event.",
+        "allowed_actions": [
+          "ISSUE_REFUND",
+          "REQUEST_MANAGER_APPROVAL",
+          "DENY_REFUND",
+          "ASK_FOR_INFORMATION"
+        ],
+        "expected_action": "DENY_REFUND",
+        "memory_ids": [
+          "cs_06_mem_1",
+          "cs_06_mem_2",
+          "cs_06_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "cs_06_mem_1"
+        ],
+        "failure_category": "missing-expiration",
+        "explanation": "The old goodwill exception no longer applies and missed-event tickets are non-refundable.",
+        "evaluator_config": {
+          "default_action": "ASK_FOR_INFORMATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "cs_06_mem_1",
+          "entity_id": "customer_6611",
+          "domain": "customer_support",
+          "content": "Customer received one-time goodwill refund flexibility after a platform outage.",
+          "source": "crm_note",
+          "created_at": "2025-01-10T00:00:00Z",
+          "valid_from": "2025-01-10T00:00:00Z",
+          "valid_until": null,
+          "status": "uncertain",
+          "supersedes": [],
+          "confidence": 0.55,
+          "retrieval_priority": 97,
+          "tags": [
+            "goodwill",
+            "missing-expiration"
+          ],
+          "metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
+            "memory_role": "history",
+            "entity_match": true,
+            "temporal_scope": "ambiguous",
+            "should_ignore": true
+          }
+        },
+        {
+          "id": "cs_06_mem_2",
+          "entity_id": "policy_events",
+          "domain": "customer_support",
+          "content": "Missed-event tickets are non-refundable unless the organizer cancels the event.",
+          "source": "policy_portal",
+          "created_at": "2026-02-01T00:00:00Z",
+          "valid_from": "2026-02-01T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 89,
+          "tags": [
+            "events"
+          ],
+          "metadata": {
+            "fake_action_bias": "DENY_REFUND",
+            "supports_action": "DENY_REFUND",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "cs_06_mem_3",
+          "entity_id": "ticket_8820",
+          "domain": "customer_support",
+          "content": "The event occurred as scheduled and the customer missed it.",
+          "source": "ticketing_system",
+          "created_at": "2026-07-05T00:00:00Z",
+          "valid_from": "2026-07-05T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.97,
+          "retrieval_priority": 82,
+          "tags": [
+            "evidence"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "cs_07",
+        "title": "Incorrect priority favors manager escalation",
+        "domain": "customer_support",
+        "user_input": "A gift card I bought never arrived by email. Please fix it.",
+        "allowed_actions": [
+          "ISSUE_REFUND",
+          "REQUEST_MANAGER_APPROVAL",
+          "DENY_REFUND",
+          "ASK_FOR_INFORMATION"
+        ],
+        "expected_action": "ASK_FOR_INFORMATION",
+        "memory_ids": [
+          "cs_07_mem_1",
+          "cs_07_mem_2",
+          "cs_07_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "cs_07_mem_1"
+        ],
+        "failure_category": "incorrect-retrieval-priority",
+        "explanation": "The agent needs delivery confirmation details before selecting refund or reissue.",
+        "evaluator_config": {
+          "default_action": "ASK_FOR_INFORMATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "cs_07_mem_1",
+          "entity_id": "workflow_gift_cards",
+          "domain": "customer_support",
+          "content": "Escalate all gift card cases to a manager immediately.",
+          "source": "temporary_macro",
+          "created_at": "2026-05-01T00:00:00Z",
+          "valid_from": "2026-05-01T00:00:00Z",
+          "valid_until": "2026-05-07T00:00:00Z",
+          "status": "stale",
+          "supersedes": [],
+          "confidence": 0.7,
+          "retrieval_priority": 100,
+          "tags": [
+            "priority-bug"
+          ],
+          "metadata": {
+            "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
+            "supports_action": "REQUEST_MANAGER_APPROVAL",
+            "memory_role": "temporary",
+            "entity_match": true,
+            "temporal_scope": "outdated"
+          }
+        },
+        {
+          "id": "cs_07_mem_2",
+          "entity_id": "policy_gift_cards",
+          "domain": "customer_support",
+          "content": "For non-delivered gift cards, first confirm delivery status and recipient email.",
+          "source": "policy_portal",
+          "created_at": "2026-01-12T00:00:00Z",
+          "valid_from": "2026-01-12T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [
+            "cs_07_mem_1"
+          ],
+          "confidence": 0.97,
+          "retrieval_priority": 86,
+          "tags": [
+            "current-policy"
+          ],
+          "metadata": {
+            "fake_action_bias": "ASK_FOR_INFORMATION",
+            "supports_action": "ASK_FOR_INFORMATION",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "cs_07_mem_3",
+          "entity_id": "order_7120",
+          "domain": "customer_support",
+          "content": "The send log shows a bounce event but no alternate email on file.",
+          "source": "mailer_log",
+          "created_at": "2026-07-06T00:00:00Z",
+          "valid_from": "2026-07-06T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.95,
+          "retrieval_priority": 81,
+          "tags": [
+            "delivery"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "cs_08",
+        "title": "Two-memory interaction denies a valid refund",
+        "domain": "customer_support",
+        "user_input": "My package never showed up and the tracking still says delayed.",
+        "allowed_actions": [
+          "ISSUE_REFUND",
+          "REQUEST_MANAGER_APPROVAL",
+          "DENY_REFUND",
+          "ASK_FOR_INFORMATION"
+        ],
+        "expected_action": "ISSUE_REFUND",
+        "memory_ids": [
+          "cs_08_mem_1",
+          "cs_08_mem_2",
+          "cs_08_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "cs_08_mem_1",
+          "cs_08_mem_2"
+        ],
+        "failure_category": "two-memory-interaction",
+        "explanation": "The package is lost past the service threshold, so the customer qualifies for a refund.",
+        "evaluator_config": {
+          "default_action": "ASK_FOR_INFORMATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "cs_08_mem_1",
+          "entity_id": "shipping_9901",
+          "domain": "customer_support",
+          "content": "Carrier delays are often resolved without refunds.",
+          "source": "carrier_guidance",
+          "created_at": "2026-03-01T00:00:00Z",
+          "valid_from": "2026-03-01T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.76,
+          "retrieval_priority": 99,
+          "tags": [
+            "interaction"
+          ],
+          "metadata": {
+            "fake_action_bias": "DENY_REFUND",
+            "supports_action": "DENY_REFUND",
+            "memory_role": "history",
+            "entity_match": true,
+            "temporal_scope": "current",
+            "interaction_group": "problem_pair",
+            "salience_boost": 2.5
+          }
+        },
+        {
+          "id": "cs_08_mem_2",
+          "entity_id": "customer_9901",
+          "domain": "customer_support",
+          "content": "Customer previously accepted a replacement for a late package.",
+          "source": "crm_note",
+          "created_at": "2026-05-15T00:00:00Z",
+          "valid_from": "2026-05-15T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.74,
+          "retrieval_priority": 95,
+          "tags": [
+            "interaction",
+            "history"
+          ],
+          "metadata": {
+            "memory_role": "history",
+            "entity_match": true,
+            "temporal_scope": "current",
+            "interaction_group": "problem_pair",
+            "salience_boost": 2.5
+          }
+        },
+        {
+          "id": "cs_08_mem_3",
+          "entity_id": "tracking_9901",
+          "domain": "customer_support",
+          "content": "Tracking shows no scan for 12 days, which meets the lost-package refund threshold.",
+          "source": "tracking_system",
+          "created_at": "2026-07-04T00:00:00Z",
+          "valid_from": "2026-07-04T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 87,
+          "tags": [
+            "evidence"
+          ],
+          "metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "cs_09",
+        "title": "Valid membership memory used in the wrong context",
+        "domain": "customer_support",
+        "user_input": "Please reverse the annual membership charge from last week.",
+        "allowed_actions": [
+          "ISSUE_REFUND",
+          "REQUEST_MANAGER_APPROVAL",
+          "DENY_REFUND",
+          "ASK_FOR_INFORMATION"
+        ],
+        "expected_action": "REQUEST_MANAGER_APPROVAL",
+        "memory_ids": [
+          "cs_09_mem_1",
+          "cs_09_mem_2",
+          "cs_09_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "cs_09_mem_1"
+        ],
+        "failure_category": "wrong-context-valid-memory",
+        "explanation": "The customer's VIP status is real, but membership cancellation refunds over the threshold still require approval.",
+        "evaluator_config": {
+          "default_action": "ASK_FOR_INFORMATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "cs_09_mem_1",
+          "entity_id": "customer_1150",
+          "domain": "customer_support",
+          "content": "VIP customers can receive same-day refunds for shipping errors.",
+          "source": "vip_policy",
+          "created_at": "2026-04-01T00:00:00Z",
+          "valid_from": "2026-04-01T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.92,
+          "retrieval_priority": 98,
+          "tags": [
+            "vip",
+            "wrong-context"
+          ],
+          "metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
+            "memory_role": "customer_status",
+            "entity_match": true,
+            "temporal_scope": "current",
+            "salience_boost": 3.5
+          }
+        },
+        {
+          "id": "cs_09_mem_2",
+          "entity_id": "policy_membership",
+          "domain": "customer_support",
+          "content": "Membership cancellations over $200 require manager approval even for VIP accounts.",
+          "source": "policy_portal",
+          "created_at": "2026-03-20T00:00:00Z",
+          "valid_from": "2026-03-20T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.97,
+          "retrieval_priority": 90,
+          "tags": [
+            "membership"
+          ],
+          "metadata": {
+            "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
+            "supports_action": "REQUEST_MANAGER_APPROVAL",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "cs_09_mem_3",
+          "entity_id": "membership_1150",
+          "domain": "customer_support",
+          "content": "The annual membership charge was $240 and posted seven days ago.",
+          "source": "billing_ledger",
+          "created_at": "2026-07-03T00:00:00Z",
+          "valid_from": "2026-07-03T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 85,
+          "tags": [
+            "amount"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "cs_10",
+        "title": "Newer address-change memory ignored",
+        "domain": "customer_support",
+        "user_input": "My replacement order went to the wrong address and I want a refund.",
+        "allowed_actions": [
+          "ISSUE_REFUND",
+          "REQUEST_MANAGER_APPROVAL",
+          "DENY_REFUND",
+          "ASK_FOR_INFORMATION"
+        ],
+        "expected_action": "ISSUE_REFUND",
+        "memory_ids": [
+          "cs_10_mem_1",
+          "cs_10_mem_2",
+          "cs_10_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "cs_10_mem_1"
+        ],
+        "failure_category": "newer-correct-memory-ignored",
+        "explanation": "The newer address correction shows the merchant shipped to an obsolete address, so refund is appropriate.",
+        "evaluator_config": {
+          "default_action": "ASK_FOR_INFORMATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "cs_10_mem_1",
+          "entity_id": "customer_1010",
+          "domain": "customer_support",
+          "content": "Customer address is 44 Pine Street.",
+          "source": "crm_snapshot",
+          "created_at": "2026-01-01T00:00:00Z",
+          "valid_from": "2026-01-01T00:00:00Z",
+          "valid_until": null,
+          "status": "stale",
+          "supersedes": [],
+          "confidence": 0.8,
+          "retrieval_priority": 98,
+          "tags": [
+            "address"
+          ],
+          "metadata": {
+            "fake_action_bias": "DENY_REFUND",
+            "supports_action": "DENY_REFUND",
+            "memory_role": "history",
+            "entity_match": true,
+            "temporal_scope": "outdated"
+          }
+        },
+        {
+          "id": "cs_10_mem_2",
+          "entity_id": "customer_1010",
+          "domain": "customer_support",
+          "content": "Customer updated their address to 900 Elm Avenue before the replacement was shipped.",
+          "source": "crm_audit_log",
+          "created_at": "2026-06-25T00:00:00Z",
+          "valid_from": "2026-06-25T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [
+            "cs_10_mem_1"
+          ],
+          "confidence": 0.98,
+          "retrieval_priority": 89,
+          "tags": [
+            "address",
+            "current"
+          ],
+          "metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "cs_10_mem_3",
+          "entity_id": "replacement_1010",
+          "domain": "customer_support",
+          "content": "Warehouse shipped the replacement to 44 Pine Street after the address change.",
+          "source": "warehouse_audit",
+          "created_at": "2026-07-07T00:00:00Z",
+          "valid_from": "2026-07-07T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.97,
+          "retrieval_priority": 84,
+          "tags": [
+            "evidence"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    }
+  ]
+}

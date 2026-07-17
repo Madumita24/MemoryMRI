@@ -1,0 +1,1038 @@
+{
+  "domain": "workplace_expense",
+  "cases": [
+    {
+      "scenario": {
+        "id": "exp_01",
+        "title": "Stale travel cap denies valid reimbursement",
+        "domain": "workplace_expense",
+        "user_input": "Approve my hotel reimbursement from the client onsite trip last week.",
+        "allowed_actions": [
+          "AUTO_APPROVE",
+          "ESCALATE_MANAGER",
+          "ESCALATE_DIRECTOR",
+          "DENY_EXPENSE",
+          "REQUEST_DOCUMENTATION"
+        ],
+        "expected_action": "AUTO_APPROVE",
+        "memory_ids": [
+          "exp_01_mem_1",
+          "exp_01_mem_2",
+          "exp_01_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "exp_01_mem_1"
+        ],
+        "failure_category": "stale-memory",
+        "explanation": "The newer travel policy raised the hotel cap, so the compliant receipt should be auto-approved.",
+        "evaluator_config": {
+          "default_action": "REQUEST_DOCUMENTATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "exp_01_mem_1",
+          "entity_id": "policy_travel",
+          "domain": "workplace_expense",
+          "content": "Old hotel cap is $180 per night for client travel.",
+          "source": "legacy_policy_pdf",
+          "created_at": "2025-01-01T00:00:00Z",
+          "valid_from": "2025-01-01T00:00:00Z",
+          "valid_until": "2025-12-31T00:00:00Z",
+          "status": "stale",
+          "supersedes": [],
+          "confidence": 0.79,
+          "retrieval_priority": 99,
+          "tags": [
+            "travel-cap"
+          ],
+          "metadata": {
+            "fake_action_bias": "ESCALATE_MANAGER",
+            "supports_action": "ESCALATE_MANAGER",
+            "memory_role": "legacy_policy",
+            "entity_match": true,
+            "temporal_scope": "outdated",
+            "should_ignore": true
+          }
+        },
+        {
+          "id": "exp_01_mem_2",
+          "entity_id": "policy_travel",
+          "domain": "workplace_expense",
+          "content": "Current client-travel hotel cap is $250 per night with receipt.",
+          "source": "policy_portal",
+          "created_at": "2026-01-01T00:00:00Z",
+          "valid_from": "2026-01-01T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [
+            "exp_01_mem_1"
+          ],
+          "confidence": 0.98,
+          "retrieval_priority": 90,
+          "tags": [
+            "policy"
+          ],
+          "metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "exp_01_mem_3",
+          "entity_id": "report_01",
+          "domain": "workplace_expense",
+          "content": "Receipt shows $220 per night for a three-night client onsite stay.",
+          "source": "expense_system",
+          "created_at": "2026-07-10T00:00:00Z",
+          "valid_from": "2026-07-10T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 86,
+          "tags": [
+            "receipt"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "exp_02",
+        "title": "Contradictory meal reimbursement rules",
+        "domain": "workplace_expense",
+        "user_input": "Please process my team dinner expense from the offsite.",
+        "allowed_actions": [
+          "AUTO_APPROVE",
+          "ESCALATE_MANAGER",
+          "ESCALATE_DIRECTOR",
+          "DENY_EXPENSE",
+          "REQUEST_DOCUMENTATION"
+        ],
+        "expected_action": "ESCALATE_MANAGER",
+        "memory_ids": [
+          "exp_02_mem_1",
+          "exp_02_mem_2",
+          "exp_02_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "exp_02_mem_1"
+        ],
+        "failure_category": "contradictory-memories",
+        "explanation": "Current policy requires manager approval for team meals above the standard cap.",
+        "evaluator_config": {
+          "default_action": "REQUEST_DOCUMENTATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "exp_02_mem_1",
+          "entity_id": "policy_meals",
+          "domain": "workplace_expense",
+          "content": "Older offsite guidance said team dinners are always reimbursable.",
+          "source": "offsite_handbook",
+          "created_at": "2025-06-01T00:00:00Z",
+          "valid_from": "2025-06-01T00:00:00Z",
+          "valid_until": null,
+          "status": "uncertain",
+          "supersedes": [],
+          "confidence": 0.61,
+          "retrieval_priority": 98,
+          "tags": [
+            "contradiction"
+          ],
+          "metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
+            "memory_role": "history",
+            "entity_match": true,
+            "temporal_scope": "ambiguous",
+            "salience_boost": 6.0
+          }
+        },
+        {
+          "id": "exp_02_mem_2",
+          "entity_id": "policy_meals",
+          "domain": "workplace_expense",
+          "content": "Team meals above $75 per attendee require manager approval.",
+          "source": "policy_portal",
+          "created_at": "2026-02-01T00:00:00Z",
+          "valid_from": "2026-02-01T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.97,
+          "retrieval_priority": 91,
+          "tags": [
+            "policy"
+          ],
+          "metadata": {
+            "fake_action_bias": "ESCALATE_MANAGER",
+            "supports_action": "ESCALATE_MANAGER",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "exp_02_mem_3",
+          "entity_id": "report_02",
+          "domain": "workplace_expense",
+          "content": "The expense totals $360 for four attendees with itemized receipt attached.",
+          "source": "expense_system",
+          "created_at": "2026-07-09T00:00:00Z",
+          "valid_from": "2026-07-09T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 87,
+          "tags": [
+            "receipt",
+            "amount"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "exp_03",
+        "title": "Wrong-employee executive exception",
+        "domain": "workplace_expense",
+        "user_input": "Approve my lounge access charge from the airport.",
+        "allowed_actions": [
+          "AUTO_APPROVE",
+          "ESCALATE_MANAGER",
+          "ESCALATE_DIRECTOR",
+          "DENY_EXPENSE",
+          "REQUEST_DOCUMENTATION"
+        ],
+        "expected_action": "DENY_EXPENSE",
+        "memory_ids": [
+          "exp_03_mem_1",
+          "exp_03_mem_2",
+          "exp_03_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "exp_03_mem_1"
+        ],
+        "failure_category": "wrong-user-memory",
+        "explanation": "The executive travel exception belongs to another employee and standard policy denies lounge fees.",
+        "evaluator_config": {
+          "default_action": "REQUEST_DOCUMENTATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "exp_03_mem_1",
+          "entity_id": "employee_exec_55",
+          "domain": "workplace_expense",
+          "content": "Executive assistant role may expense lounge access during travel.",
+          "source": "hr_note",
+          "created_at": "2026-03-01T00:00:00Z",
+          "valid_from": "2026-03-01T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.91,
+          "retrieval_priority": 99,
+          "tags": [
+            "wrong-entity"
+          ],
+          "metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
+            "memory_role": "customer_status",
+            "entity_match": false,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "exp_03_mem_2",
+          "entity_id": "policy_travel",
+          "domain": "workplace_expense",
+          "content": "Lounge access is not reimbursable for standard employee travel.",
+          "source": "policy_portal",
+          "created_at": "2026-01-10T00:00:00Z",
+          "valid_from": "2026-01-10T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 91,
+          "tags": [
+            "travel-policy"
+          ],
+          "metadata": {
+            "fake_action_bias": "DENY_EXPENSE",
+            "supports_action": "DENY_EXPENSE",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "exp_03_mem_3",
+          "entity_id": "report_03",
+          "domain": "workplace_expense",
+          "content": "Submitter role is software engineer and receipt is for airport lounge access only.",
+          "source": "expense_system",
+          "created_at": "2026-07-08T00:00:00Z",
+          "valid_from": "2026-07-08T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 88,
+          "tags": [
+            "employee-role"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "exp_04",
+        "title": "Hallucinated remote-work reimbursement preference",
+        "domain": "workplace_expense",
+        "user_input": "I submitted a home office monitor expense for review.",
+        "allowed_actions": [
+          "AUTO_APPROVE",
+          "ESCALATE_MANAGER",
+          "ESCALATE_DIRECTOR",
+          "DENY_EXPENSE",
+          "REQUEST_DOCUMENTATION"
+        ],
+        "expected_action": "REQUEST_DOCUMENTATION",
+        "memory_ids": [
+          "exp_04_mem_1",
+          "exp_04_mem_2",
+          "exp_04_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "exp_04_mem_1"
+        ],
+        "failure_category": "hallucinated-preference",
+        "explanation": "The agent must request the missing manager pre-approval rather than assume home office equipment is broadly covered.",
+        "evaluator_config": {
+          "default_action": "REQUEST_DOCUMENTATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "exp_04_mem_1",
+          "entity_id": "employee_04",
+          "domain": "workplace_expense",
+          "content": "Employee probably qualifies for home office reimbursement because they are fully remote.",
+          "source": "agent_inference",
+          "created_at": "2026-07-01T00:00:00Z",
+          "valid_from": "2026-07-01T00:00:00Z",
+          "valid_until": null,
+          "status": "uncertain",
+          "supersedes": [],
+          "confidence": 0.39,
+          "retrieval_priority": 98,
+          "tags": [
+            "inference"
+          ],
+          "metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
+            "memory_role": "inference",
+            "entity_match": true,
+            "temporal_scope": "ambiguous",
+            "should_ignore": true
+          }
+        },
+        {
+          "id": "exp_04_mem_2",
+          "entity_id": "policy_remote_work",
+          "domain": "workplace_expense",
+          "content": "Home office equipment requires documented manager pre-approval.",
+          "source": "policy_portal",
+          "created_at": "2026-01-15T00:00:00Z",
+          "valid_from": "2026-01-15T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.97,
+          "retrieval_priority": 90,
+          "tags": [
+            "documentation"
+          ],
+          "metadata": {
+            "fake_action_bias": "REQUEST_DOCUMENTATION",
+            "supports_action": "REQUEST_DOCUMENTATION",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "exp_04_mem_3",
+          "entity_id": "report_04",
+          "domain": "workplace_expense",
+          "content": "Receipt is attached, but the manager pre-approval field is blank.",
+          "source": "expense_system",
+          "created_at": "2026-07-11T00:00:00Z",
+          "valid_from": "2026-07-11T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 87,
+          "tags": [
+            "missing-docs"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "exp_05",
+        "title": "Obsolete policy denies software subscription",
+        "domain": "workplace_expense",
+        "user_input": "Approve my annual design software subscription expense.",
+        "allowed_actions": [
+          "AUTO_APPROVE",
+          "ESCALATE_MANAGER",
+          "ESCALATE_DIRECTOR",
+          "DENY_EXPENSE",
+          "REQUEST_DOCUMENTATION"
+        ],
+        "expected_action": "ESCALATE_MANAGER",
+        "memory_ids": [
+          "exp_05_mem_1",
+          "exp_05_mem_2",
+          "exp_05_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "exp_05_mem_1"
+        ],
+        "failure_category": "obsolete-policy",
+        "explanation": "The current policy allows department software subscriptions with manager approval instead of outright denial.",
+        "evaluator_config": {
+          "default_action": "REQUEST_DOCUMENTATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "exp_05_mem_1",
+          "entity_id": "policy_software",
+          "domain": "workplace_expense",
+          "content": "Older finance policy denied all annual software subscriptions.",
+          "source": "legacy_policy_pdf",
+          "created_at": "2024-04-01T00:00:00Z",
+          "valid_from": "2024-04-01T00:00:00Z",
+          "valid_until": "2025-12-31T00:00:00Z",
+          "status": "superseded",
+          "supersedes": [],
+          "confidence": 0.82,
+          "retrieval_priority": 97,
+          "tags": [
+            "legacy"
+          ],
+          "metadata": {
+            "fake_action_bias": "DENY_EXPENSE",
+            "supports_action": "DENY_EXPENSE",
+            "memory_role": "legacy_policy",
+            "entity_match": true,
+            "temporal_scope": "outdated",
+            "should_ignore": true
+          }
+        },
+        {
+          "id": "exp_05_mem_2",
+          "entity_id": "policy_software",
+          "domain": "workplace_expense",
+          "content": "Department software subscriptions may be reimbursed with manager approval and cost-center mapping.",
+          "source": "policy_portal",
+          "created_at": "2026-02-05T00:00:00Z",
+          "valid_from": "2026-02-05T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [
+            "exp_05_mem_1"
+          ],
+          "confidence": 0.97,
+          "retrieval_priority": 90,
+          "tags": [
+            "approval"
+          ],
+          "metadata": {
+            "fake_action_bias": "ESCALATE_MANAGER",
+            "supports_action": "ESCALATE_MANAGER",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "exp_05_mem_3",
+          "entity_id": "report_05",
+          "domain": "workplace_expense",
+          "content": "The subscription is annual, mapped to the design cost center, and includes an itemized invoice.",
+          "source": "expense_system",
+          "created_at": "2026-07-12T00:00:00Z",
+          "valid_from": "2026-07-12T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 86,
+          "tags": [
+            "invoice"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "exp_06",
+        "title": "Missing expiration on temporary commuting exception",
+        "domain": "workplace_expense",
+        "user_input": "Approve my taxi ride from home to the office yesterday.",
+        "allowed_actions": [
+          "AUTO_APPROVE",
+          "ESCALATE_MANAGER",
+          "ESCALATE_DIRECTOR",
+          "DENY_EXPENSE",
+          "REQUEST_DOCUMENTATION"
+        ],
+        "expected_action": "DENY_EXPENSE",
+        "memory_ids": [
+          "exp_06_mem_1",
+          "exp_06_mem_2",
+          "exp_06_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "exp_06_mem_1"
+        ],
+        "failure_category": "missing-expiration",
+        "explanation": "The temporary late-night commuting exception has ended and ordinary home-to-office taxis are not reimbursable.",
+        "evaluator_config": {
+          "default_action": "REQUEST_DOCUMENTATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "exp_06_mem_1",
+          "entity_id": "policy_commute",
+          "domain": "workplace_expense",
+          "content": "Employees may expense taxis between home and office during the office relocation period.",
+          "source": "ops_bulletin",
+          "created_at": "2025-09-01T00:00:00Z",
+          "valid_from": "2025-09-01T00:00:00Z",
+          "valid_until": null,
+          "status": "uncertain",
+          "supersedes": [],
+          "confidence": 0.57,
+          "retrieval_priority": 97,
+          "tags": [
+            "missing-expiration"
+          ],
+          "metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
+            "memory_role": "temporary",
+            "entity_match": true,
+            "temporal_scope": "ambiguous",
+            "should_ignore": true
+          }
+        },
+        {
+          "id": "exp_06_mem_2",
+          "entity_id": "policy_commute",
+          "domain": "workplace_expense",
+          "content": "Routine commuting between home and office is not reimbursable.",
+          "source": "policy_portal",
+          "created_at": "2026-01-20T00:00:00Z",
+          "valid_from": "2026-01-20T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 90,
+          "tags": [
+            "commute-policy"
+          ],
+          "metadata": {
+            "fake_action_bias": "DENY_EXPENSE",
+            "supports_action": "DENY_EXPENSE",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "exp_06_mem_3",
+          "entity_id": "report_06",
+          "domain": "workplace_expense",
+          "content": "The taxi was taken at 9:00 AM from the employee's home to headquarters.",
+          "source": "expense_system",
+          "created_at": "2026-07-16T00:00:00Z",
+          "valid_from": "2026-07-16T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 88,
+          "tags": [
+            "receipt"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "exp_07",
+        "title": "Incorrect priority over-escalates conference fee",
+        "domain": "workplace_expense",
+        "user_input": "Please process my conference registration reimbursement.",
+        "allowed_actions": [
+          "AUTO_APPROVE",
+          "ESCALATE_MANAGER",
+          "ESCALATE_DIRECTOR",
+          "DENY_EXPENSE",
+          "REQUEST_DOCUMENTATION"
+        ],
+        "expected_action": "ESCALATE_MANAGER",
+        "memory_ids": [
+          "exp_07_mem_1",
+          "exp_07_mem_2",
+          "exp_07_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "exp_07_mem_1"
+        ],
+        "failure_category": "incorrect-retrieval-priority",
+        "explanation": "Conference fees above the auto-approval cap require manager approval, not director escalation.",
+        "evaluator_config": {
+          "default_action": "REQUEST_DOCUMENTATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "exp_07_mem_1",
+          "entity_id": "policy_learning",
+          "domain": "workplace_expense",
+          "content": "Large external events should go straight to director review.",
+          "source": "temporary_finance_note",
+          "created_at": "2026-03-01T00:00:00Z",
+          "valid_from": "2026-03-01T00:00:00Z",
+          "valid_until": "2026-03-05T00:00:00Z",
+          "status": "stale",
+          "supersedes": [],
+          "confidence": 0.66,
+          "retrieval_priority": 100,
+          "tags": [
+            "priority-bug"
+          ],
+          "metadata": {
+            "fake_action_bias": "ESCALATE_DIRECTOR",
+            "supports_action": "ESCALATE_DIRECTOR",
+            "memory_role": "history",
+            "entity_match": true,
+            "temporal_scope": "outdated"
+          }
+        },
+        {
+          "id": "exp_07_mem_2",
+          "entity_id": "policy_learning",
+          "domain": "workplace_expense",
+          "content": "Professional development fees above $500 require manager approval.",
+          "source": "policy_portal",
+          "created_at": "2026-01-18T00:00:00Z",
+          "valid_from": "2026-01-18T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [
+            "exp_07_mem_1"
+          ],
+          "confidence": 0.98,
+          "retrieval_priority": 90,
+          "tags": [
+            "conference"
+          ],
+          "metadata": {
+            "fake_action_bias": "ESCALATE_MANAGER",
+            "supports_action": "ESCALATE_MANAGER",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "exp_07_mem_3",
+          "entity_id": "report_07",
+          "domain": "workplace_expense",
+          "content": "The registration fee is $620 and includes the agenda and receipt.",
+          "source": "expense_system",
+          "created_at": "2026-07-13T00:00:00Z",
+          "valid_from": "2026-07-13T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 87,
+          "tags": [
+            "amount",
+            "receipt"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "exp_08",
+        "title": "Two-memory interaction hides missing docs",
+        "domain": "workplace_expense",
+        "user_input": "Approve my client entertainment expense from yesterday.",
+        "allowed_actions": [
+          "AUTO_APPROVE",
+          "ESCALATE_MANAGER",
+          "ESCALATE_DIRECTOR",
+          "DENY_EXPENSE",
+          "REQUEST_DOCUMENTATION"
+        ],
+        "expected_action": "REQUEST_DOCUMENTATION",
+        "memory_ids": [
+          "exp_08_mem_1",
+          "exp_08_mem_2",
+          "exp_08_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "exp_08_mem_1",
+          "exp_08_mem_2"
+        ],
+        "failure_category": "two-memory-interaction",
+        "explanation": "Client entertainment can be reimbursable, but the attendee list is missing and must be requested first.",
+        "evaluator_config": {
+          "default_action": "REQUEST_DOCUMENTATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "exp_08_mem_1",
+          "entity_id": "employee_08",
+          "domain": "workplace_expense",
+          "content": "Employee always submits excellent client entertainment reports.",
+          "source": "manager_note",
+          "created_at": "2026-05-05T00:00:00Z",
+          "valid_from": "2026-05-05T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.8,
+          "retrieval_priority": 99,
+          "tags": [
+            "interaction"
+          ],
+          "metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
+            "memory_role": "history",
+            "entity_match": true,
+            "temporal_scope": "current",
+            "interaction_group": "problem_pair",
+            "salience_boost": 2.5
+          }
+        },
+        {
+          "id": "exp_08_mem_2",
+          "entity_id": "policy_entertainment",
+          "domain": "workplace_expense",
+          "content": "Reasonable client entertainment is reimbursable when a business purpose exists.",
+          "source": "policy_portal",
+          "created_at": "2026-02-08T00:00:00Z",
+          "valid_from": "2026-02-08T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.96,
+          "retrieval_priority": 95,
+          "tags": [
+            "interaction"
+          ],
+          "metadata": {
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current",
+            "interaction_group": "problem_pair",
+            "salience_boost": 2.5
+          }
+        },
+        {
+          "id": "exp_08_mem_3",
+          "entity_id": "report_08",
+          "domain": "workplace_expense",
+          "content": "Receipt is attached, but the attendee list and business purpose text are missing.",
+          "source": "expense_system",
+          "created_at": "2026-07-16T00:00:00Z",
+          "valid_from": "2026-07-16T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 88,
+          "tags": [
+            "missing-docs"
+          ],
+          "metadata": {
+            "fake_action_bias": "REQUEST_DOCUMENTATION",
+            "supports_action": "REQUEST_DOCUMENTATION",
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "exp_09",
+        "title": "Valid relocation memory used in wrong context",
+        "domain": "workplace_expense",
+        "user_input": "Approve my dinner expense during the customer visit.",
+        "allowed_actions": [
+          "AUTO_APPROVE",
+          "ESCALATE_MANAGER",
+          "ESCALATE_DIRECTOR",
+          "DENY_EXPENSE",
+          "REQUEST_DOCUMENTATION"
+        ],
+        "expected_action": "DENY_EXPENSE",
+        "memory_ids": [
+          "exp_09_mem_1",
+          "exp_09_mem_2",
+          "exp_09_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "exp_09_mem_1"
+        ],
+        "failure_category": "wrong-context-valid-memory",
+        "explanation": "The relocation meal stipend is real but irrelevant; this dinner exceeds the travel meal rules and lacks client attendees.",
+        "evaluator_config": {
+          "default_action": "REQUEST_DOCUMENTATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "exp_09_mem_1",
+          "entity_id": "employee_09",
+          "domain": "workplace_expense",
+          "content": "Employee is eligible for a temporary relocation meal stipend.",
+          "source": "hr_note",
+          "created_at": "2026-03-15T00:00:00Z",
+          "valid_from": "2026-03-15T00:00:00Z",
+          "valid_until": "2026-08-15T00:00:00Z",
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.92,
+          "retrieval_priority": 98,
+          "tags": [
+            "wrong-context"
+          ],
+          "metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
+            "memory_role": "customer_status",
+            "entity_match": true,
+            "temporal_scope": "current",
+            "salience_boost": 3.5
+          }
+        },
+        {
+          "id": "exp_09_mem_2",
+          "entity_id": "policy_meals",
+          "domain": "workplace_expense",
+          "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+          "source": "policy_portal",
+          "created_at": "2026-01-22T00:00:00Z",
+          "valid_from": "2026-01-22T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 91,
+          "tags": [
+            "meal-policy"
+          ],
+          "metadata": {
+            "fake_action_bias": "DENY_EXPENSE",
+            "supports_action": "DENY_EXPENSE",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "exp_09_mem_3",
+          "entity_id": "report_09",
+          "domain": "workplace_expense",
+          "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+          "source": "expense_system",
+          "created_at": "2026-07-14T00:00:00Z",
+          "valid_from": "2026-07-14T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 87,
+          "tags": [
+            "receipt"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "exp_10",
+        "title": "Newer pre-approval memory ignored",
+        "domain": "workplace_expense",
+        "user_input": "Please process my training course reimbursement.",
+        "allowed_actions": [
+          "AUTO_APPROVE",
+          "ESCALATE_MANAGER",
+          "ESCALATE_DIRECTOR",
+          "DENY_EXPENSE",
+          "REQUEST_DOCUMENTATION"
+        ],
+        "expected_action": "AUTO_APPROVE",
+        "memory_ids": [
+          "exp_10_mem_1",
+          "exp_10_mem_2",
+          "exp_10_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "exp_10_mem_1"
+        ],
+        "failure_category": "newer-correct-memory-ignored",
+        "explanation": "A newer approval record exists and the amount is within policy, so the course should be auto-approved.",
+        "evaluator_config": {
+          "default_action": "REQUEST_DOCUMENTATION"
+        }
+      },
+      "memories": [
+        {
+          "id": "exp_10_mem_1",
+          "entity_id": "report_10",
+          "domain": "workplace_expense",
+          "content": "No manager pre-approval is on file for this course.",
+          "source": "expense_system_snapshot",
+          "created_at": "2026-07-10T09:00:00Z",
+          "valid_from": "2026-07-10T09:00:00Z",
+          "valid_until": null,
+          "status": "stale",
+          "supersedes": [],
+          "confidence": 0.81,
+          "retrieval_priority": 98,
+          "tags": [
+            "approval"
+          ],
+          "metadata": {
+            "fake_action_bias": "REQUEST_DOCUMENTATION",
+            "supports_action": "REQUEST_DOCUMENTATION",
+            "memory_role": "history",
+            "entity_match": true,
+            "temporal_scope": "outdated"
+          }
+        },
+        {
+          "id": "exp_10_mem_2",
+          "entity_id": "report_10",
+          "domain": "workplace_expense",
+          "content": "Manager pre-approval was added later that day in the training request system.",
+          "source": "training_portal",
+          "created_at": "2026-07-10T14:00:00Z",
+          "valid_from": "2026-07-10T14:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [
+            "exp_10_mem_1"
+          ],
+          "confidence": 0.98,
+          "retrieval_priority": 90,
+          "tags": [
+            "approval",
+            "current"
+          ],
+          "metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "exp_10_mem_3",
+          "entity_id": "report_10",
+          "domain": "workplace_expense",
+          "content": "The course costs $320, includes receipt, and falls within the auto-approval cap once approved.",
+          "source": "expense_system",
+          "created_at": "2026-07-14T00:00:00Z",
+          "valid_from": "2026-07-14T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 87,
+          "tags": [
+            "receipt",
+            "amount"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    }
+  ]
+}

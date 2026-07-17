@@ -1,0 +1,23 @@
+# Decisions
+
+## Day 1
+
+### JSON benchmark source files
+
+Reviewed source data lives in version-controlled JSON files so scenarios and memories remain auditable and easy to diff.
+
+### Shared scenario model
+
+All domains reuse the same `AgentScenario` model and benchmark execution engine. Domain-specific differences are expressed through action enums, prompt templates, and scenario content rather than separate pipelines.
+
+### Deterministic fake runner
+
+Tests and local development use a fake runner that never needs API credentials. It exercises retrieval, action selection, evaluation, and persistence without introducing LLM variance.
+
+### Mixed benchmark baseline
+
+The benchmark baseline must contain both passes and failures in each domain. This preserves already-correct cases for regression protection and keeps failed cases available for later replay, repair proposal, and verification work. The fake runner therefore uses reviewed heuristic scoring from memory attributes instead of a universal fail-first rule.
+
+### SQLite first
+
+SQLite is sufficient for local benchmark imports, trace persistence, and artifact generation during the MVP foundation phase.

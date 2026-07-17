@@ -1,0 +1,220 @@
+from __future__ import annotations
+
+from datetime import datetime
+from enum import StrEnum
+from typing import Any
+from uuid import uuid4
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+from memory_mri.domain.actions import DOMAIN_ACTIONS, DomainName
+
+
+class MemoryStatus(StrEnum):
+    ACTIVE = "active"
+    STALE = "stale"
+    SUPERSEDED = "superseded"
+    UNCERTAIN = "uncertain"
+    INVALID = "invalid"
+
+
+class RepairStatus(StrEnum):
+    PROPOSED = "proposed"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+    APPLIED = "applied"
+
+
+class Memory(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    entity_id: str
+    domain: DomainName
+    content: str
+    source: str
+    created_at: datetime
+    valid_from: datetime | None = None
+    valid_until: datetime | None = None
+    status: MemoryStatus
+    supersedes: list[str] = Field(default_factory=list)
+    confidence: float = Field(ge=0.0, le=1.0)
+    retrieval_priority: int = Field(ge=0, le=100)
+    tags: list[str] = Field(default_factory=list)
+    metadata: dict[str, Any] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def validate_dates(self) -> "Memory":
+        if self.valid_from and self.valid_until and self.valid_until < self.valid_from:
+            raise ValueError("valid_until must not be before valid_from")
+        return self
+
+
+class AgentScenario(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    title: str
+    domain: DomainName
+    user_input: str
+    allowed_actions: list[str]
+    expected_action: str
+    memory_ids: list[str] = Field(min_length=1)
+    expected_problematic_memory_ids: list[str] = Field(default_factory=list)
+    failure_category: str
+    explanation: str
+    evaluator_config: dict[str, Any] = Field(default_factory=dict)
+
+    @field_validator("allowed_actions")
+    @classmethod
+    def validate_allowed_actions(cls, value: list[str]) -> list[str]:
+        if len(value) != len(set(value)):
+            raise ValueError("allowed_actions must be unique")
+        return value
+
+    @model_validator(mode="after")
+    def validate_action_membership(self) -> "AgentScenario":
+        known_actions = set(DOMAIN_ACTIONS[self.domain])
+        if any(action not in known_actions for action in self.allowed_actions):
+            raise ValueError("allowed_actions contain unsupported action for domain")
+        if self.expected_action not in self.allowed_actions:
+            raise ValueError("expected_action must be in allowed_actions")
+        missing_memory_ids = set(self.expected_problematic_memory_ids) - set(self.memory_ids)
+        if missing_memory_ids:
+            raise ValueError("expected_problematic_memory_ids must exist in memory_ids")
+        return self
+
+
+class EvaluatorResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    expected_action: str
+    selected_action: str
+    passed: bool
+    reason: str
+
+
+class ExecutionTrace(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    trace_id: str
+    scenario_id: str
+    run_id: str
+    model: str
+    prompt_version: str
+    retrieved_memory_ids: list[str]
+    memory_snapshot: list[Memory]
+    selected_action: str
+    action_arguments: dict[str, Any] = Field(default_factory=dict)
+    tool_call: dict[str, Any] | None = None
+    evaluator_result: EvaluatorResult
+    passed: bool
+    latency_ms: int = Field(ge=0)
+    token_usage: dict[str, int] = Field(default_factory=dict)
+    created_at: datetime
+
+
+class ScenarioResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    scenario_id: str
+    selected_action: str
+    expected_action: str
+    passed: bool
+    retrieved_memory_ids: list[str]
+    trace_id: str
+    error: str | None = None
+
+
+class Intervention(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    intervention_type: str
+    target_memory_ids: list[str]
+    replacement_values: dict[str, Any] = Field(default_factory=dict)
+    reason: str
+
+
+class ReplayResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    scenario_id: str
+    intervention: Intervention
+    total_runs: int = Field(ge=0)
+    successful_runs: int = Field(ge=0)
+    success_rate: float = Field(ge=0.0, le=1.0)
+    confidence_interval_low: float = Field(ge=0.0, le=1.0)
+    confidence_interval_high: float = Field(ge=0.0, le=1.0)
+    original_success_rate: float = Field(ge=0.0, le=1.0)
+    influence_delta: float
+    traces: list[ExecutionTrace] = Field(default_factory=list)
+
+
+class RepairProposal(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    proposal_id: str
+    scenario_id: str
+    repair_type: str
+    target_memory_ids: list[str]
+    before: dict[str, Any]
+    after: dict[str, Any]
+    explanation: str
+    confidence: float = Field(ge=0.0, le=1.0)
+    requires_human_approval: bool = True
+    status: RepairStatus = RepairStatus.PROPOSED
+
+
+class VerificationArtifact(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    artifact_id: str
+    scenario_id: str
+    original_failure: ScenarioResult
+    suspected_memories: list[str]
+    replay_evidence: list[ReplayResult]
+    approved_repair: RepairProposal | None = None
+    original_case_after_repair: ScenarioResult | None = None
+    domain_regression_results: dict[str, Any] = Field(default_factory=dict)
+    complete_benchmark_results: dict[str, Any] = Field(default_factory=dict)
+    unrelated_behavior_changes: list[str] = Field(default_factory=list)
+    created_at: datetime
+
+
+class BenchmarkCase(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    scenario: AgentScenario
+    memories: list[Memory] = Field(min_length=3)
+
+    @model_validator(mode="after")
+    def validate_memory_refs(self) -> "BenchmarkCase":
+        memory_ids = {memory.id for memory in self.memories}
+        missing = set(self.scenario.memory_ids) - memory_ids
+        if missing:
+            raise ValueError("scenario memory_ids must resolve to supplied memories")
+        return self
+
+
+class BenchmarkDomainFile(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    domain: DomainName
+    cases: list[BenchmarkCase]
+
+    @model_validator(mode="after")
+    def validate_case_domains(self) -> "BenchmarkDomainFile":
+        for case in self.cases:
+            if case.scenario.domain != self.domain:
+                raise ValueError("scenario domain must match file domain")
+            if any(memory.domain != self.domain for memory in case.memories):
+                raise ValueError("memory domain must match file domain")
+        return self
+
+
+def new_trace_id() -> str:
+    return f"trace_{uuid4().hex}"
+
+
+def new_run_id() -> str:
+    return f"run_{uuid4().hex}"

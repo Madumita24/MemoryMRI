@@ -1,0 +1,1025 @@
+{
+  "domain": "devops",
+  "cases": [
+    {
+      "scenario": {
+        "id": "dev_01",
+        "title": "Stale staging-only note blocks production deploy",
+        "domain": "devops",
+        "user_input": "Promote release 2026.07.17 to production after the final smoke checks.",
+        "allowed_actions": [
+          "DEPLOY_STAGING",
+          "DEPLOY_PRODUCTION",
+          "BLOCK_DEPLOYMENT",
+          "REQUEST_ENGINEER_REVIEW"
+        ],
+        "expected_action": "DEPLOY_PRODUCTION",
+        "memory_ids": [
+          "dev_01_mem_1",
+          "dev_01_mem_2",
+          "dev_01_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "dev_01_mem_1"
+        ],
+        "failure_category": "stale-memory",
+        "explanation": "A newer change record cleared the production freeze after staging verification passed.",
+        "evaluator_config": {
+          "default_action": "REQUEST_ENGINEER_REVIEW"
+        }
+      },
+      "memories": [
+        {
+          "id": "dev_01_mem_1",
+          "entity_id": "release_2026_07_17",
+          "domain": "devops",
+          "content": "Temporary note from earlier this week: release may deploy only to staging.",
+          "source": "incident_channel_export",
+          "created_at": "2026-07-12T00:00:00Z",
+          "valid_from": "2026-07-12T00:00:00Z",
+          "valid_until": "2026-07-14T00:00:00Z",
+          "status": "stale",
+          "supersedes": [],
+          "confidence": 0.73,
+          "retrieval_priority": 99,
+          "tags": [
+            "freeze"
+          ],
+          "metadata": {
+            "fake_action_bias": "DEPLOY_STAGING",
+            "supports_action": "DEPLOY_STAGING",
+            "memory_role": "temporary",
+            "entity_match": true,
+            "temporal_scope": "outdated",
+            "should_ignore": true
+          }
+        },
+        {
+          "id": "dev_01_mem_2",
+          "entity_id": "change_2026_07_17",
+          "domain": "devops",
+          "content": "Change approval updated: production deployment cleared after successful staging smoke tests.",
+          "source": "change_management",
+          "created_at": "2026-07-16T18:00:00Z",
+          "valid_from": "2026-07-16T18:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [
+            "dev_01_mem_1"
+          ],
+          "confidence": 0.99,
+          "retrieval_priority": 88,
+          "tags": [
+            "approval"
+          ],
+          "metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION",
+            "memory_role": "approval",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "dev_01_mem_3",
+          "entity_id": "release_2026_07_17",
+          "domain": "devops",
+          "content": "Staging smoke test suite completed successfully with no Sev1 regressions.",
+          "source": "ci_pipeline",
+          "created_at": "2026-07-16T19:00:00Z",
+          "valid_from": "2026-07-16T19:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 84,
+          "tags": [
+            "verification"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "dev_02",
+        "title": "Contradictory canary guidance",
+        "domain": "devops",
+        "user_input": "Release 2026.07.17-c should go out after database migration review.",
+        "allowed_actions": [
+          "DEPLOY_STAGING",
+          "DEPLOY_PRODUCTION",
+          "BLOCK_DEPLOYMENT",
+          "REQUEST_ENGINEER_REVIEW"
+        ],
+        "expected_action": "REQUEST_ENGINEER_REVIEW",
+        "memory_ids": [
+          "dev_02_mem_1",
+          "dev_02_mem_2",
+          "dev_02_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "dev_02_mem_1"
+        ],
+        "failure_category": "contradictory-memories",
+        "explanation": "Conflicting deployment guidance plus an unfinished migration review requires engineer review.",
+        "evaluator_config": {
+          "default_action": "REQUEST_ENGINEER_REVIEW"
+        }
+      },
+      "memories": [
+        {
+          "id": "dev_02_mem_1",
+          "entity_id": "runbook_canary",
+          "domain": "devops",
+          "content": "Older runbook says canary services may deploy to production automatically after unit tests.",
+          "source": "runbook_wiki",
+          "created_at": "2025-09-01T00:00:00Z",
+          "valid_from": "2025-09-01T00:00:00Z",
+          "valid_until": null,
+          "status": "uncertain",
+          "supersedes": [],
+          "confidence": 0.62,
+          "retrieval_priority": 98,
+          "tags": [
+            "contradiction"
+          ],
+          "metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION",
+            "memory_role": "legacy_policy",
+            "entity_match": true,
+            "temporal_scope": "ambiguous",
+            "salience_boost": 6.0
+          }
+        },
+        {
+          "id": "dev_02_mem_2",
+          "entity_id": "runbook_canary",
+          "domain": "devops",
+          "content": "Current process requires engineer review when a deployment includes a pending database migration.",
+          "source": "runbook_repo",
+          "created_at": "2026-05-10T00:00:00Z",
+          "valid_from": "2026-05-10T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.97,
+          "retrieval_priority": 90,
+          "tags": [
+            "migration"
+          ],
+          "metadata": {
+            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
+            "supports_action": "REQUEST_ENGINEER_REVIEW",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "dev_02_mem_3",
+          "entity_id": "release_2026_07_17_c",
+          "domain": "devops",
+          "content": "The migration review ticket remains open and unassigned.",
+          "source": "ticketing_system",
+          "created_at": "2026-07-17T01:00:00Z",
+          "valid_from": "2026-07-17T01:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 86,
+          "tags": [
+            "review"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "dev_03",
+        "title": "Wrong-service memory approves the wrong release",
+        "domain": "devops",
+        "user_input": "Deploy the payments-api fix to production if it is clear.",
+        "allowed_actions": [
+          "DEPLOY_STAGING",
+          "DEPLOY_PRODUCTION",
+          "BLOCK_DEPLOYMENT",
+          "REQUEST_ENGINEER_REVIEW"
+        ],
+        "expected_action": "BLOCK_DEPLOYMENT",
+        "memory_ids": [
+          "dev_03_mem_1",
+          "dev_03_mem_2",
+          "dev_03_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "dev_03_mem_1"
+        ],
+        "failure_category": "wrong-user-memory",
+        "explanation": "The approval belongs to another service while payments-api still has a critical alert.",
+        "evaluator_config": {
+          "default_action": "REQUEST_ENGINEER_REVIEW"
+        }
+      },
+      "memories": [
+        {
+          "id": "dev_03_mem_1",
+          "entity_id": "service_catalog:search-api",
+          "domain": "devops",
+          "content": "Search API hotfix already has production approval and green health checks.",
+          "source": "change_management",
+          "created_at": "2026-07-16T22:00:00Z",
+          "valid_from": "2026-07-16T22:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.94,
+          "retrieval_priority": 99,
+          "tags": [
+            "wrong-entity"
+          ],
+          "metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION",
+            "memory_role": "customer_status",
+            "entity_match": false,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "dev_03_mem_2",
+          "entity_id": "service_catalog:payments-api",
+          "domain": "devops",
+          "content": "Payments API production deploys must be blocked when any Sev1 alert is still open.",
+          "source": "release_policy",
+          "created_at": "2026-02-01T00:00:00Z",
+          "valid_from": "2026-02-01T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 91,
+          "tags": [
+            "policy"
+          ],
+          "metadata": {
+            "fake_action_bias": "BLOCK_DEPLOYMENT",
+            "supports_action": "BLOCK_DEPLOYMENT",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "dev_03_mem_3",
+          "entity_id": "service_catalog:payments-api",
+          "domain": "devops",
+          "content": "Payments API currently has one unresolved Sev1 checkout failure alert.",
+          "source": "monitoring",
+          "created_at": "2026-07-17T02:00:00Z",
+          "valid_from": "2026-07-17T02:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 87,
+          "tags": [
+            "alert"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "dev_04",
+        "title": "Hallucinated low-risk assumption",
+        "domain": "devops",
+        "user_input": "Ship the catalog release tonight if nothing unusual is pending.",
+        "allowed_actions": [
+          "DEPLOY_STAGING",
+          "DEPLOY_PRODUCTION",
+          "BLOCK_DEPLOYMENT",
+          "REQUEST_ENGINEER_REVIEW"
+        ],
+        "expected_action": "REQUEST_ENGINEER_REVIEW",
+        "memory_ids": [
+          "dev_04_mem_1",
+          "dev_04_mem_2",
+          "dev_04_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "dev_04_mem_1"
+        ],
+        "failure_category": "hallucinated-preference",
+        "explanation": "The agent should not infer low risk when the release includes a schema change requiring review.",
+        "evaluator_config": {
+          "default_action": "REQUEST_ENGINEER_REVIEW"
+        }
+      },
+      "memories": [
+        {
+          "id": "dev_04_mem_1",
+          "entity_id": "release_catalog_july",
+          "domain": "devops",
+          "content": "Catalog releases are usually low risk and can probably skip review.",
+          "source": "agent_inference",
+          "created_at": "2026-07-15T00:00:00Z",
+          "valid_from": "2026-07-15T00:00:00Z",
+          "valid_until": null,
+          "status": "uncertain",
+          "supersedes": [],
+          "confidence": 0.37,
+          "retrieval_priority": 98,
+          "tags": [
+            "inference"
+          ],
+          "metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION",
+            "memory_role": "inference",
+            "entity_match": true,
+            "temporal_scope": "ambiguous",
+            "should_ignore": true
+          }
+        },
+        {
+          "id": "dev_04_mem_2",
+          "entity_id": "release_catalog_july",
+          "domain": "devops",
+          "content": "Any release with a schema change requires an engineer review before deployment.",
+          "source": "release_policy",
+          "created_at": "2026-01-05T00:00:00Z",
+          "valid_from": "2026-01-05T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 90,
+          "tags": [
+            "schema-change"
+          ],
+          "metadata": {
+            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
+            "supports_action": "REQUEST_ENGINEER_REVIEW",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "dev_04_mem_3",
+          "entity_id": "release_catalog_july",
+          "domain": "devops",
+          "content": "This release introduces a new nullable column to the inventory table.",
+          "source": "pull_request",
+          "created_at": "2026-07-16T16:00:00Z",
+          "valid_from": "2026-07-16T16:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.96,
+          "retrieval_priority": 86,
+          "tags": [
+            "db-change"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "dev_05",
+        "title": "Obsolete freeze calendar entry",
+        "domain": "devops",
+        "user_input": "Can we deploy the invoicing patch to production now?",
+        "allowed_actions": [
+          "DEPLOY_STAGING",
+          "DEPLOY_PRODUCTION",
+          "BLOCK_DEPLOYMENT",
+          "REQUEST_ENGINEER_REVIEW"
+        ],
+        "expected_action": "DEPLOY_PRODUCTION",
+        "memory_ids": [
+          "dev_05_mem_1",
+          "dev_05_mem_2",
+          "dev_05_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "dev_05_mem_1"
+        ],
+        "failure_category": "obsolete-policy",
+        "explanation": "The freeze was lifted and the patch has already passed all required gates.",
+        "evaluator_config": {
+          "default_action": "REQUEST_ENGINEER_REVIEW"
+        }
+      },
+      "memories": [
+        {
+          "id": "dev_05_mem_1",
+          "entity_id": "freeze_calendar",
+          "domain": "devops",
+          "content": "Quarter-end freeze blocks all invoicing deploys through July 31.",
+          "source": "calendar_export",
+          "created_at": "2026-06-20T00:00:00Z",
+          "valid_from": "2026-06-20T00:00:00Z",
+          "valid_until": null,
+          "status": "superseded",
+          "supersedes": [],
+          "confidence": 0.83,
+          "retrieval_priority": 97,
+          "tags": [
+            "freeze"
+          ],
+          "metadata": {
+            "fake_action_bias": "BLOCK_DEPLOYMENT",
+            "supports_action": "BLOCK_DEPLOYMENT",
+            "memory_role": "legacy_policy",
+            "entity_match": true,
+            "temporal_scope": "outdated",
+            "should_ignore": true
+          }
+        },
+        {
+          "id": "dev_05_mem_2",
+          "entity_id": "freeze_calendar",
+          "domain": "devops",
+          "content": "Emergency CAB lifted the invoicing freeze for this patch release.",
+          "source": "change_management",
+          "created_at": "2026-07-16T12:00:00Z",
+          "valid_from": "2026-07-16T12:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [
+            "dev_05_mem_1"
+          ],
+          "confidence": 0.97,
+          "retrieval_priority": 89,
+          "tags": [
+            "cab"
+          ],
+          "metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION",
+            "memory_role": "approval",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "dev_05_mem_3",
+          "entity_id": "release_invoice_patch",
+          "domain": "devops",
+          "content": "All CI checks, smoke tests, and rollback checks completed successfully.",
+          "source": "ci_pipeline",
+          "created_at": "2026-07-16T15:00:00Z",
+          "valid_from": "2026-07-16T15:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 84,
+          "tags": [
+            "verification"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "dev_06",
+        "title": "Missing expiration on hotfix bypass",
+        "domain": "devops",
+        "user_input": "Release the admin-dashboard patch if it is ready.",
+        "allowed_actions": [
+          "DEPLOY_STAGING",
+          "DEPLOY_PRODUCTION",
+          "BLOCK_DEPLOYMENT",
+          "REQUEST_ENGINEER_REVIEW"
+        ],
+        "expected_action": "REQUEST_ENGINEER_REVIEW",
+        "memory_ids": [
+          "dev_06_mem_1",
+          "dev_06_mem_2",
+          "dev_06_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "dev_06_mem_1"
+        ],
+        "failure_category": "missing-expiration",
+        "explanation": "A historic emergency hotfix bypass should not be reused; current review is still required.",
+        "evaluator_config": {
+          "default_action": "REQUEST_ENGINEER_REVIEW"
+        }
+      },
+      "memories": [
+        {
+          "id": "dev_06_mem_1",
+          "entity_id": "service_catalog:admin-dashboard",
+          "domain": "devops",
+          "content": "Admin dashboard can bypass engineer review during urgent incidents.",
+          "source": "incident_postmortem",
+          "created_at": "2025-11-10T00:00:00Z",
+          "valid_from": "2025-11-10T00:00:00Z",
+          "valid_until": null,
+          "status": "uncertain",
+          "supersedes": [],
+          "confidence": 0.58,
+          "retrieval_priority": 97,
+          "tags": [
+            "missing-expiration"
+          ],
+          "metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION",
+            "memory_role": "temporary",
+            "entity_match": true,
+            "temporal_scope": "ambiguous",
+            "should_ignore": true
+          }
+        },
+        {
+          "id": "dev_06_mem_2",
+          "entity_id": "service_catalog:admin-dashboard",
+          "domain": "devops",
+          "content": "Normal process requires engineer review for admin-dashboard production releases.",
+          "source": "runbook_repo",
+          "created_at": "2026-01-08T00:00:00Z",
+          "valid_from": "2026-01-08T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 90,
+          "tags": [
+            "policy"
+          ],
+          "metadata": {
+            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
+            "supports_action": "REQUEST_ENGINEER_REVIEW",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "dev_06_mem_3",
+          "entity_id": "release_admin_patch",
+          "domain": "devops",
+          "content": "Readiness checks passed, but no engineer has signed the review checklist yet.",
+          "source": "checklist_service",
+          "created_at": "2026-07-17T03:00:00Z",
+          "valid_from": "2026-07-17T03:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.97,
+          "retrieval_priority": 86,
+          "tags": [
+            "review"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "dev_07",
+        "title": "Incorrect priority favors blocking note",
+        "domain": "devops",
+        "user_input": "Promote the docs-site update wherever it belongs.",
+        "allowed_actions": [
+          "DEPLOY_STAGING",
+          "DEPLOY_PRODUCTION",
+          "BLOCK_DEPLOYMENT",
+          "REQUEST_ENGINEER_REVIEW"
+        ],
+        "expected_action": "DEPLOY_STAGING",
+        "memory_ids": [
+          "dev_07_mem_1",
+          "dev_07_mem_2",
+          "dev_07_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "dev_07_mem_1"
+        ],
+        "failure_category": "incorrect-retrieval-priority",
+        "explanation": "This low-risk docs update should go to staging first because production approval is not requested yet.",
+        "evaluator_config": {
+          "default_action": "REQUEST_ENGINEER_REVIEW"
+        }
+      },
+      "memories": [
+        {
+          "id": "dev_07_mem_1",
+          "entity_id": "service_catalog:docs-site",
+          "domain": "devops",
+          "content": "Stop all docs-site deploys because of a CSS outage from last month.",
+          "source": "temporary_chat_note",
+          "created_at": "2026-06-02T00:00:00Z",
+          "valid_from": "2026-06-02T00:00:00Z",
+          "valid_until": "2026-06-03T00:00:00Z",
+          "status": "stale",
+          "supersedes": [],
+          "confidence": 0.65,
+          "retrieval_priority": 100,
+          "tags": [
+            "priority-bug"
+          ],
+          "metadata": {
+            "fake_action_bias": "BLOCK_DEPLOYMENT",
+            "supports_action": "BLOCK_DEPLOYMENT",
+            "memory_role": "temporary",
+            "entity_match": true,
+            "temporal_scope": "outdated"
+          }
+        },
+        {
+          "id": "dev_07_mem_2",
+          "entity_id": "service_catalog:docs-site",
+          "domain": "devops",
+          "content": "Docs-site changes deploy to staging automatically before any production request.",
+          "source": "runbook_repo",
+          "created_at": "2026-02-10T00:00:00Z",
+          "valid_from": "2026-02-10T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [
+            "dev_07_mem_1"
+          ],
+          "confidence": 0.98,
+          "retrieval_priority": 88,
+          "tags": [
+            "workflow"
+          ],
+          "metadata": {
+            "fake_action_bias": "DEPLOY_STAGING",
+            "supports_action": "DEPLOY_STAGING",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "dev_07_mem_3",
+          "entity_id": "release_docs_update",
+          "domain": "devops",
+          "content": "The change only updates markdown help pages and has green preview checks.",
+          "source": "ci_pipeline",
+          "created_at": "2026-07-17T04:00:00Z",
+          "valid_from": "2026-07-17T04:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.97,
+          "retrieval_priority": 84,
+          "tags": [
+            "low-risk"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "dev_08",
+        "title": "Two-memory interaction masks a required block",
+        "domain": "devops",
+        "user_input": "Should the search-ranking update go live tonight?",
+        "allowed_actions": [
+          "DEPLOY_STAGING",
+          "DEPLOY_PRODUCTION",
+          "BLOCK_DEPLOYMENT",
+          "REQUEST_ENGINEER_REVIEW"
+        ],
+        "expected_action": "BLOCK_DEPLOYMENT",
+        "memory_ids": [
+          "dev_08_mem_1",
+          "dev_08_mem_2",
+          "dev_08_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "dev_08_mem_1",
+          "dev_08_mem_2"
+        ],
+        "failure_category": "two-memory-interaction",
+        "explanation": "Even though prior rollouts were smooth, the current release must be blocked because rollback is broken.",
+        "evaluator_config": {
+          "default_action": "REQUEST_ENGINEER_REVIEW"
+        }
+      },
+      "memories": [
+        {
+          "id": "dev_08_mem_1",
+          "entity_id": "service_catalog:search-ranking",
+          "domain": "devops",
+          "content": "Search-ranking has a flawless canary history for the last five releases.",
+          "source": "release_dashboard",
+          "created_at": "2026-07-10T00:00:00Z",
+          "valid_from": "2026-07-10T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.93,
+          "retrieval_priority": 99,
+          "tags": [
+            "history",
+            "interaction"
+          ],
+          "metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION",
+            "memory_role": "history",
+            "entity_match": true,
+            "temporal_scope": "current",
+            "interaction_group": "problem_pair",
+            "salience_boost": 2.5
+          }
+        },
+        {
+          "id": "dev_08_mem_2",
+          "entity_id": "service_catalog:search-ranking",
+          "domain": "devops",
+          "content": "The team successfully handled one rollback manually last quarter.",
+          "source": "retro_note",
+          "created_at": "2026-04-20T00:00:00Z",
+          "valid_from": "2026-04-20T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.78,
+          "retrieval_priority": 95,
+          "tags": [
+            "interaction"
+          ],
+          "metadata": {
+            "memory_role": "history",
+            "entity_match": true,
+            "temporal_scope": "current",
+            "interaction_group": "problem_pair",
+            "salience_boost": 2.5
+          }
+        },
+        {
+          "id": "dev_08_mem_3",
+          "entity_id": "release_search_rank_july",
+          "domain": "devops",
+          "content": "The automated rollback job failed in rehearsal, which blocks tonight's production deployment.",
+          "source": "rollback_test",
+          "created_at": "2026-07-17T05:00:00Z",
+          "valid_from": "2026-07-17T05:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 88,
+          "tags": [
+            "rollback"
+          ],
+          "metadata": {
+            "fake_action_bias": "BLOCK_DEPLOYMENT",
+            "supports_action": "BLOCK_DEPLOYMENT",
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "dev_09",
+        "title": "Valid staging memory used in the wrong context",
+        "domain": "devops",
+        "user_input": "Promote the recommender update to production if policy allows.",
+        "allowed_actions": [
+          "DEPLOY_STAGING",
+          "DEPLOY_PRODUCTION",
+          "BLOCK_DEPLOYMENT",
+          "REQUEST_ENGINEER_REVIEW"
+        ],
+        "expected_action": "REQUEST_ENGINEER_REVIEW",
+        "memory_ids": [
+          "dev_09_mem_1",
+          "dev_09_mem_2",
+          "dev_09_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "dev_09_mem_1"
+        ],
+        "failure_category": "wrong-context-valid-memory",
+        "explanation": "The staging auto-deploy rule is valid, but production rollout needs review because the model weights changed.",
+        "evaluator_config": {
+          "default_action": "REQUEST_ENGINEER_REVIEW"
+        }
+      },
+      "memories": [
+        {
+          "id": "dev_09_mem_1",
+          "entity_id": "service_catalog:recommender",
+          "domain": "devops",
+          "content": "Recommender updates auto-deploy to staging after tests pass.",
+          "source": "runbook_repo",
+          "created_at": "2026-02-14T00:00:00Z",
+          "valid_from": "2026-02-14T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.95,
+          "retrieval_priority": 98,
+          "tags": [
+            "wrong-context"
+          ],
+          "metadata": {
+            "fake_action_bias": "DEPLOY_STAGING",
+            "supports_action": "DEPLOY_STAGING",
+            "memory_role": "customer_status",
+            "entity_match": true,
+            "temporal_scope": "current",
+            "salience_boost": 3.5
+          }
+        },
+        {
+          "id": "dev_09_mem_2",
+          "entity_id": "service_catalog:recommender",
+          "domain": "devops",
+          "content": "Any production release with changed model weights requires engineer review.",
+          "source": "ml_release_policy",
+          "created_at": "2026-03-03T00:00:00Z",
+          "valid_from": "2026-03-03T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.99,
+          "retrieval_priority": 90,
+          "tags": [
+            "ml-policy"
+          ],
+          "metadata": {
+            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
+            "supports_action": "REQUEST_ENGINEER_REVIEW",
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "dev_09_mem_3",
+          "entity_id": "release_recommender_july",
+          "domain": "devops",
+          "content": "This release ships updated ranking weights trained on a new dataset.",
+          "source": "release_notes",
+          "created_at": "2026-07-17T06:00:00Z",
+          "valid_from": "2026-07-17T06:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.97,
+          "retrieval_priority": 86,
+          "tags": [
+            "model-weights"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "id": "dev_10",
+        "title": "Newer approval ignored for production deploy",
+        "domain": "devops",
+        "user_input": "Take the analytics patch live if it is approved.",
+        "allowed_actions": [
+          "DEPLOY_STAGING",
+          "DEPLOY_PRODUCTION",
+          "BLOCK_DEPLOYMENT",
+          "REQUEST_ENGINEER_REVIEW"
+        ],
+        "expected_action": "DEPLOY_PRODUCTION",
+        "memory_ids": [
+          "dev_10_mem_1",
+          "dev_10_mem_2",
+          "dev_10_mem_3"
+        ],
+        "expected_problematic_memory_ids": [
+          "dev_10_mem_1"
+        ],
+        "failure_category": "newer-correct-memory-ignored",
+        "explanation": "A newer change approval cleared production deployment after the earlier hold was resolved.",
+        "evaluator_config": {
+          "default_action": "REQUEST_ENGINEER_REVIEW"
+        }
+      },
+      "memories": [
+        {
+          "id": "dev_10_mem_1",
+          "entity_id": "release_analytics_patch",
+          "domain": "devops",
+          "content": "Production hold remains active pending SRE approval.",
+          "source": "change_management",
+          "created_at": "2026-07-16T08:00:00Z",
+          "valid_from": "2026-07-16T08:00:00Z",
+          "valid_until": null,
+          "status": "stale",
+          "supersedes": [],
+          "confidence": 0.82,
+          "retrieval_priority": 98,
+          "tags": [
+            "hold"
+          ],
+          "metadata": {
+            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
+            "supports_action": "REQUEST_ENGINEER_REVIEW",
+            "memory_role": "approval",
+            "entity_match": true,
+            "temporal_scope": "outdated"
+          }
+        },
+        {
+          "id": "dev_10_mem_2",
+          "entity_id": "release_analytics_patch",
+          "domain": "devops",
+          "content": "SRE approval was granted and the production hold is cleared.",
+          "source": "change_management",
+          "created_at": "2026-07-16T20:00:00Z",
+          "valid_from": "2026-07-16T20:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [
+            "dev_10_mem_1"
+          ],
+          "confidence": 0.98,
+          "retrieval_priority": 89,
+          "tags": [
+            "approval"
+          ],
+          "metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION",
+            "memory_role": "approval",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        {
+          "id": "dev_10_mem_3",
+          "entity_id": "release_analytics_patch",
+          "domain": "devops",
+          "content": "The patch passed smoke tests and rollback verification in staging.",
+          "source": "ci_pipeline",
+          "created_at": "2026-07-16T21:00:00Z",
+          "valid_from": "2026-07-16T21:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "supersedes": [],
+          "confidence": 0.98,
+          "retrieval_priority": 85,
+          "tags": [
+            "verification"
+          ],
+          "metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      ]
+    }
+  ]
+}
