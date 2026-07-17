@@ -66,8 +66,8 @@ class FakeAgentRunner(AgentRunner):
     ) -> list[MemoryAssessment]:
         assessments: list[MemoryAssessment] = []
         for memory in memories:
-            supports_action = memory.metadata.get(
-                "supports_action", memory.metadata.get("fake_action_bias")
+            supports_action = memory.benchmark_metadata.get(
+                "supports_action", memory.benchmark_metadata.get("fake_action_bias")
             )
             if supports_action is not None and supports_action not in scenario.allowed_actions:
                 raise ValueError(
@@ -92,7 +92,7 @@ class FakeAgentRunner(AgentRunner):
             if assessment.supports_action is None:
                 continue
             action_scores[assessment.supports_action] += assessment.score
-            interaction_group = assessment.memory.metadata.get("interaction_group")
+            interaction_group = assessment.memory.benchmark_metadata.get("interaction_group")
             if interaction_group is not None:
                 interaction_groups[str(interaction_group)].append(assessment.supports_action)
 
@@ -139,14 +139,14 @@ class FakeAgentRunner(AgentRunner):
             "temporary": -1.0,
             "legacy_policy": -1.5,
         }
-        memory_role = str(memory.metadata.get("memory_role", "history"))
+        memory_role = str(memory.operational_metadata.get("memory_role", "history"))
         score += role_weights.get(memory_role, 0.0)
         reasons.append(f"role:{memory_role}")
 
         score += (memory.confidence - 0.75) * 4
         reasons.append(f"confidence:{memory.confidence}")
 
-        entity_match = bool(memory.metadata.get("entity_match", True))
+        entity_match = bool(memory.operational_metadata.get("entity_match", True))
         score += 1.0 if entity_match else -3.0
         reasons.append(f"entity_match:{entity_match}")
 
@@ -154,7 +154,7 @@ class FakeAgentRunner(AgentRunner):
             score -= 2.0
             reasons.append("expired")
 
-        if memory.metadata.get("should_ignore", False):
+        if memory.benchmark_metadata.get("should_ignore", False):
             score -= 3.0
             reasons.append("should_ignore")
 
@@ -162,7 +162,7 @@ class FakeAgentRunner(AgentRunner):
             score -= 2.5
             reasons.append("superseded_by_current_memory")
 
-        salience_boost = float(memory.metadata.get("salience_boost", 0.0))
+        salience_boost = float(memory.benchmark_metadata.get("salience_boost", 0.0))
         score += salience_boost
         if salience_boost > 0:
             reasons.append(f"salience_boost:{salience_boost}")

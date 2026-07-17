@@ -47,12 +47,14 @@
             "duplicate-charge",
             "legacy"
           ],
-          "metadata": {
-            "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
-            "supports_action": "REQUEST_MANAGER_APPROVAL",
+          "operational_metadata": {
             "memory_role": "legacy_policy",
             "entity_match": true,
-            "temporal_scope": "outdated",
+            "temporal_scope": "outdated"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
+            "supports_action": "REQUEST_MANAGER_APPROVAL",
             "should_ignore": true
           }
         },
@@ -75,12 +77,14 @@
             "refund",
             "current-policy"
           ],
-          "metadata": {
-            "fake_action_bias": "ISSUE_REFUND",
-            "supports_action": "ISSUE_REFUND",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND"
           }
         },
         {
@@ -99,11 +103,12 @@
           "tags": [
             "evidence"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -151,12 +156,14 @@
           "tags": [
             "contradiction"
           ],
-          "metadata": {
-            "fake_action_bias": "ISSUE_REFUND",
-            "supports_action": "ISSUE_REFUND",
+          "operational_metadata": {
             "memory_role": "history",
             "entity_match": true,
-            "temporal_scope": "ambiguous",
+            "temporal_scope": "ambiguous"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
             "salience_boost": 6.0
           }
         },
@@ -176,12 +183,14 @@
           "tags": [
             "current-policy"
           ],
-          "metadata": {
-            "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
-            "supports_action": "REQUEST_MANAGER_APPROVAL",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
+            "supports_action": "REQUEST_MANAGER_APPROVAL"
           }
         },
         {
@@ -201,11 +210,12 @@
             "amount",
             "evidence"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -254,12 +264,14 @@
             "vip",
             "wrong-entity"
           ],
-          "metadata": {
-            "fake_action_bias": "ISSUE_REFUND",
-            "supports_action": "ISSUE_REFUND",
+          "operational_metadata": {
             "memory_role": "customer_status",
             "entity_match": false,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND"
           }
         },
         {
@@ -278,12 +290,14 @@
           "tags": [
             "digital-goods"
           ],
-          "metadata": {
-            "fake_action_bias": "DENY_REFUND",
-            "supports_action": "DENY_REFUND",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DENY_REFUND",
+            "supports_action": "DENY_REFUND"
           }
         },
         {
@@ -302,11 +316,12 @@
           "tags": [
             "evidence"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -354,12 +369,14 @@
           "tags": [
             "inference"
           ],
-          "metadata": {
-            "fake_action_bias": "ISSUE_REFUND",
-            "supports_action": "ISSUE_REFUND",
+          "operational_metadata": {
             "memory_role": "inference",
             "entity_match": true,
-            "temporal_scope": "ambiguous",
+            "temporal_scope": "ambiguous"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
             "should_ignore": true
           }
         },
@@ -379,12 +396,14 @@
           "tags": [
             "returns"
           ],
-          "metadata": {
-            "fake_action_bias": "ASK_FOR_INFORMATION",
-            "supports_action": "ASK_FOR_INFORMATION",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ASK_FOR_INFORMATION",
+            "supports_action": "ASK_FOR_INFORMATION"
           }
         },
         {
@@ -403,11 +422,12 @@
           "tags": [
             "evidence"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -456,12 +476,14 @@
             "legacy",
             "window"
           ],
-          "metadata": {
-            "fake_action_bias": "DENY_REFUND",
-            "supports_action": "DENY_REFUND",
+          "operational_metadata": {
             "memory_role": "legacy_policy",
             "entity_match": true,
-            "temporal_scope": "outdated",
+            "temporal_scope": "outdated"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DENY_REFUND",
+            "supports_action": "DENY_REFUND",
             "should_ignore": true
           }
         },
@@ -484,12 +506,14 @@
             "current-policy",
             "damage"
           ],
-          "metadata": {
-            "fake_action_bias": "ISSUE_REFUND",
-            "supports_action": "ISSUE_REFUND",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND"
           }
         },
         {
@@ -509,11 +533,12 @@
             "damage",
             "evidence"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -562,12 +587,14 @@
             "goodwill",
             "missing-expiration"
           ],
-          "metadata": {
-            "fake_action_bias": "ISSUE_REFUND",
-            "supports_action": "ISSUE_REFUND",
+          "operational_metadata": {
             "memory_role": "history",
             "entity_match": true,
-            "temporal_scope": "ambiguous",
+            "temporal_scope": "ambiguous"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
             "should_ignore": true
           }
         },
@@ -587,12 +614,14 @@
           "tags": [
             "events"
           ],
-          "metadata": {
-            "fake_action_bias": "DENY_REFUND",
-            "supports_action": "DENY_REFUND",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DENY_REFUND",
+            "supports_action": "DENY_REFUND"
           }
         },
         {
@@ -611,11 +640,12 @@
           "tags": [
             "evidence"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -663,12 +693,14 @@
           "tags": [
             "priority-bug"
           ],
-          "metadata": {
-            "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
-            "supports_action": "REQUEST_MANAGER_APPROVAL",
+          "operational_metadata": {
             "memory_role": "temporary",
             "entity_match": true,
             "temporal_scope": "outdated"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
+            "supports_action": "REQUEST_MANAGER_APPROVAL"
           }
         },
         {
@@ -689,12 +721,14 @@
           "tags": [
             "current-policy"
           ],
-          "metadata": {
-            "fake_action_bias": "ASK_FOR_INFORMATION",
-            "supports_action": "ASK_FOR_INFORMATION",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ASK_FOR_INFORMATION",
+            "supports_action": "ASK_FOR_INFORMATION"
           }
         },
         {
@@ -713,11 +747,12 @@
           "tags": [
             "delivery"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -766,12 +801,14 @@
           "tags": [
             "interaction"
           ],
-          "metadata": {
-            "fake_action_bias": "DENY_REFUND",
-            "supports_action": "DENY_REFUND",
+          "operational_metadata": {
             "memory_role": "history",
             "entity_match": true,
-            "temporal_scope": "current",
+            "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DENY_REFUND",
+            "supports_action": "DENY_REFUND",
             "interaction_group": "problem_pair",
             "salience_boost": 2.5
           }
@@ -793,10 +830,12 @@
             "interaction",
             "history"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "history",
             "entity_match": true,
-            "temporal_scope": "current",
+            "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
             "interaction_group": "problem_pair",
             "salience_boost": 2.5
           }
@@ -817,12 +856,14 @@
           "tags": [
             "evidence"
           ],
-          "metadata": {
-            "fake_action_bias": "ISSUE_REFUND",
-            "supports_action": "ISSUE_REFUND",
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND"
           }
         }
       ]
@@ -872,12 +913,14 @@
             "vip",
             "wrong-context"
           ],
-          "metadata": {
-            "fake_action_bias": "ISSUE_REFUND",
-            "supports_action": "ISSUE_REFUND",
+          "operational_metadata": {
             "memory_role": "customer_status",
             "entity_match": true,
-            "temporal_scope": "current",
+            "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND",
             "salience_boost": 3.5
           }
         },
@@ -897,12 +940,14 @@
           "tags": [
             "membership"
           ],
-          "metadata": {
-            "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
-            "supports_action": "REQUEST_MANAGER_APPROVAL",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "REQUEST_MANAGER_APPROVAL",
+            "supports_action": "REQUEST_MANAGER_APPROVAL"
           }
         },
         {
@@ -921,11 +966,12 @@
           "tags": [
             "amount"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -973,12 +1019,14 @@
           "tags": [
             "address"
           ],
-          "metadata": {
-            "fake_action_bias": "DENY_REFUND",
-            "supports_action": "DENY_REFUND",
+          "operational_metadata": {
             "memory_role": "history",
             "entity_match": true,
             "temporal_scope": "outdated"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DENY_REFUND",
+            "supports_action": "DENY_REFUND"
           }
         },
         {
@@ -1000,12 +1048,14 @@
             "address",
             "current"
           ],
-          "metadata": {
-            "fake_action_bias": "ISSUE_REFUND",
-            "supports_action": "ISSUE_REFUND",
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ISSUE_REFUND",
+            "supports_action": "ISSUE_REFUND"
           }
         },
         {
@@ -1024,11 +1074,12 @@
           "tags": [
             "evidence"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     }

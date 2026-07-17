@@ -46,12 +46,14 @@
           "tags": [
             "travel-cap"
           ],
-          "metadata": {
-            "fake_action_bias": "ESCALATE_MANAGER",
-            "supports_action": "ESCALATE_MANAGER",
+          "operational_metadata": {
             "memory_role": "legacy_policy",
             "entity_match": true,
-            "temporal_scope": "outdated",
+            "temporal_scope": "outdated"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ESCALATE_MANAGER",
+            "supports_action": "ESCALATE_MANAGER",
             "should_ignore": true
           }
         },
@@ -73,12 +75,14 @@
           "tags": [
             "policy"
           ],
-          "metadata": {
-            "fake_action_bias": "AUTO_APPROVE",
-            "supports_action": "AUTO_APPROVE",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE"
           }
         },
         {
@@ -97,11 +101,12 @@
           "tags": [
             "receipt"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -150,12 +155,14 @@
           "tags": [
             "contradiction"
           ],
-          "metadata": {
-            "fake_action_bias": "AUTO_APPROVE",
-            "supports_action": "AUTO_APPROVE",
+          "operational_metadata": {
             "memory_role": "history",
             "entity_match": true,
-            "temporal_scope": "ambiguous",
+            "temporal_scope": "ambiguous"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
             "salience_boost": 6.0
           }
         },
@@ -175,12 +182,14 @@
           "tags": [
             "policy"
           ],
-          "metadata": {
-            "fake_action_bias": "ESCALATE_MANAGER",
-            "supports_action": "ESCALATE_MANAGER",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ESCALATE_MANAGER",
+            "supports_action": "ESCALATE_MANAGER"
           }
         },
         {
@@ -200,11 +209,12 @@
             "receipt",
             "amount"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -253,12 +263,14 @@
           "tags": [
             "wrong-entity"
           ],
-          "metadata": {
-            "fake_action_bias": "AUTO_APPROVE",
-            "supports_action": "AUTO_APPROVE",
+          "operational_metadata": {
             "memory_role": "customer_status",
             "entity_match": false,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE"
           }
         },
         {
@@ -277,12 +289,14 @@
           "tags": [
             "travel-policy"
           ],
-          "metadata": {
-            "fake_action_bias": "DENY_EXPENSE",
-            "supports_action": "DENY_EXPENSE",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DENY_EXPENSE",
+            "supports_action": "DENY_EXPENSE"
           }
         },
         {
@@ -301,11 +315,12 @@
           "tags": [
             "employee-role"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -354,12 +369,14 @@
           "tags": [
             "inference"
           ],
-          "metadata": {
-            "fake_action_bias": "AUTO_APPROVE",
-            "supports_action": "AUTO_APPROVE",
+          "operational_metadata": {
             "memory_role": "inference",
             "entity_match": true,
-            "temporal_scope": "ambiguous",
+            "temporal_scope": "ambiguous"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
             "should_ignore": true
           }
         },
@@ -379,12 +396,14 @@
           "tags": [
             "documentation"
           ],
-          "metadata": {
-            "fake_action_bias": "REQUEST_DOCUMENTATION",
-            "supports_action": "REQUEST_DOCUMENTATION",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "REQUEST_DOCUMENTATION",
+            "supports_action": "REQUEST_DOCUMENTATION"
           }
         },
         {
@@ -403,11 +422,12 @@
           "tags": [
             "missing-docs"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -456,12 +476,14 @@
           "tags": [
             "legacy"
           ],
-          "metadata": {
-            "fake_action_bias": "DENY_EXPENSE",
-            "supports_action": "DENY_EXPENSE",
+          "operational_metadata": {
             "memory_role": "legacy_policy",
             "entity_match": true,
-            "temporal_scope": "outdated",
+            "temporal_scope": "outdated"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DENY_EXPENSE",
+            "supports_action": "DENY_EXPENSE",
             "should_ignore": true
           }
         },
@@ -483,12 +505,14 @@
           "tags": [
             "approval"
           ],
-          "metadata": {
-            "fake_action_bias": "ESCALATE_MANAGER",
-            "supports_action": "ESCALATE_MANAGER",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ESCALATE_MANAGER",
+            "supports_action": "ESCALATE_MANAGER"
           }
         },
         {
@@ -507,11 +531,12 @@
           "tags": [
             "invoice"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -560,12 +585,14 @@
           "tags": [
             "missing-expiration"
           ],
-          "metadata": {
-            "fake_action_bias": "AUTO_APPROVE",
-            "supports_action": "AUTO_APPROVE",
+          "operational_metadata": {
             "memory_role": "temporary",
             "entity_match": true,
-            "temporal_scope": "ambiguous",
+            "temporal_scope": "ambiguous"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
             "should_ignore": true
           }
         },
@@ -585,12 +612,14 @@
           "tags": [
             "commute-policy"
           ],
-          "metadata": {
-            "fake_action_bias": "DENY_EXPENSE",
-            "supports_action": "DENY_EXPENSE",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DENY_EXPENSE",
+            "supports_action": "DENY_EXPENSE"
           }
         },
         {
@@ -609,11 +638,12 @@
           "tags": [
             "receipt"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -662,12 +692,14 @@
           "tags": [
             "priority-bug"
           ],
-          "metadata": {
-            "fake_action_bias": "ESCALATE_DIRECTOR",
-            "supports_action": "ESCALATE_DIRECTOR",
+          "operational_metadata": {
             "memory_role": "history",
             "entity_match": true,
             "temporal_scope": "outdated"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ESCALATE_DIRECTOR",
+            "supports_action": "ESCALATE_DIRECTOR"
           }
         },
         {
@@ -688,12 +720,14 @@
           "tags": [
             "conference"
           ],
-          "metadata": {
-            "fake_action_bias": "ESCALATE_MANAGER",
-            "supports_action": "ESCALATE_MANAGER",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "ESCALATE_MANAGER",
+            "supports_action": "ESCALATE_MANAGER"
           }
         },
         {
@@ -713,11 +747,12 @@
             "amount",
             "receipt"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -767,12 +802,14 @@
           "tags": [
             "interaction"
           ],
-          "metadata": {
-            "fake_action_bias": "AUTO_APPROVE",
-            "supports_action": "AUTO_APPROVE",
+          "operational_metadata": {
             "memory_role": "history",
             "entity_match": true,
-            "temporal_scope": "current",
+            "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
             "interaction_group": "problem_pair",
             "salience_boost": 2.5
           }
@@ -793,10 +830,12 @@
           "tags": [
             "interaction"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
-            "temporal_scope": "current",
+            "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
             "interaction_group": "problem_pair",
             "salience_boost": 2.5
           }
@@ -817,12 +856,14 @@
           "tags": [
             "missing-docs"
           ],
-          "metadata": {
-            "fake_action_bias": "REQUEST_DOCUMENTATION",
-            "supports_action": "REQUEST_DOCUMENTATION",
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "REQUEST_DOCUMENTATION",
+            "supports_action": "REQUEST_DOCUMENTATION"
           }
         }
       ]
@@ -872,12 +913,14 @@
           "tags": [
             "wrong-context"
           ],
-          "metadata": {
-            "fake_action_bias": "AUTO_APPROVE",
-            "supports_action": "AUTO_APPROVE",
+          "operational_metadata": {
             "memory_role": "customer_status",
             "entity_match": true,
-            "temporal_scope": "current",
+            "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE",
             "salience_boost": 3.5
           }
         },
@@ -897,12 +940,14 @@
           "tags": [
             "meal-policy"
           ],
-          "metadata": {
-            "fake_action_bias": "DENY_EXPENSE",
-            "supports_action": "DENY_EXPENSE",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DENY_EXPENSE",
+            "supports_action": "DENY_EXPENSE"
           }
         },
         {
@@ -921,11 +966,12 @@
           "tags": [
             "receipt"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -974,12 +1020,14 @@
           "tags": [
             "approval"
           ],
-          "metadata": {
-            "fake_action_bias": "REQUEST_DOCUMENTATION",
-            "supports_action": "REQUEST_DOCUMENTATION",
+          "operational_metadata": {
             "memory_role": "history",
             "entity_match": true,
             "temporal_scope": "outdated"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "REQUEST_DOCUMENTATION",
+            "supports_action": "REQUEST_DOCUMENTATION"
           }
         },
         {
@@ -1001,12 +1049,14 @@
             "approval",
             "current"
           ],
-          "metadata": {
-            "fake_action_bias": "AUTO_APPROVE",
-            "supports_action": "AUTO_APPROVE",
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "AUTO_APPROVE",
+            "supports_action": "AUTO_APPROVE"
           }
         },
         {
@@ -1026,11 +1076,12 @@
             "receipt",
             "amount"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     }

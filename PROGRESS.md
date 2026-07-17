@@ -9,6 +9,8 @@
 - Corrected the Day 1.5 benchmark so the deterministic baseline now mixes passes and failures in every domain.
 - Preserved the original all-failing artifact as `artifacts/day1-initial-baseline-summary.json`.
 - Added benchmark-quality tests that reject 0 percent and 100 percent baselines.
+- Added an explicit agent-input serialization layer that keeps benchmark answer-key fields and fake-runner hints out of model-facing payloads.
+- Split memory metadata into agent-visible operational metadata and benchmark-private metadata.
 
 ## Remaining Day 2 risks
 

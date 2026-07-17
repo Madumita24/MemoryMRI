@@ -33,3 +33,4 @@ def test_mixed_baseline_quality(tmp_path) -> None:
         if result["failed"] > 0
     ]
     assert len(failed_categories) >= 2
+    assert passed == 22

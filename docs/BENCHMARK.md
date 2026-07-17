@@ -16,6 +16,15 @@ Each scenario includes:
 - a documented failure category
 - a natural-language explanation of the expected action
 
+## Privacy boundary
+
+Benchmark source files contain both operational data and private evaluation data.
+
+- Agent-visible operational data includes user input, allowed actions, and realistic memory fields such as content, dates, status, confidence, superseding relationships, and operational metadata.
+- Benchmark-private data includes `expected_action`, `expected_problematic_memory_ids`, `failure_category`, `explanation`, `evaluator_config`, and memory-level deterministic hints kept in `benchmark_metadata`.
+
+Only the explicit agent-input serializer may be used to prepare model-facing payloads.
+
 The corrected Day 1.5 benchmark is intentionally mixed rather than all-failing. A realistic regression benchmark needs:
 
 - already-correct cases so later repairs can prove they did not break working behavior
@@ -53,3 +62,5 @@ The fake runner remains deterministic, but it no longer blindly follows the firs
 - pairwise interaction boosts for grouped problematic memories
 
 This produces a stable mixed baseline with both passes and failures in every domain while keeping the behavior grounded in memory attributes rather than scenario IDs.
+
+The operational serializer never exposes the benchmark-only ignore hints, interaction labels, answer key, or failure labels to GPT-facing runners.

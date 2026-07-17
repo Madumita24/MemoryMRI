@@ -45,12 +45,14 @@
           "tags": [
             "freeze"
           ],
-          "metadata": {
-            "fake_action_bias": "DEPLOY_STAGING",
-            "supports_action": "DEPLOY_STAGING",
+          "operational_metadata": {
             "memory_role": "temporary",
             "entity_match": true,
-            "temporal_scope": "outdated",
+            "temporal_scope": "outdated"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DEPLOY_STAGING",
+            "supports_action": "DEPLOY_STAGING",
             "should_ignore": true
           }
         },
@@ -72,12 +74,14 @@
           "tags": [
             "approval"
           ],
-          "metadata": {
-            "fake_action_bias": "DEPLOY_PRODUCTION",
-            "supports_action": "DEPLOY_PRODUCTION",
+          "operational_metadata": {
             "memory_role": "approval",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION"
           }
         },
         {
@@ -96,11 +100,12 @@
           "tags": [
             "verification"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -148,12 +153,14 @@
           "tags": [
             "contradiction"
           ],
-          "metadata": {
-            "fake_action_bias": "DEPLOY_PRODUCTION",
-            "supports_action": "DEPLOY_PRODUCTION",
+          "operational_metadata": {
             "memory_role": "legacy_policy",
             "entity_match": true,
-            "temporal_scope": "ambiguous",
+            "temporal_scope": "ambiguous"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION",
             "salience_boost": 6.0
           }
         },
@@ -173,12 +180,14 @@
           "tags": [
             "migration"
           ],
-          "metadata": {
-            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
-            "supports_action": "REQUEST_ENGINEER_REVIEW",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
+            "supports_action": "REQUEST_ENGINEER_REVIEW"
           }
         },
         {
@@ -197,11 +206,12 @@
           "tags": [
             "review"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -249,12 +259,14 @@
           "tags": [
             "wrong-entity"
           ],
-          "metadata": {
-            "fake_action_bias": "DEPLOY_PRODUCTION",
-            "supports_action": "DEPLOY_PRODUCTION",
+          "operational_metadata": {
             "memory_role": "customer_status",
             "entity_match": false,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION"
           }
         },
         {
@@ -273,12 +285,14 @@
           "tags": [
             "policy"
           ],
-          "metadata": {
-            "fake_action_bias": "BLOCK_DEPLOYMENT",
-            "supports_action": "BLOCK_DEPLOYMENT",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "BLOCK_DEPLOYMENT",
+            "supports_action": "BLOCK_DEPLOYMENT"
           }
         },
         {
@@ -297,11 +311,12 @@
           "tags": [
             "alert"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -349,12 +364,14 @@
           "tags": [
             "inference"
           ],
-          "metadata": {
-            "fake_action_bias": "DEPLOY_PRODUCTION",
-            "supports_action": "DEPLOY_PRODUCTION",
+          "operational_metadata": {
             "memory_role": "inference",
             "entity_match": true,
-            "temporal_scope": "ambiguous",
+            "temporal_scope": "ambiguous"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION",
             "should_ignore": true
           }
         },
@@ -374,12 +391,14 @@
           "tags": [
             "schema-change"
           ],
-          "metadata": {
-            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
-            "supports_action": "REQUEST_ENGINEER_REVIEW",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
+            "supports_action": "REQUEST_ENGINEER_REVIEW"
           }
         },
         {
@@ -398,11 +417,12 @@
           "tags": [
             "db-change"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -450,12 +470,14 @@
           "tags": [
             "freeze"
           ],
-          "metadata": {
-            "fake_action_bias": "BLOCK_DEPLOYMENT",
-            "supports_action": "BLOCK_DEPLOYMENT",
+          "operational_metadata": {
             "memory_role": "legacy_policy",
             "entity_match": true,
-            "temporal_scope": "outdated",
+            "temporal_scope": "outdated"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "BLOCK_DEPLOYMENT",
+            "supports_action": "BLOCK_DEPLOYMENT",
             "should_ignore": true
           }
         },
@@ -477,12 +499,14 @@
           "tags": [
             "cab"
           ],
-          "metadata": {
-            "fake_action_bias": "DEPLOY_PRODUCTION",
-            "supports_action": "DEPLOY_PRODUCTION",
+          "operational_metadata": {
             "memory_role": "approval",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION"
           }
         },
         {
@@ -501,11 +525,12 @@
           "tags": [
             "verification"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -553,12 +578,14 @@
           "tags": [
             "missing-expiration"
           ],
-          "metadata": {
-            "fake_action_bias": "DEPLOY_PRODUCTION",
-            "supports_action": "DEPLOY_PRODUCTION",
+          "operational_metadata": {
             "memory_role": "temporary",
             "entity_match": true,
-            "temporal_scope": "ambiguous",
+            "temporal_scope": "ambiguous"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION",
             "should_ignore": true
           }
         },
@@ -578,12 +605,14 @@
           "tags": [
             "policy"
           ],
-          "metadata": {
-            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
-            "supports_action": "REQUEST_ENGINEER_REVIEW",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
+            "supports_action": "REQUEST_ENGINEER_REVIEW"
           }
         },
         {
@@ -602,11 +631,12 @@
           "tags": [
             "review"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -654,12 +684,14 @@
           "tags": [
             "priority-bug"
           ],
-          "metadata": {
-            "fake_action_bias": "BLOCK_DEPLOYMENT",
-            "supports_action": "BLOCK_DEPLOYMENT",
+          "operational_metadata": {
             "memory_role": "temporary",
             "entity_match": true,
             "temporal_scope": "outdated"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "BLOCK_DEPLOYMENT",
+            "supports_action": "BLOCK_DEPLOYMENT"
           }
         },
         {
@@ -680,12 +712,14 @@
           "tags": [
             "workflow"
           ],
-          "metadata": {
-            "fake_action_bias": "DEPLOY_STAGING",
-            "supports_action": "DEPLOY_STAGING",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DEPLOY_STAGING",
+            "supports_action": "DEPLOY_STAGING"
           }
         },
         {
@@ -704,11 +738,12 @@
           "tags": [
             "low-risk"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -758,12 +793,14 @@
             "history",
             "interaction"
           ],
-          "metadata": {
-            "fake_action_bias": "DEPLOY_PRODUCTION",
-            "supports_action": "DEPLOY_PRODUCTION",
+          "operational_metadata": {
             "memory_role": "history",
             "entity_match": true,
-            "temporal_scope": "current",
+            "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION",
             "interaction_group": "problem_pair",
             "salience_boost": 2.5
           }
@@ -784,10 +821,12 @@
           "tags": [
             "interaction"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "history",
             "entity_match": true,
-            "temporal_scope": "current",
+            "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
             "interaction_group": "problem_pair",
             "salience_boost": 2.5
           }
@@ -808,12 +847,14 @@
           "tags": [
             "rollback"
           ],
-          "metadata": {
-            "fake_action_bias": "BLOCK_DEPLOYMENT",
-            "supports_action": "BLOCK_DEPLOYMENT",
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "BLOCK_DEPLOYMENT",
+            "supports_action": "BLOCK_DEPLOYMENT"
           }
         }
       ]
@@ -862,12 +903,14 @@
           "tags": [
             "wrong-context"
           ],
-          "metadata": {
-            "fake_action_bias": "DEPLOY_STAGING",
-            "supports_action": "DEPLOY_STAGING",
+          "operational_metadata": {
             "memory_role": "customer_status",
             "entity_match": true,
-            "temporal_scope": "current",
+            "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DEPLOY_STAGING",
+            "supports_action": "DEPLOY_STAGING",
             "salience_boost": 3.5
           }
         },
@@ -887,12 +930,14 @@
           "tags": [
             "ml-policy"
           ],
-          "metadata": {
-            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
-            "supports_action": "REQUEST_ENGINEER_REVIEW",
+          "operational_metadata": {
             "memory_role": "policy",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
+            "supports_action": "REQUEST_ENGINEER_REVIEW"
           }
         },
         {
@@ -911,11 +956,12 @@
           "tags": [
             "model-weights"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     },
@@ -963,12 +1009,14 @@
           "tags": [
             "hold"
           ],
-          "metadata": {
-            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
-            "supports_action": "REQUEST_ENGINEER_REVIEW",
+          "operational_metadata": {
             "memory_role": "approval",
             "entity_match": true,
             "temporal_scope": "outdated"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "REQUEST_ENGINEER_REVIEW",
+            "supports_action": "REQUEST_ENGINEER_REVIEW"
           }
         },
         {
@@ -989,12 +1037,14 @@
           "tags": [
             "approval"
           ],
-          "metadata": {
-            "fake_action_bias": "DEPLOY_PRODUCTION",
-            "supports_action": "DEPLOY_PRODUCTION",
+          "operational_metadata": {
             "memory_role": "approval",
             "entity_match": true,
             "temporal_scope": "current"
+          },
+          "benchmark_metadata": {
+            "fake_action_bias": "DEPLOY_PRODUCTION",
+            "supports_action": "DEPLOY_PRODUCTION"
           }
         },
         {
@@ -1013,11 +1063,12 @@
           "tags": [
             "verification"
           ],
-          "metadata": {
+          "operational_metadata": {
             "memory_role": "evidence",
             "entity_match": true,
             "temporal_scope": "current"
-          }
+          },
+          "benchmark_metadata": {}
         }
       ]
     }

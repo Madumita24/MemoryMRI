@@ -41,13 +41,31 @@ class Memory(BaseModel):
     confidence: float = Field(ge=0.0, le=1.0)
     retrieval_priority: int = Field(ge=0, le=100)
     tags: list[str] = Field(default_factory=list)
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    operational_metadata: dict[str, Any] = Field(default_factory=dict)
+    benchmark_metadata: dict[str, Any] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def validate_dates(self) -> "Memory":
         if self.valid_from and self.valid_until and self.valid_until < self.valid_from:
             raise ValueError("valid_until must not be before valid_from")
         return self
+
+    def to_agent_input(self) -> "AgentInputMemory":
+        return AgentInputMemory(
+            memory_id=self.id,
+            entity_id=self.entity_id,
+            content=self.content,
+            source=self.source,
+            created_at=self.created_at,
+            valid_from=self.valid_from,
+            valid_until=self.valid_until,
+            status=self.status,
+            confidence=self.confidence,
+            retrieval_priority=self.retrieval_priority,
+            supersedes=self.supersedes,
+            tags=self.tags,
+            operational_metadata=self.operational_metadata,
+        )
 
 
 class AgentScenario(BaseModel):
@@ -83,6 +101,38 @@ class AgentScenario(BaseModel):
         if missing_memory_ids:
             raise ValueError("expected_problematic_memory_ids must exist in memory_ids")
         return self
+
+    def to_agent_input(self, memories: list[Memory]) -> "AgentInput":
+        scenario_memories = [memory for memory in memories if memory.id in self.memory_ids]
+        return build_agent_input(self, scenario_memories)
+
+
+class AgentInputMemory(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    memory_id: str
+    entity_id: str
+    content: str
+    source: str
+    created_at: datetime
+    valid_from: datetime | None = None
+    valid_until: datetime | None = None
+    status: MemoryStatus
+    confidence: float = Field(ge=0.0, le=1.0)
+    retrieval_priority: int = Field(ge=0, le=100)
+    supersedes: list[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list)
+    operational_metadata: dict[str, Any] = Field(default_factory=dict)
+
+
+class AgentInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    scenario_id: str
+    domain: DomainName
+    user_input: str
+    allowed_actions: list[str]
+    memories: list[AgentInputMemory]
 
 
 class EvaluatorResult(BaseModel):
@@ -218,3 +268,17 @@ def new_trace_id() -> str:
 
 def new_run_id() -> str:
     return f"run_{uuid4().hex}"
+
+
+def build_agent_input(scenario: AgentScenario, memories: list[Memory]) -> AgentInput:
+    memory_lookup = {memory.id: memory for memory in memories}
+    ordered_memories = [
+        memory_lookup[memory_id] for memory_id in scenario.memory_ids if memory_id in memory_lookup
+    ]
+    return AgentInput(
+        scenario_id=scenario.id,
+        domain=scenario.domain,
+        user_input=scenario.user_input,
+        allowed_actions=scenario.allowed_actions,
+        memories=[memory.to_agent_input() for memory in ordered_memories],
+    )
