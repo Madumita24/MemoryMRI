@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import StrEnum
 from typing import Any
 from uuid import uuid4
@@ -30,6 +30,10 @@ class RepairStatus(StrEnum):
 class InterventionType(StrEnum):
     REMOVE_MEMORY = "REMOVE_MEMORY"
     DISABLE_MEMORY = "DISABLE_MEMORY"
+    REMOVE_MEMORIES = "REMOVE_MEMORIES"
+    DISABLE_MEMORIES = "DISABLE_MEMORIES"
+    REMOVE_ALL_MEMORIES = "REMOVE_ALL_MEMORIES"
+    ISOLATE_MEMORY = "ISOLATE_MEMORY"
     LOWER_RETRIEVAL_PRIORITY = "LOWER_RETRIEVAL_PRIORITY"
     MARK_SUPERSEDED = "MARK_SUPERSEDED"
     REPLACE_MEMORY_WITH_CANDIDATE = "REPLACE_MEMORY_WITH_CANDIDATE"
@@ -39,6 +43,23 @@ class ReplayMode(StrEnum):
     FAST = "fast"
     DEEP = "deep"
     CUSTOM = "custom"
+
+
+class MemoryDependenceClassification(StrEnum):
+    INDIVIDUAL_MEMORY_DEPENDENT = "individual-memory dependent"
+    PAIRWISE_MEMORY_DEPENDENT = "pairwise-memory dependent"
+    DISTRIBUTED_MEMORY_DEPENDENT = "distributed-memory dependent"
+    LIKELY_MEMORY_INDEPENDENT = "likely memory-independent"
+    INCONCLUSIVE = "inconclusive"
+
+
+class PairEvidenceClassification(StrEnum):
+    INTERACTION_SUPPORTED = "interaction-supported"
+    DOMINATED_BY_ONE_MEMORY = "dominated by one memory"
+    REDUNDANT_PAIR = "redundant pair"
+    NEGATIVE_INTERACTION = "negative interaction"
+    NO_OBSERVED_PAIRWISE_INFLUENCE = "no observed pairwise influence"
+    INCONCLUSIVE = "inconclusive"
 
 
 class Memory(BaseModel):
@@ -261,6 +282,14 @@ class Intervention(BaseModel):
     target_memory_ids: list[str]
     replacement_values: dict[str, Any] = Field(default_factory=dict)
     reason: str
+    intervention_id: str = Field(default_factory=lambda: f"intervention_{uuid4().hex}")
+    before_states: dict[str, dict[str, Any]] = Field(default_factory=dict)
+    after_states: dict[str, dict[str, Any]] = Field(default_factory=dict)
+    unchanged_input_hash: str | None = None
+    model: str | None = None
+    prompt_version: str | None = None
+    inference_configuration: dict[str, Any] = Field(default_factory=dict)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class ReplayResult(BaseModel):
@@ -308,6 +337,127 @@ class Investigation(BaseModel):
     expected_action: str
     original_memory_snapshot: list[AgentInputMemory]
     replay_results: list[ReplayResult] = Field(default_factory=list)
+    created_at: datetime
+
+
+class DecisionSupportAudit(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    outcome_correct: bool
+    decision_still_supported: bool
+    support_explanation: str
+    requires_human_review: bool
+
+
+class PairSelectionRecord(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    selected_memory_ids: list[str]
+    generated_pairs: list[list[str]]
+    ranking_source: str
+    ranking_version: str | None = None
+    ranking_snapshot_hash: str | None = None
+    created_at: datetime
+
+
+class PairwiseReplayResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    investigation_id: str
+    parent_trace_id: str
+    scenario_id: str
+    intervention: Intervention
+    shared_baseline_runs: bool
+    fresh_baseline_per_pair: bool
+    original_successful_runs: int = Field(ge=0)
+    original_total_evaluated_runs: int = Field(ge=0)
+    original_success_rate: float = Field(ge=0.0, le=1.0)
+    original_action_distribution: dict[str, int] = Field(default_factory=dict)
+    individual_influences: dict[str, float] = Field(default_factory=dict)
+    combined_successful_runs: int = Field(ge=0)
+    combined_total_evaluated_runs: int = Field(ge=0)
+    combined_success_rate: float = Field(ge=0.0, le=1.0)
+    combined_action_distribution: dict[str, int] = Field(default_factory=dict)
+    combined_influence: float
+    interaction_score: float
+    interaction_synergy: float
+    confidence_interval_low: float = Field(ge=0.0, le=1.0)
+    confidence_interval_high: float = Field(ge=0.0, le=1.0)
+    replay_stability: float = Field(ge=0.0, le=1.0)
+    infrastructure_error_count: int = Field(ge=0)
+    token_usage: dict[str, int] = Field(default_factory=dict)
+    latency_ms: int = Field(ge=0)
+    support_validity: DecisionSupportAudit
+    evidence_classification: PairEvidenceClassification
+    original_trace_ids: list[str] = Field(default_factory=list)
+    intervention_trace_ids: list[str] = Field(default_factory=list)
+
+
+class MemoryControlType(StrEnum):
+    NO_MEMORY = "no-memory"
+    ISOLATE_MEMORY = "isolate-memory"
+
+
+class MemoryControlResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    investigation_id: str
+    parent_trace_id: str
+    scenario_id: str
+    control_type: MemoryControlType
+    target_memory_id: str | None = None
+    intervention: Intervention
+    original_successful_runs: int = Field(ge=0)
+    original_total_evaluated_runs: int = Field(ge=0)
+    original_success_rate: float = Field(ge=0.0, le=1.0)
+    original_action_distribution: dict[str, int] = Field(default_factory=dict)
+    control_successful_runs: int = Field(ge=0)
+    control_total_evaluated_runs: int = Field(ge=0)
+    control_success_rate: float = Field(ge=0.0, le=1.0)
+    control_action_distribution: dict[str, int] = Field(default_factory=dict)
+    replay_stability: float = Field(ge=0.0, le=1.0)
+    infrastructure_error_count: int = Field(ge=0)
+    token_usage: dict[str, int] = Field(default_factory=dict)
+    latency_ms: int = Field(ge=0)
+    support_validity: DecisionSupportAudit
+    original_trace_ids: list[str] = Field(default_factory=list)
+    control_trace_ids: list[str] = Field(default_factory=list)
+
+
+class PairwiseReplayArtifact(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    investigation_id: str
+    parent_trace_id: str
+    scenario_id: str
+    original_snapshot_hash: str
+    pair_selection: PairSelectionRecord
+    shared_baseline_runs: bool
+    fresh_baseline_per_pair: bool
+    individual_replay_evidence: list[ReplayResult]
+    pair_results: list[PairwiseReplayResult]
+    memory_dependence_classification: MemoryDependenceClassification
+    model: str
+    prompt_version: str
+    api_usage: dict[str, int] = Field(default_factory=dict)
+    git_commit_hash: str
+    created_at: datetime
+
+
+class MemoryControlsArtifact(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    investigation_id: str
+    parent_trace_id: str
+    scenario_id: str
+    original_snapshot_hash: str
+    no_memory_control: MemoryControlResult
+    isolation_controls: list[MemoryControlResult]
+    memory_dependence_classification: MemoryDependenceClassification
+    model: str
+    prompt_version: str
+    api_usage: dict[str, int] = Field(default_factory=dict)
+    git_commit_hash: str
     created_at: datetime
 
 

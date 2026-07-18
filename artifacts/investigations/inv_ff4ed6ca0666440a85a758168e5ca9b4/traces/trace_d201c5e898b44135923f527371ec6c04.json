@@ -1,0 +1,207 @@
+{
+  "trace_id": "trace_d201c5e898b44135923f527371ec6c04",
+  "scenario_id": "exp_09",
+  "run_id": "run_2a8aec219bd24a3681ba399a24b8dcf0",
+  "domain": "workplace_expense",
+  "user_input": "Approve my dinner expense during the customer visit.",
+  "agent_input": {
+    "schema_version": "day2a-v1",
+    "scenario_id": "exp_09",
+    "domain": "workplace_expense",
+    "user_input": "Approve my dinner expense during the customer visit.",
+    "allowed_actions": [
+      "AUTO_APPROVE",
+      "ESCALATE_MANAGER",
+      "ESCALATE_DIRECTOR",
+      "DENY_EXPENSE",
+      "REQUEST_DOCUMENTATION"
+    ],
+    "memories": [
+      {
+        "memory_id": "exp_09_mem_2",
+        "entity_id": "policy_meals",
+        "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+        "source": "policy_portal",
+        "created_at": "2026-01-22T00:00:00Z",
+        "valid_from": "2026-01-22T00:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.98,
+        "retrieval_priority": 91,
+        "supersedes": [],
+        "tags": [
+          "meal-policy"
+        ],
+        "operational_metadata": {
+          "memory_role": "policy",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    ]
+  },
+  "requested_model": "gpt-5.6",
+  "response_model": "gpt-5.6-sol",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "prompt_content_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b",
+  "agent_input_schema_version": "day2a-v1",
+  "request_hash": "4ee7dc6861ba27183400e2b71a11b8b489fc3fa7360d8acc0a284b1832eef72a",
+  "retrieved_memory_ids": [
+    "exp_09_mem_2"
+  ],
+  "memory_snapshot": [
+    {
+      "memory_id": "exp_09_mem_2",
+      "entity_id": "policy_meals",
+      "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+      "source": "policy_portal",
+      "created_at": "2026-01-22T00:00:00Z",
+      "valid_from": "2026-01-22T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.98,
+      "retrieval_priority": 91,
+      "supersedes": [],
+      "tags": [
+        "meal-policy"
+      ],
+      "operational_metadata": {
+        "memory_role": "policy",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    }
+  ],
+  "structured_response": {
+    "selected_action": "REQUEST_DOCUMENTATION",
+    "action_arguments": {
+      "required_documentation": "Receipt, attendees, business purpose, and applicable per-diem details"
+    },
+    "cited_memory_ids": [
+      "exp_09_mem_2"
+    ],
+    "concise_rationale": "Current meal policy requires documentation to determine whether the dinner is reimbursable under per-diem rules.",
+    "uncertainty": 0.08,
+    "needs_human_review": false
+  },
+  "selected_action": "REQUEST_DOCUMENTATION",
+  "action_arguments": {
+    "required_documentation": "Receipt, attendees, business purpose, and applicable per-diem details"
+  },
+  "cited_memory_ids": [
+    "exp_09_mem_2"
+  ],
+  "concise_rationale": "Current meal policy requires documentation to determine whether the dinner is reimbursable under per-diem rules.",
+  "uncertainty": 0.08,
+  "needs_human_review": false,
+  "tool_call": {
+    "response_id": "resp_026e01036bfe6640006a5b2bb8b16c819b98aa5eafb17e1e85",
+    "cache_hit": false
+  },
+  "evaluation": {
+    "evaluator_result": {
+      "expected_action": "DENY_EXPENSE",
+      "selected_action": "REQUEST_DOCUMENTATION",
+      "passed": false,
+      "reason": "selected action differed"
+    }
+  },
+  "passed": false,
+  "execution_source": "live",
+  "cache_lookup_latency_ms": 0,
+  "original_model_latency_ms": null,
+  "latency_ms": 5044,
+  "token_usage": {
+    "input_tokens": 656,
+    "output_tokens": 122,
+    "total_tokens": 778
+  },
+  "request_token_usage": {
+    "input_tokens": 656,
+    "output_tokens": 122,
+    "total_tokens": 778
+  },
+  "cached_original_token_usage": null,
+  "billable_api_call": true,
+  "cache": {
+    "enabled": false,
+    "request_hash": "4ee7dc6861ba27183400e2b71a11b8b489fc3fa7360d8acc0a284b1832eef72a",
+    "hit": false,
+    "cache_path": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\openai_cache\\4ee7dc6861ba27183400e2b71a11b8b489fc3fa7360d8acc0a284b1832eef72a.json",
+    "cached_at": null
+  },
+  "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+  "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+  "replay_intervention": {
+    "intervention_type": "ISOLATE_MEMORY",
+    "target_memory_ids": [
+      "exp_09_mem_2"
+    ],
+    "replacement_values": {},
+    "reason": "Retain only exp_09_mem_2 in the snapshot",
+    "intervention_id": "intervention_aad69c7b18bc429baeb9de714e31cf51",
+    "before_states": {
+      "exp_09_mem_2": {
+        "memory_id": "exp_09_mem_2",
+        "entity_id": "policy_meals",
+        "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+        "source": "policy_portal",
+        "created_at": "2026-01-22T00:00:00Z",
+        "valid_from": "2026-01-22T00:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.98,
+        "retrieval_priority": 91,
+        "supersedes": [],
+        "tags": [
+          "meal-policy"
+        ],
+        "operational_metadata": {
+          "memory_role": "policy",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    },
+    "after_states": {
+      "exp_09_mem_2": {
+        "memory_id": "exp_09_mem_2",
+        "entity_id": "policy_meals",
+        "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+        "source": "policy_portal",
+        "created_at": "2026-01-22T00:00:00Z",
+        "valid_from": "2026-01-22T00:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.98,
+        "retrieval_priority": 91,
+        "supersedes": [],
+        "tags": [
+          "meal-policy"
+        ],
+        "operational_metadata": {
+          "memory_role": "policy",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    },
+    "unchanged_input_hash": "2a29e2eb5ae4f989943cf83b0ccac136544550055ce1ec5b3e4e20e6a9010668",
+    "model": "gpt-5.6",
+    "prompt_version": "v1",
+    "inference_configuration": {
+      "model": "gpt-5.6",
+      "timeout_seconds": 30.0,
+      "max_retries": 2,
+      "cache_enabled": false,
+      "prompt_version": "v1",
+      "reasoning_effort": null,
+      "verbosity": "low"
+    },
+    "created_at": "2026-07-18T07:30:54.509590Z"
+  },
+  "replay_role": "isolate-memory_intervention",
+  "error": null,
+  "created_at": "2026-07-18T07:31:09.506540Z"
+}

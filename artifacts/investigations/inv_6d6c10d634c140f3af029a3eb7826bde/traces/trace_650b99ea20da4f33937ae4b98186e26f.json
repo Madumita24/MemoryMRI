@@ -1,0 +1,218 @@
+{
+  "trace_id": "trace_650b99ea20da4f33937ae4b98186e26f",
+  "scenario_id": "cs_01",
+  "run_id": "run_6e80d551baac43f2b4050ecb6c21b52f",
+  "domain": "customer_support",
+  "user_input": "I was charged twice for order 8821 and need the duplicate reversed.",
+  "agent_input": {
+    "schema_version": "day2a-v1",
+    "scenario_id": "cs_01",
+    "domain": "customer_support",
+    "user_input": "I was charged twice for order 8821 and need the duplicate reversed.",
+    "allowed_actions": [
+      "ISSUE_REFUND",
+      "REQUEST_MANAGER_APPROVAL",
+      "DENY_REFUND",
+      "ASK_FOR_INFORMATION"
+    ],
+    "memories": [
+      {
+        "memory_id": "cs_01_mem_2",
+        "entity_id": "customer_8821",
+        "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+        "source": "policy_portal",
+        "created_at": "2026-01-15T00:00:00Z",
+        "valid_from": "2026-01-15T00:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.97,
+        "retrieval_priority": 80,
+        "supersedes": [
+          "cs_01_mem_1"
+        ],
+        "tags": [
+          "refund",
+          "current-policy"
+        ],
+        "operational_metadata": {
+          "memory_role": "policy",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    ]
+  },
+  "requested_model": "gpt-5.6",
+  "response_model": "gpt-5.6-sol",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "prompt_content_hash": "146b6c39f0df027da7f2294ba51e23f87835ecb8b59c2681c315fed51d2a8d11",
+  "agent_input_schema_version": "day2a-v1",
+  "request_hash": "d9737d838b4b80d23a746263306a24fd0b8bfaf38b8432468c8f6d9b5f1b4bdd",
+  "retrieved_memory_ids": [
+    "cs_01_mem_2"
+  ],
+  "memory_snapshot": [
+    {
+      "memory_id": "cs_01_mem_2",
+      "entity_id": "customer_8821",
+      "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+      "source": "policy_portal",
+      "created_at": "2026-01-15T00:00:00Z",
+      "valid_from": "2026-01-15T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.97,
+      "retrieval_priority": 80,
+      "supersedes": [
+        "cs_01_mem_1"
+      ],
+      "tags": [
+        "refund",
+        "current-policy"
+      ],
+      "operational_metadata": {
+        "memory_role": "policy",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    }
+  ],
+  "structured_response": {
+    "selected_action": "ASK_FOR_INFORMATION",
+    "action_arguments": {
+      "required_information": "Verification of both charges and the duplicate charge amount for order 8821"
+    },
+    "cited_memory_ids": [
+      "cs_01_mem_2"
+    ],
+    "concise_rationale": "Direct refund requires a verified duplicate charge under $500; verification and amount are not provided.",
+    "uncertainty": 0.08,
+    "needs_human_review": false
+  },
+  "selected_action": "ASK_FOR_INFORMATION",
+  "action_arguments": {
+    "required_information": "Verification of both charges and the duplicate charge amount for order 8821"
+  },
+  "cited_memory_ids": [
+    "cs_01_mem_2"
+  ],
+  "concise_rationale": "Direct refund requires a verified duplicate charge under $500; verification and amount are not provided.",
+  "uncertainty": 0.08,
+  "needs_human_review": false,
+  "tool_call": {
+    "response_id": "resp_0f9d81252e03125d006a5b2c888824819bb6e04f1414e12152",
+    "cache_hit": false
+  },
+  "evaluation": {
+    "evaluator_result": {
+      "expected_action": "ISSUE_REFUND",
+      "selected_action": "ASK_FOR_INFORMATION",
+      "passed": false,
+      "reason": "selected action differed"
+    }
+  },
+  "passed": false,
+  "execution_source": "live",
+  "cache_lookup_latency_ms": 0,
+  "original_model_latency_ms": null,
+  "latency_ms": 2795,
+  "token_usage": {
+    "input_tokens": 647,
+    "output_tokens": 130,
+    "total_tokens": 777
+  },
+  "request_token_usage": {
+    "input_tokens": 647,
+    "output_tokens": 130,
+    "total_tokens": 777
+  },
+  "cached_original_token_usage": null,
+  "billable_api_call": true,
+  "cache": {
+    "enabled": false,
+    "request_hash": "d9737d838b4b80d23a746263306a24fd0b8bfaf38b8432468c8f6d9b5f1b4bdd",
+    "hit": false,
+    "cache_path": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\openai_cache\\d9737d838b4b80d23a746263306a24fd0b8bfaf38b8432468c8f6d9b5f1b4bdd.json",
+    "cached_at": null
+  },
+  "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+  "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+  "replay_intervention": {
+    "intervention_type": "ISOLATE_MEMORY",
+    "target_memory_ids": [
+      "cs_01_mem_2"
+    ],
+    "replacement_values": {},
+    "reason": "Retain only cs_01_mem_2 in the snapshot",
+    "intervention_id": "intervention_099046007e5a432c9f089a266a66ca83",
+    "before_states": {
+      "cs_01_mem_2": {
+        "memory_id": "cs_01_mem_2",
+        "entity_id": "customer_8821",
+        "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+        "source": "policy_portal",
+        "created_at": "2026-01-15T00:00:00Z",
+        "valid_from": "2026-01-15T00:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.97,
+        "retrieval_priority": 80,
+        "supersedes": [
+          "cs_01_mem_1"
+        ],
+        "tags": [
+          "refund",
+          "current-policy"
+        ],
+        "operational_metadata": {
+          "memory_role": "policy",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    },
+    "after_states": {
+      "cs_01_mem_2": {
+        "memory_id": "cs_01_mem_2",
+        "entity_id": "customer_8821",
+        "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+        "source": "policy_portal",
+        "created_at": "2026-01-15T00:00:00Z",
+        "valid_from": "2026-01-15T00:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.97,
+        "retrieval_priority": 80,
+        "supersedes": [
+          "cs_01_mem_1"
+        ],
+        "tags": [
+          "refund",
+          "current-policy"
+        ],
+        "operational_metadata": {
+          "memory_role": "policy",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    },
+    "unchanged_input_hash": "69ef47a0825314a727b6835fcfd04c5a253488f50bb47bfa2e770f49f0b25867",
+    "model": "gpt-5.6",
+    "prompt_version": "v1",
+    "inference_configuration": {
+      "model": "gpt-5.6",
+      "timeout_seconds": 30.0,
+      "max_retries": 2,
+      "cache_enabled": false,
+      "prompt_version": "v1",
+      "reasoning_effort": null,
+      "verbosity": "low"
+    },
+    "created_at": "2026-07-18T07:34:32.349882Z"
+  },
+  "replay_role": "isolate-memory_intervention",
+  "error": null,
+  "created_at": "2026-07-18T07:34:35.150056Z"
+}

@@ -1,0 +1,1245 @@
+{
+  "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+  "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+  "scenario_id": "cs_01",
+  "original_snapshot_hash": "a1bff8657db2c84231cf5e68ff288acc19ebc2c6269587c5ef532fc609aa8a4d",
+  "pair_selection": {
+    "selected_memory_ids": [
+      "cs_01_mem_1",
+      "cs_01_mem_3",
+      "cs_01_mem_2"
+    ],
+    "generated_pairs": [
+      [
+        "cs_01_mem_1",
+        "cs_01_mem_2"
+      ],
+      [
+        "cs_01_mem_1",
+        "cs_01_mem_3"
+      ],
+      [
+        "cs_01_mem_2",
+        "cs_01_mem_3"
+      ]
+    ],
+    "ranking_source": "suspicion-ranking.json",
+    "ranking_version": "v1",
+    "ranking_snapshot_hash": "a1bff8657db2c84231cf5e68ff288acc19ebc2c6269587c5ef532fc609aa8a4d",
+    "created_at": "2026-07-18T07:32:07.254007Z"
+  },
+  "shared_baseline_runs": true,
+  "fresh_baseline_per_pair": false,
+  "individual_replay_evidence": [
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "scenario_id": "cs_01",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORY",
+        "target_memory_ids": [
+          "cs_01_mem_1"
+        ],
+        "replacement_values": {},
+        "reason": "Remove cs_01_mem_1 from the snapshot",
+        "intervention_id": "intervention_9fbf4760dc9f41599c2838dd8be086a2",
+        "before_states": {},
+        "after_states": {},
+        "unchanged_input_hash": null,
+        "model": null,
+        "prompt_version": null,
+        "inference_configuration": {},
+        "created_at": "2026-07-18T07:32:07.252838Z"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "intervention_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_67fdc9bea99b401c99325000cc5228ab",
+        "trace_f1aa41090abf4e3facb8248c4d3e5e82",
+        "trace_b77104a1b6a04defaa7dfffbc652c8b9"
+      ],
+      "intervention_trace_ids": [
+        "trace_cfebdd12d1e0401e951f29f77c490e93",
+        "trace_032a1b36e44448e1aa9036d7e0595272",
+        "trace_639afe46c5fe4eec96a99674bf0d707a"
+      ]
+    },
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "scenario_id": "cs_01",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORY",
+        "target_memory_ids": [
+          "cs_01_mem_1"
+        ],
+        "replacement_values": {},
+        "reason": "Disable cs_01_mem_1 while preserving the rest of the snapshot",
+        "intervention_id": "intervention_8d1a28e5bc324efeb6d2881691abb2a4",
+        "before_states": {},
+        "after_states": {},
+        "unchanged_input_hash": null,
+        "model": null,
+        "prompt_version": null,
+        "inference_configuration": {},
+        "created_at": "2026-07-18T07:32:07.252888Z"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "intervention_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_979a0638e02e4c28bfb967071e4102a8",
+        "trace_6d4dd16b3cdc4ed5b43f2252bbd73a74",
+        "trace_49f6d0f59525418eb1062337d4d07339"
+      ],
+      "intervention_trace_ids": [
+        "trace_9d9b3fb9a13244c39e3724dc15401439",
+        "trace_41b71daead604ed1b8bdcb0485eaaef1",
+        "trace_552e6369ea224e3da41fc0afcbb6cfe3"
+      ]
+    },
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "scenario_id": "cs_01",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORY",
+        "target_memory_ids": [
+          "cs_01_mem_2"
+        ],
+        "replacement_values": {},
+        "reason": "Remove cs_01_mem_2 from the snapshot",
+        "intervention_id": "intervention_0993e7cc7501474583704d5e314be1f1",
+        "before_states": {},
+        "after_states": {},
+        "unchanged_input_hash": null,
+        "model": null,
+        "prompt_version": null,
+        "inference_configuration": {},
+        "created_at": "2026-07-18T07:32:07.252913Z"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 3,
+      "success_rate": 1.0,
+      "confidence_interval_low": 0.43849391955098227,
+      "confidence_interval_high": 1.0,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 1.0,
+      "original_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "intervention_action_distribution": {
+        "ISSUE_REFUND": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_7ed9d668bbb140ebbdc750bcd58a94ea",
+        "trace_859abe89abf14a64b06053dee3aa0683",
+        "trace_9bfef34c6d704244a690ee3839cb5584"
+      ],
+      "intervention_trace_ids": [
+        "trace_b45db34aa4fd4656a5f1a0327b91614d",
+        "trace_e972eeb9b9d4499499e401d3e177ef8e",
+        "trace_5b26559f1c9c40efa4a2f2fbd25fbdc3"
+      ]
+    },
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "scenario_id": "cs_01",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORY",
+        "target_memory_ids": [
+          "cs_01_mem_2"
+        ],
+        "replacement_values": {},
+        "reason": "Disable cs_01_mem_2 while preserving the rest of the snapshot",
+        "intervention_id": "intervention_65b7e7d5fa7b4747a68ff21616ff6fde",
+        "before_states": {},
+        "after_states": {},
+        "unchanged_input_hash": null,
+        "model": null,
+        "prompt_version": null,
+        "inference_configuration": {},
+        "created_at": "2026-07-18T07:32:07.252932Z"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_MANAGER_APPROVAL": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_b74bc1c369794ad39d16dd657b95b64d",
+        "trace_d00a987df9d347e48db6af57349765df",
+        "trace_01585e462eea472b9fd2960bc1c06d2d"
+      ],
+      "intervention_trace_ids": [
+        "trace_c755be4070c845649faf9609b18db092",
+        "trace_7dd0cb00c99141788e6a7c8820211758",
+        "trace_7d07b5a6979f41bcaba607c29ab88562"
+      ]
+    },
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "scenario_id": "cs_01",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORY",
+        "target_memory_ids": [
+          "cs_01_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "Remove cs_01_mem_3 from the snapshot",
+        "intervention_id": "intervention_2524f356a73547e6b51161b1071351d1",
+        "before_states": {},
+        "after_states": {},
+        "unchanged_input_hash": null,
+        "model": null,
+        "prompt_version": null,
+        "inference_configuration": {},
+        "created_at": "2026-07-18T07:32:07.252949Z"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "intervention_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_a2abbdffec1c4134afcee1e96ca1273e",
+        "trace_ef14e37d8ec84deabff4c242e67dc431",
+        "trace_3acff6525e78486b9abbbe81507ea5ef"
+      ],
+      "intervention_trace_ids": [
+        "trace_b807dbb555124a3494f735cf144d5dab",
+        "trace_c2696eb22bb743fa92cbde9e3818ad50",
+        "trace_d37f223e490840a8a93e6fbd9805cf11"
+      ]
+    },
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "scenario_id": "cs_01",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORY",
+        "target_memory_ids": [
+          "cs_01_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "Disable cs_01_mem_3 while preserving the rest of the snapshot",
+        "intervention_id": "intervention_1d50edef5de94b87b65391d4b9afed10",
+        "before_states": {},
+        "after_states": {},
+        "unchanged_input_hash": null,
+        "model": null,
+        "prompt_version": null,
+        "inference_configuration": {},
+        "created_at": "2026-07-18T07:32:07.252965Z"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "intervention_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_f13ca261511d4648b9570d84ffa34620",
+        "trace_ce0e982d547c482484c4f0a6ce179dd9",
+        "trace_9dd7e00af6294ce9ba49d5eaee7d4576"
+      ],
+      "intervention_trace_ids": [
+        "trace_77a1880e2b90426f8e58ae30ca3d3a05",
+        "trace_d30b9c14f7a14b1aa3b2a0ea0e3abbe9",
+        "trace_e59195c6f5fc4061a9d550fae25d9bcc"
+      ]
+    }
+  ],
+  "pair_results": [
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "scenario_id": "cs_01",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORIES",
+        "target_memory_ids": [
+          "cs_01_mem_1",
+          "cs_01_mem_2"
+        ],
+        "replacement_values": {},
+        "reason": "REMOVE_MEMORIES on cs_01_mem_1 + cs_01_mem_2",
+        "intervention_id": "intervention_eaa6e172f6cc415a8b4e89c6655a58eb",
+        "before_states": {
+          "cs_01_mem_1": {
+            "memory_id": "cs_01_mem_1",
+            "entity_id": "customer_8821",
+            "content": "Old 2024 pilot note said duplicate-charge refunds required manager approval.",
+            "source": "legacy_policy_sync",
+            "created_at": "2024-02-01T00:00:00Z",
+            "valid_from": "2024-02-01T00:00:00Z",
+            "valid_until": "2024-12-31T00:00:00Z",
+            "status": "stale",
+            "confidence": 0.81,
+            "retrieval_priority": 99,
+            "supersedes": [],
+            "tags": [
+              "refund",
+              "duplicate-charge",
+              "legacy"
+            ],
+            "operational_metadata": {
+              "memory_role": "legacy_policy",
+              "entity_match": true,
+              "temporal_scope": "outdated"
+            }
+          },
+          "cs_01_mem_2": {
+            "memory_id": "cs_01_mem_2",
+            "entity_id": "customer_8821",
+            "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+            "source": "policy_portal",
+            "created_at": "2026-01-15T00:00:00Z",
+            "valid_from": "2026-01-15T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.97,
+            "retrieval_priority": 80,
+            "supersedes": [
+              "cs_01_mem_1"
+            ],
+            "tags": [
+              "refund",
+              "current-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {},
+        "unchanged_input_hash": "c9e2426267173989c22a3cfcaa5b786c4c7b38fd99c5429ac87716a35043d4b0",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:32:20.288622Z"
+      },
+      "shared_baseline_runs": true,
+      "fresh_baseline_per_pair": false,
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "individual_influences": {
+        "cs_01_mem_1": 0.0,
+        "cs_01_mem_2": 1.0
+      },
+      "combined_successful_runs": 3,
+      "combined_total_evaluated_runs": 3,
+      "combined_success_rate": 1.0,
+      "combined_action_distribution": {
+        "ISSUE_REFUND": 3
+      },
+      "combined_influence": 1.0,
+      "interaction_score": 0.0,
+      "interaction_synergy": 0.0,
+      "confidence_interval_low": 0.43849391955098227,
+      "confidence_interval_high": 1.0,
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 1896,
+        "output_tokens": 301,
+        "total_tokens": 2197
+      },
+      "latency_ms": 8588,
+      "support_validity": {
+        "outcome_correct": true,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention changed behavior, but the remaining snapshot no longer contains enough active policy and evidence to support the expected action confidently.",
+        "requires_human_review": true
+      },
+      "evidence_classification": "dominated by one memory",
+      "original_trace_ids": [
+        "trace_9ab01c726b704269994dd7f464eede5e",
+        "trace_70098ed612ac40ef9e6270d6ad384a24",
+        "trace_107f897bfe6b444f8aa507ab7750a542"
+      ],
+      "intervention_trace_ids": [
+        "trace_573ed8326aa4419b9e7c168392e7cdba",
+        "trace_3aa269fc872740e3b78b72914f7a187c",
+        "trace_4825ceaca96746fc8675f556c17d9683"
+      ]
+    },
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "scenario_id": "cs_01",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORIES",
+        "target_memory_ids": [
+          "cs_01_mem_1",
+          "cs_01_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "REMOVE_MEMORIES on cs_01_mem_1 + cs_01_mem_3",
+        "intervention_id": "intervention_b5e15e1194d5419790e0eb49f96e9f2c",
+        "before_states": {
+          "cs_01_mem_1": {
+            "memory_id": "cs_01_mem_1",
+            "entity_id": "customer_8821",
+            "content": "Old 2024 pilot note said duplicate-charge refunds required manager approval.",
+            "source": "legacy_policy_sync",
+            "created_at": "2024-02-01T00:00:00Z",
+            "valid_from": "2024-02-01T00:00:00Z",
+            "valid_until": "2024-12-31T00:00:00Z",
+            "status": "stale",
+            "confidence": 0.81,
+            "retrieval_priority": 99,
+            "supersedes": [],
+            "tags": [
+              "refund",
+              "duplicate-charge",
+              "legacy"
+            ],
+            "operational_metadata": {
+              "memory_role": "legacy_policy",
+              "entity_match": true,
+              "temporal_scope": "outdated"
+            }
+          },
+          "cs_01_mem_3": {
+            "memory_id": "cs_01_mem_3",
+            "entity_id": "order_8821",
+            "content": "Billing ledger shows two settled charges within one minute for the same order.",
+            "source": "billing_ledger",
+            "created_at": "2026-07-01T09:00:00Z",
+            "valid_from": "2026-07-01T09:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.99,
+            "retrieval_priority": 70,
+            "supersedes": [],
+            "tags": [
+              "evidence"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {},
+        "unchanged_input_hash": "465ba3e7fd3684e0e280b27d4c78156137c381124bbc560f010b1c88cbbfa680",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:32:41.787134Z"
+      },
+      "shared_baseline_runs": true,
+      "fresh_baseline_per_pair": false,
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "individual_influences": {
+        "cs_01_mem_1": 0.0,
+        "cs_01_mem_3": 0.0
+      },
+      "combined_successful_runs": 0,
+      "combined_total_evaluated_runs": 3,
+      "combined_success_rate": 0.0,
+      "combined_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "combined_influence": 0.0,
+      "interaction_score": 0.0,
+      "interaction_synergy": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 1941,
+        "output_tokens": 378,
+        "total_tokens": 2319
+      },
+      "latency_ms": 9363,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "evidence_classification": "no observed pairwise influence",
+      "original_trace_ids": [
+        "trace_9ab01c726b704269994dd7f464eede5e",
+        "trace_70098ed612ac40ef9e6270d6ad384a24",
+        "trace_107f897bfe6b444f8aa507ab7750a542"
+      ],
+      "intervention_trace_ids": [
+        "trace_92d4ba3976e641a3b959f86b53e5f235",
+        "trace_6783cf230d564309ba16388389fedcb3",
+        "trace_77cc5e26cab74611968e517fd7afbc3f"
+      ]
+    },
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "scenario_id": "cs_01",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORIES",
+        "target_memory_ids": [
+          "cs_01_mem_1",
+          "cs_01_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "DISABLE_MEMORIES on cs_01_mem_1 + cs_01_mem_3",
+        "intervention_id": "intervention_c77249a585c84f66ab3b4d673eaa994a",
+        "before_states": {
+          "cs_01_mem_1": {
+            "memory_id": "cs_01_mem_1",
+            "entity_id": "customer_8821",
+            "content": "Old 2024 pilot note said duplicate-charge refunds required manager approval.",
+            "source": "legacy_policy_sync",
+            "created_at": "2024-02-01T00:00:00Z",
+            "valid_from": "2024-02-01T00:00:00Z",
+            "valid_until": "2024-12-31T00:00:00Z",
+            "status": "stale",
+            "confidence": 0.81,
+            "retrieval_priority": 99,
+            "supersedes": [],
+            "tags": [
+              "refund",
+              "duplicate-charge",
+              "legacy"
+            ],
+            "operational_metadata": {
+              "memory_role": "legacy_policy",
+              "entity_match": true,
+              "temporal_scope": "outdated"
+            }
+          },
+          "cs_01_mem_3": {
+            "memory_id": "cs_01_mem_3",
+            "entity_id": "order_8821",
+            "content": "Billing ledger shows two settled charges within one minute for the same order.",
+            "source": "billing_ledger",
+            "created_at": "2026-07-01T09:00:00Z",
+            "valid_from": "2026-07-01T09:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.99,
+            "retrieval_priority": 70,
+            "supersedes": [],
+            "tags": [
+              "evidence"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {
+          "cs_01_mem_1": {
+            "memory_id": "cs_01_mem_1",
+            "entity_id": "customer_8821",
+            "content": "Old 2024 pilot note said duplicate-charge refunds required manager approval.",
+            "source": "legacy_policy_sync",
+            "created_at": "2024-02-01T00:00:00Z",
+            "valid_from": "2024-02-01T00:00:00Z",
+            "valid_until": "2024-12-31T00:00:00Z",
+            "status": "invalid",
+            "confidence": 0.81,
+            "retrieval_priority": 99,
+            "supersedes": [],
+            "tags": [
+              "refund",
+              "duplicate-charge",
+              "legacy"
+            ],
+            "operational_metadata": {
+              "memory_role": "legacy_policy",
+              "entity_match": true,
+              "temporal_scope": "outdated",
+              "disabled_for_replay": true
+            }
+          },
+          "cs_01_mem_3": {
+            "memory_id": "cs_01_mem_3",
+            "entity_id": "order_8821",
+            "content": "Billing ledger shows two settled charges within one minute for the same order.",
+            "source": "billing_ledger",
+            "created_at": "2026-07-01T09:00:00Z",
+            "valid_from": "2026-07-01T09:00:00Z",
+            "valid_until": null,
+            "status": "invalid",
+            "confidence": 0.99,
+            "retrieval_priority": 70,
+            "supersedes": [],
+            "tags": [
+              "evidence"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current",
+              "disabled_for_replay": true
+            }
+          }
+        },
+        "unchanged_input_hash": "465ba3e7fd3684e0e280b27d4c78156137c381124bbc560f010b1c88cbbfa680",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:32:51.199996Z"
+      },
+      "shared_baseline_runs": true,
+      "fresh_baseline_per_pair": false,
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "individual_influences": {
+        "cs_01_mem_1": 0.0,
+        "cs_01_mem_3": 0.0
+      },
+      "combined_successful_runs": 0,
+      "combined_total_evaluated_runs": 3,
+      "combined_success_rate": 0.0,
+      "combined_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "combined_influence": 0.0,
+      "interaction_score": 0.0,
+      "interaction_synergy": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 3147,
+        "output_tokens": 432,
+        "total_tokens": 3579
+      },
+      "latency_ms": 10885,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "evidence_classification": "no observed pairwise influence",
+      "original_trace_ids": [
+        "trace_9ab01c726b704269994dd7f464eede5e",
+        "trace_70098ed612ac40ef9e6270d6ad384a24",
+        "trace_107f897bfe6b444f8aa507ab7750a542"
+      ],
+      "intervention_trace_ids": [
+        "trace_e5e95a20ac4748f78eeec95b40beb366",
+        "trace_16c456fa663f47e8b5f93269335d3c2e",
+        "trace_499ce69a1c8a4b8c8cccecd7bebd3691"
+      ]
+    },
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "scenario_id": "cs_01",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORIES",
+        "target_memory_ids": [
+          "cs_01_mem_2",
+          "cs_01_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "REMOVE_MEMORIES on cs_01_mem_2 + cs_01_mem_3",
+        "intervention_id": "intervention_bb13101ff7ad4514bdffc3830bf3456a",
+        "before_states": {
+          "cs_01_mem_2": {
+            "memory_id": "cs_01_mem_2",
+            "entity_id": "customer_8821",
+            "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+            "source": "policy_portal",
+            "created_at": "2026-01-15T00:00:00Z",
+            "valid_from": "2026-01-15T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.97,
+            "retrieval_priority": 80,
+            "supersedes": [
+              "cs_01_mem_1"
+            ],
+            "tags": [
+              "refund",
+              "current-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          },
+          "cs_01_mem_3": {
+            "memory_id": "cs_01_mem_3",
+            "entity_id": "order_8821",
+            "content": "Billing ledger shows two settled charges within one minute for the same order.",
+            "source": "billing_ledger",
+            "created_at": "2026-07-01T09:00:00Z",
+            "valid_from": "2026-07-01T09:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.99,
+            "retrieval_priority": 70,
+            "supersedes": [],
+            "tags": [
+              "evidence"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {},
+        "unchanged_input_hash": "a6d285feb5dcdd592aa7483d3febbe9a346eb52ff4350cfaac5d88e870d641e9",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:33:02.134366Z"
+      },
+      "shared_baseline_runs": true,
+      "fresh_baseline_per_pair": false,
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "individual_influences": {
+        "cs_01_mem_2": 1.0,
+        "cs_01_mem_3": 0.0
+      },
+      "combined_successful_runs": 0,
+      "combined_total_evaluated_runs": 3,
+      "combined_success_rate": 0.0,
+      "combined_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "combined_influence": 0.0,
+      "interaction_score": -1.0,
+      "interaction_synergy": -1.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 1965,
+        "output_tokens": 499,
+        "total_tokens": 2464
+      },
+      "latency_ms": 12257,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "evidence_classification": "no observed pairwise influence",
+      "original_trace_ids": [
+        "trace_9ab01c726b704269994dd7f464eede5e",
+        "trace_70098ed612ac40ef9e6270d6ad384a24",
+        "trace_107f897bfe6b444f8aa507ab7750a542"
+      ],
+      "intervention_trace_ids": [
+        "trace_d7acab53bce843d7ab06c2a4d95cd178",
+        "trace_2456c151ce4b4cfca8965bcd890345ca",
+        "trace_c41a4bfb2372435cbb5d28c39d45168a"
+      ]
+    },
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "scenario_id": "cs_01",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORIES",
+        "target_memory_ids": [
+          "cs_01_mem_2",
+          "cs_01_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "DISABLE_MEMORIES on cs_01_mem_2 + cs_01_mem_3",
+        "intervention_id": "intervention_89cb447e1a9e4a2fbfe44133def0295a",
+        "before_states": {
+          "cs_01_mem_2": {
+            "memory_id": "cs_01_mem_2",
+            "entity_id": "customer_8821",
+            "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+            "source": "policy_portal",
+            "created_at": "2026-01-15T00:00:00Z",
+            "valid_from": "2026-01-15T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.97,
+            "retrieval_priority": 80,
+            "supersedes": [
+              "cs_01_mem_1"
+            ],
+            "tags": [
+              "refund",
+              "current-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          },
+          "cs_01_mem_3": {
+            "memory_id": "cs_01_mem_3",
+            "entity_id": "order_8821",
+            "content": "Billing ledger shows two settled charges within one minute for the same order.",
+            "source": "billing_ledger",
+            "created_at": "2026-07-01T09:00:00Z",
+            "valid_from": "2026-07-01T09:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.99,
+            "retrieval_priority": 70,
+            "supersedes": [],
+            "tags": [
+              "evidence"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {
+          "cs_01_mem_2": {
+            "memory_id": "cs_01_mem_2",
+            "entity_id": "customer_8821",
+            "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+            "source": "policy_portal",
+            "created_at": "2026-01-15T00:00:00Z",
+            "valid_from": "2026-01-15T00:00:00Z",
+            "valid_until": null,
+            "status": "invalid",
+            "confidence": 0.97,
+            "retrieval_priority": 80,
+            "supersedes": [
+              "cs_01_mem_1"
+            ],
+            "tags": [
+              "refund",
+              "current-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current",
+              "disabled_for_replay": true
+            }
+          },
+          "cs_01_mem_3": {
+            "memory_id": "cs_01_mem_3",
+            "entity_id": "order_8821",
+            "content": "Billing ledger shows two settled charges within one minute for the same order.",
+            "source": "billing_ledger",
+            "created_at": "2026-07-01T09:00:00Z",
+            "valid_from": "2026-07-01T09:00:00Z",
+            "valid_until": null,
+            "status": "invalid",
+            "confidence": 0.99,
+            "retrieval_priority": 70,
+            "supersedes": [],
+            "tags": [
+              "evidence"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current",
+              "disabled_for_replay": true
+            }
+          }
+        },
+        "unchanged_input_hash": "a6d285feb5dcdd592aa7483d3febbe9a346eb52ff4350cfaac5d88e870d641e9",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:33:14.448006Z"
+      },
+      "shared_baseline_runs": true,
+      "fresh_baseline_per_pair": false,
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "individual_influences": {
+        "cs_01_mem_2": 1.0,
+        "cs_01_mem_3": 0.0
+      },
+      "combined_successful_runs": 0,
+      "combined_total_evaluated_runs": 3,
+      "combined_success_rate": 0.0,
+      "combined_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "combined_influence": 0.0,
+      "interaction_score": -1.0,
+      "interaction_synergy": -1.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 3150,
+        "output_tokens": 618,
+        "total_tokens": 3768
+      },
+      "latency_ms": 16531,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "evidence_classification": "no observed pairwise influence",
+      "original_trace_ids": [
+        "trace_9ab01c726b704269994dd7f464eede5e",
+        "trace_70098ed612ac40ef9e6270d6ad384a24",
+        "trace_107f897bfe6b444f8aa507ab7750a542"
+      ],
+      "intervention_trace_ids": [
+        "trace_69840ff965c7474e86d92752561fb26d",
+        "trace_42c13796dd2b47d1ab80a51cae4e7464",
+        "trace_2657a8404fa0411fb4be8f0110ab4a4a"
+      ]
+    },
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "scenario_id": "cs_01",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORIES",
+        "target_memory_ids": [
+          "cs_01_mem_1",
+          "cs_01_mem_2"
+        ],
+        "replacement_values": {},
+        "reason": "DISABLE_MEMORIES on cs_01_mem_1 + cs_01_mem_2",
+        "intervention_id": "intervention_ae99a5b36bfd49f086b8f097b92262d8",
+        "before_states": {
+          "cs_01_mem_1": {
+            "memory_id": "cs_01_mem_1",
+            "entity_id": "customer_8821",
+            "content": "Old 2024 pilot note said duplicate-charge refunds required manager approval.",
+            "source": "legacy_policy_sync",
+            "created_at": "2024-02-01T00:00:00Z",
+            "valid_from": "2024-02-01T00:00:00Z",
+            "valid_until": "2024-12-31T00:00:00Z",
+            "status": "stale",
+            "confidence": 0.81,
+            "retrieval_priority": 99,
+            "supersedes": [],
+            "tags": [
+              "refund",
+              "duplicate-charge",
+              "legacy"
+            ],
+            "operational_metadata": {
+              "memory_role": "legacy_policy",
+              "entity_match": true,
+              "temporal_scope": "outdated"
+            }
+          },
+          "cs_01_mem_2": {
+            "memory_id": "cs_01_mem_2",
+            "entity_id": "customer_8821",
+            "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+            "source": "policy_portal",
+            "created_at": "2026-01-15T00:00:00Z",
+            "valid_from": "2026-01-15T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.97,
+            "retrieval_priority": 80,
+            "supersedes": [
+              "cs_01_mem_1"
+            ],
+            "tags": [
+              "refund",
+              "current-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {
+          "cs_01_mem_1": {
+            "memory_id": "cs_01_mem_1",
+            "entity_id": "customer_8821",
+            "content": "Old 2024 pilot note said duplicate-charge refunds required manager approval.",
+            "source": "legacy_policy_sync",
+            "created_at": "2024-02-01T00:00:00Z",
+            "valid_from": "2024-02-01T00:00:00Z",
+            "valid_until": "2024-12-31T00:00:00Z",
+            "status": "invalid",
+            "confidence": 0.81,
+            "retrieval_priority": 99,
+            "supersedes": [],
+            "tags": [
+              "refund",
+              "duplicate-charge",
+              "legacy"
+            ],
+            "operational_metadata": {
+              "memory_role": "legacy_policy",
+              "entity_match": true,
+              "temporal_scope": "outdated",
+              "disabled_for_replay": true
+            }
+          },
+          "cs_01_mem_2": {
+            "memory_id": "cs_01_mem_2",
+            "entity_id": "customer_8821",
+            "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+            "source": "policy_portal",
+            "created_at": "2026-01-15T00:00:00Z",
+            "valid_from": "2026-01-15T00:00:00Z",
+            "valid_until": null,
+            "status": "invalid",
+            "confidence": 0.97,
+            "retrieval_priority": 80,
+            "supersedes": [
+              "cs_01_mem_1"
+            ],
+            "tags": [
+              "refund",
+              "current-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current",
+              "disabled_for_replay": true
+            }
+          }
+        },
+        "unchanged_input_hash": "c9e2426267173989c22a3cfcaa5b786c4c7b38fd99c5429ac87716a35043d4b0",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:32:28.928672Z"
+      },
+      "shared_baseline_runs": true,
+      "fresh_baseline_per_pair": false,
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "ASK_FOR_INFORMATION": 3
+      },
+      "individual_influences": {
+        "cs_01_mem_1": 0.0,
+        "cs_01_mem_2": 1.0
+      },
+      "combined_successful_runs": 0,
+      "combined_total_evaluated_runs": 3,
+      "combined_success_rate": 0.0,
+      "combined_action_distribution": {
+        "ASK_FOR_INFORMATION": 1,
+        "REQUEST_MANAGER_APPROVAL": 2
+      },
+      "combined_influence": 0.0,
+      "interaction_score": -1.0,
+      "interaction_synergy": -1.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "replay_stability": 0.6666666666666666,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 3147,
+        "output_tokens": 461,
+        "total_tokens": 3608
+      },
+      "latency_ms": 12789,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "evidence_classification": "negative interaction",
+      "original_trace_ids": [
+        "trace_9ab01c726b704269994dd7f464eede5e",
+        "trace_70098ed612ac40ef9e6270d6ad384a24",
+        "trace_107f897bfe6b444f8aa507ab7750a542"
+      ],
+      "intervention_trace_ids": [
+        "trace_63ba2a6fc4a5460eb82ee7c5421c4a15",
+        "trace_0a19a16f1631475bb840dfe490c3d68b",
+        "trace_234f5a55d8574cf0b1e510226e4c9737"
+      ]
+    }
+  ],
+  "memory_dependence_classification": "individual-memory dependent",
+  "model": "gpt-5.6",
+  "prompt_version": "v1",
+  "api_usage": {
+    "input_tokens": 15246,
+    "output_tokens": 2689,
+    "total_tokens": 17935
+  },
+  "git_commit_hash": "016a9b5f3e10457c60c4424dc1108c325db7b626",
+  "created_at": "2026-07-18T07:33:31.113073Z"
+}

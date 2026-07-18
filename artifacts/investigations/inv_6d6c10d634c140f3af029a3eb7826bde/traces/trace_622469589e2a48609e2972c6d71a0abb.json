@@ -1,0 +1,208 @@
+{
+  "trace_id": "trace_622469589e2a48609e2972c6d71a0abb",
+  "scenario_id": "cs_01",
+  "run_id": "run_fa04ea0e20de4f559d212d74d4fba66a",
+  "domain": "customer_support",
+  "user_input": "I was charged twice for order 8821 and need the duplicate reversed.",
+  "agent_input": {
+    "schema_version": "day2a-v1",
+    "scenario_id": "cs_01",
+    "domain": "customer_support",
+    "user_input": "I was charged twice for order 8821 and need the duplicate reversed.",
+    "allowed_actions": [
+      "ISSUE_REFUND",
+      "REQUEST_MANAGER_APPROVAL",
+      "DENY_REFUND",
+      "ASK_FOR_INFORMATION"
+    ],
+    "memories": [
+      {
+        "memory_id": "cs_01_mem_3",
+        "entity_id": "order_8821",
+        "content": "Billing ledger shows two settled charges within one minute for the same order.",
+        "source": "billing_ledger",
+        "created_at": "2026-07-01T09:00:00Z",
+        "valid_from": "2026-07-01T09:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.99,
+        "retrieval_priority": 70,
+        "supersedes": [],
+        "tags": [
+          "evidence"
+        ],
+        "operational_metadata": {
+          "memory_role": "evidence",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    ]
+  },
+  "requested_model": "gpt-5.6",
+  "response_model": "gpt-5.6-sol",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "prompt_content_hash": "146b6c39f0df027da7f2294ba51e23f87835ecb8b59c2681c315fed51d2a8d11",
+  "agent_input_schema_version": "day2a-v1",
+  "request_hash": "11ecdb18824ad8cb52dd1fd71e6d62115111066ee8fcee1b05001d8379f611f9",
+  "retrieved_memory_ids": [
+    "cs_01_mem_3"
+  ],
+  "memory_snapshot": [
+    {
+      "memory_id": "cs_01_mem_3",
+      "entity_id": "order_8821",
+      "content": "Billing ledger shows two settled charges within one minute for the same order.",
+      "source": "billing_ledger",
+      "created_at": "2026-07-01T09:00:00Z",
+      "valid_from": "2026-07-01T09:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.99,
+      "retrieval_priority": 70,
+      "supersedes": [],
+      "tags": [
+        "evidence"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    }
+  ],
+  "structured_response": {
+    "selected_action": "ISSUE_REFUND",
+    "action_arguments": {
+      "order_id": "8821",
+      "reason": "Duplicate settled charge"
+    },
+    "cited_memory_ids": [
+      "cs_01_mem_3"
+    ],
+    "concise_rationale": "The active billing ledger confirms two settled charges for the same order.",
+    "uncertainty": 0.01,
+    "needs_human_review": false
+  },
+  "selected_action": "ISSUE_REFUND",
+  "action_arguments": {
+    "order_id": "8821",
+    "reason": "Duplicate settled charge"
+  },
+  "cited_memory_ids": [
+    "cs_01_mem_3"
+  ],
+  "concise_rationale": "The active billing ledger confirms two settled charges for the same order.",
+  "uncertainty": 0.01,
+  "needs_human_review": false,
+  "tool_call": {
+    "response_id": "resp_07c4ee2180be275b006a5b2cbf5eec81988c17a547febd854a",
+    "cache_hit": false
+  },
+  "evaluation": {
+    "evaluator_result": {
+      "expected_action": "ISSUE_REFUND",
+      "selected_action": "ISSUE_REFUND",
+      "passed": true,
+      "reason": "selected action matched expected action"
+    }
+  },
+  "passed": true,
+  "execution_source": "live",
+  "cache_lookup_latency_ms": 0,
+  "original_model_latency_ms": null,
+  "latency_ms": 3375,
+  "token_usage": {
+    "input_tokens": 632,
+    "output_tokens": 124,
+    "total_tokens": 756
+  },
+  "request_token_usage": {
+    "input_tokens": 632,
+    "output_tokens": 124,
+    "total_tokens": 756
+  },
+  "cached_original_token_usage": null,
+  "billable_api_call": true,
+  "cache": {
+    "enabled": false,
+    "request_hash": "11ecdb18824ad8cb52dd1fd71e6d62115111066ee8fcee1b05001d8379f611f9",
+    "hit": false,
+    "cache_path": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\openai_cache\\11ecdb18824ad8cb52dd1fd71e6d62115111066ee8fcee1b05001d8379f611f9.json",
+    "cached_at": null
+  },
+  "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+  "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+  "replay_intervention": {
+    "intervention_type": "ISOLATE_MEMORY",
+    "target_memory_ids": [
+      "cs_01_mem_3"
+    ],
+    "replacement_values": {},
+    "reason": "Retain only cs_01_mem_3 in the snapshot",
+    "intervention_id": "intervention_13a5a133b95047f897a97f4bfac880bf",
+    "before_states": {
+      "cs_01_mem_3": {
+        "memory_id": "cs_01_mem_3",
+        "entity_id": "order_8821",
+        "content": "Billing ledger shows two settled charges within one minute for the same order.",
+        "source": "billing_ledger",
+        "created_at": "2026-07-01T09:00:00Z",
+        "valid_from": "2026-07-01T09:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.99,
+        "retrieval_priority": 70,
+        "supersedes": [],
+        "tags": [
+          "evidence"
+        ],
+        "operational_metadata": {
+          "memory_role": "evidence",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    },
+    "after_states": {
+      "cs_01_mem_3": {
+        "memory_id": "cs_01_mem_3",
+        "entity_id": "order_8821",
+        "content": "Billing ledger shows two settled charges within one minute for the same order.",
+        "source": "billing_ledger",
+        "created_at": "2026-07-01T09:00:00Z",
+        "valid_from": "2026-07-01T09:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.99,
+        "retrieval_priority": 70,
+        "supersedes": [],
+        "tags": [
+          "evidence"
+        ],
+        "operational_metadata": {
+          "memory_role": "evidence",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    },
+    "unchanged_input_hash": "68f42987e4c930a00c011a886faa0dfde50e6325c2c851d8d1174d9a111a0825",
+    "model": "gpt-5.6",
+    "prompt_version": "v1",
+    "inference_configuration": {
+      "model": "gpt-5.6",
+      "timeout_seconds": 30.0,
+      "max_retries": 2,
+      "cache_enabled": false,
+      "prompt_version": "v1",
+      "reasoning_effort": null,
+      "verbosity": "low"
+    },
+    "created_at": "2026-07-18T07:35:18.511598Z"
+  },
+  "replay_role": "isolate-memory_intervention",
+  "error": null,
+  "created_at": "2026-07-18T07:35:30.423878Z"
+}

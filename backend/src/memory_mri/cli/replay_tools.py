@@ -48,6 +48,43 @@ def main() -> None:
     results_parser = subparsers.add_parser("replay-results", help="Retrieve replay results")
     results_parser.add_argument("--investigation-id", required=True)
 
+    pairwise_parser = subparsers.add_parser("pairwise-replay", help="Run pairwise replay")
+    pairwise_parser.add_argument("--investigation-id", required=True)
+    pairwise_parser.add_argument("--memory-a", default=None)
+    pairwise_parser.add_argument("--memory-b", default=None)
+    pairwise_parser.add_argument("--all-pairs", action="store_true")
+
+    no_memory_parser = subparsers.add_parser(
+        "no-memory-control",
+        help="Run the no-memory control for an investigation",
+    )
+    no_memory_parser.add_argument("--investigation-id", required=True)
+
+    isolate_parser = subparsers.add_parser(
+        "isolate-memory",
+        help="Run the single-memory isolation control",
+    )
+    isolate_parser.add_argument("--investigation-id", required=True)
+    isolate_parser.add_argument("--memory-id", required=True)
+
+    compare_parser = subparsers.add_parser(
+        "compare-individual-pairwise",
+        help="Compare individual and pairwise replay evidence",
+    )
+    compare_parser.add_argument("--investigation-id", required=True)
+
+    classify_parser = subparsers.add_parser(
+        "classify-memory-dependence",
+        help="Classify the investigation's memory dependence",
+    )
+    classify_parser.add_argument("--investigation-id", required=True)
+
+    export_pairwise_parser = subparsers.add_parser(
+        "export-pairwise",
+        help="Export pairwise replay and memory-control artifacts",
+    )
+    export_pairwise_parser.add_argument("--investigation-id", required=True)
+
     args = parser.parse_args()
     engine = CounterfactualReplayEngine(
         database_url=args.database_url,
@@ -68,16 +105,52 @@ def main() -> None:
             print(f"{memory.memory_id}: {memory.content}")
         return
     if args.command == "replay-remove":
-        result = engine.replay_without_memory(args.investigation_id, args.memory_id)
-        print(result.model_dump_json(indent=2))
+        replay_result = engine.replay_without_memory(args.investigation_id, args.memory_id)
+        print(replay_result.model_dump_json(indent=2))
         return
     if args.command == "replay-disable":
-        result = engine.replay_with_memory_disabled(args.investigation_id, args.memory_id)
-        print(result.model_dump_json(indent=2))
+        replay_result = engine.replay_with_memory_disabled(args.investigation_id, args.memory_id)
+        print(replay_result.model_dump_json(indent=2))
         return
     if args.command == "replay-results":
         results = engine.get_replay_results(args.investigation_id)
         print("[\n" + ",\n".join(result.model_dump_json(indent=2) for result in results) + "\n]")
+        return
+    if args.command == "pairwise-replay":
+        artifact = engine.replay_pairwise(
+            args.investigation_id,
+            memory_a=args.memory_a,
+            memory_b=args.memory_b,
+            all_pairs=args.all_pairs,
+        )
+        print(artifact.model_dump_json(indent=2))
+        return
+    if args.command == "no-memory-control":
+        control_result = engine.run_no_memory_control(args.investigation_id)
+        print(control_result.model_dump_json(indent=2))
+        return
+    if args.command == "isolate-memory":
+        control_result = engine.run_isolate_memory(args.investigation_id, args.memory_id)
+        print(control_result.model_dump_json(indent=2))
+        return
+    if args.command == "compare-individual-pairwise":
+        artifact = engine.replay_pairwise(args.investigation_id, all_pairs=True)
+        print(artifact.model_dump_json(indent=2))
+        return
+    if args.command == "classify-memory-dependence":
+        classification = engine.classify_memory_dependence(args.investigation_id)
+        print(classification.value)
+        return
+    if args.command == "export-pairwise":
+        pairwise = engine.replay_pairwise(args.investigation_id, all_pairs=True)
+        controls = engine.export_memory_controls(args.investigation_id)
+        pairwise_path = (
+            engine._investigation_dir(pairwise.investigation_id) / "pairwise-replay.json"
+        )
+        controls_path = (
+            engine._investigation_dir(controls.investigation_id) / "memory-controls.json"
+        )
+        print(f'{{\n  "pairwise": "{pairwise_path}",\n  "controls": "{controls_path}"\n}}')
         return
     raise SystemExit(f"unsupported command: {args.command}")
 

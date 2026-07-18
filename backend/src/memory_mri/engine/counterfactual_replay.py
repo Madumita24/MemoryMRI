@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import subprocess
 from collections import Counter
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
+from itertools import combinations
 from pathlib import Path
 from typing import Callable
 from uuid import uuid4
@@ -20,11 +23,20 @@ from memory_mri.schemas import (
     AgentInputMemory,
     AgentScenario,
     BenchmarkCase,
+    DecisionSupportAudit,
     ExecutionTrace,
     Intervention,
     InterventionType,
     Investigation,
+    MemoryControlResult,
+    MemoryControlsArtifact,
+    MemoryControlType,
+    MemoryDependenceClassification,
     MemoryStatus,
+    PairEvidenceClassification,
+    PairSelectionRecord,
+    PairwiseReplayArtifact,
+    PairwiseReplayResult,
     ReplayMode,
     ReplayResult,
     TraceErrorDetails,
@@ -40,11 +52,13 @@ class ReplayBatch:
     traces: list[ExecutionTrace]
     successful_runs: int
     total_runs: int
+    evaluated_runs: int
     success_rate: float
     action_distribution: dict[str, int]
     replay_stability: float
     errors: list[TraceErrorDetails]
     token_usage: dict[str, int]
+    latency_ms: int
 
 
 RunnerFactory = Callable[[ExecutionTrace], AgentRunner]
@@ -129,6 +143,210 @@ class CounterfactualReplayEngine:
     def get_replay_results(self, investigation_id: str) -> list[ReplayResult]:
         return self.load_investigation(investigation_id).replay_results
 
+    def generate_ranked_pairs(
+        self,
+        investigation_id: str,
+        *,
+        max_memories: int = 5,
+    ) -> PairSelectionRecord:
+        investigation = self.load_investigation(investigation_id)
+        ranking_path = self._investigation_dir(investigation_id) / "suspicion-ranking.json"
+        ranking_source = "investigation_snapshot"
+        ranking_version: str | None = None
+        ranking_snapshot_hash: str | None = None
+        if ranking_path.exists():
+            ranking_payload = json.loads(ranking_path.read_text(encoding="utf-8"))
+            selected_memory_ids = [
+                memory["memory_id"] for memory in ranking_payload["memories"][:max_memories]
+            ]
+            ranking_source = "suspicion-ranking.json"
+            ranking_version = ranking_payload["metadata"].get("semantic_analysis_prompt_version")
+            ranking_snapshot_hash = ranking_payload["metadata"].get("memory_snapshot_hash")
+        else:
+            selected_memory_ids = [
+                memory.memory_id for memory in investigation.original_memory_snapshot[:max_memories]
+            ]
+        generated_pairs = [
+            [left, right] for left, right in combinations(sorted(selected_memory_ids), 2)
+        ]
+        return PairSelectionRecord(
+            selected_memory_ids=selected_memory_ids,
+            generated_pairs=generated_pairs,
+            ranking_source=ranking_source,
+            ranking_version=ranking_version,
+            ranking_snapshot_hash=ranking_snapshot_hash,
+            created_at=datetime.now(timezone.utc),
+        )
+
+    def replay_pairwise(
+        self,
+        investigation_id: str,
+        *,
+        memory_a: str | None = None,
+        memory_b: str | None = None,
+        all_pairs: bool = False,
+        shared_baseline_runs: bool = True,
+        fresh_baseline_per_pair: bool = False,
+    ) -> PairwiseReplayArtifact:
+        investigation = self.load_investigation(investigation_id)
+        pair_selection = self.generate_ranked_pairs(investigation_id)
+        if memory_a is not None and memory_b is not None:
+            pair_targets = [[*sorted([memory_a, memory_b])]]
+        elif all_pairs:
+            pair_targets = pair_selection.generated_pairs
+        else:
+            pair_targets = pair_selection.generated_pairs
+
+        original_case = self._materialize_case(investigation)
+        shared_baseline = None
+        shared_trace_ids: list[str] = []
+        if shared_baseline_runs and not fresh_baseline_per_pair:
+            shared_traces = self._execute_batch(
+                investigation=investigation,
+                parent_trace_id=investigation.parent_trace_id,
+                intervention=None,
+                case=original_case.model_copy(deep=True),
+                role="pairwise_shared_baseline",
+            )
+            shared_baseline = self._summarize_batch(shared_traces)
+            shared_trace_ids = [trace.trace_id for trace in shared_traces]
+
+        pair_results: list[PairwiseReplayResult] = []
+        for target_pair in pair_targets:
+            self._ensure_target_memory_exists(investigation, target_pair[0])
+            self._ensure_target_memory_exists(investigation, target_pair[1])
+            for intervention_type in (
+                InterventionType.REMOVE_MEMORIES,
+                InterventionType.DISABLE_MEMORIES,
+            ):
+                pair_results.append(
+                    self._run_pair_intervention(
+                        investigation=investigation,
+                        target_memory_ids=target_pair,
+                        intervention_type=intervention_type,
+                        shared_baseline=shared_baseline,
+                        shared_trace_ids=shared_trace_ids,
+                        shared_baseline_runs=shared_baseline_runs,
+                        fresh_baseline_per_pair=fresh_baseline_per_pair,
+                    )
+                )
+
+        artifact = PairwiseReplayArtifact(
+            investigation_id=investigation.investigation_id,
+            parent_trace_id=investigation.parent_trace_id,
+            scenario_id=investigation.scenario_id,
+            original_snapshot_hash=self._snapshot_hash(investigation.original_memory_snapshot),
+            pair_selection=pair_selection,
+            shared_baseline_runs=shared_baseline_runs,
+            fresh_baseline_per_pair=fresh_baseline_per_pair,
+            individual_replay_evidence=investigation.replay_results,
+            pair_results=self._rank_pair_results(pair_results),
+            memory_dependence_classification=self.classify_memory_dependence(
+                investigation_id,
+                pair_results=pair_results,
+            ),
+            model=investigation.requested_model,
+            prompt_version=investigation.prompt_version,
+            api_usage=self._aggregate_trace_usage(pair_results),
+            git_commit_hash=self._git_commit_hash(),
+            created_at=datetime.now(timezone.utc),
+        )
+        self._write_pairwise_artifacts(artifact)
+        return artifact
+
+    def run_no_memory_control(self, investigation_id: str) -> MemoryControlResult:
+        investigation = self.load_investigation(investigation_id)
+        return self._run_control(
+            investigation=investigation,
+            control_type=MemoryControlType.NO_MEMORY,
+            target_memory_id=None,
+        )
+
+    def run_isolate_memory(self, investigation_id: str, memory_id: str) -> MemoryControlResult:
+        investigation = self.load_investigation(investigation_id)
+        self._ensure_target_memory_exists(investigation, memory_id)
+        return self._run_control(
+            investigation=investigation,
+            control_type=MemoryControlType.ISOLATE_MEMORY,
+            target_memory_id=memory_id,
+        )
+
+    def run_all_isolation_controls(self, investigation_id: str) -> list[MemoryControlResult]:
+        investigation = self.load_investigation(investigation_id)
+        return [
+            self.run_isolate_memory(investigation_id, memory.memory_id)
+            for memory in investigation.original_memory_snapshot
+        ]
+
+    def export_memory_controls(self, investigation_id: str) -> MemoryControlsArtifact:
+        investigation = self.load_investigation(investigation_id)
+        no_memory = self.run_no_memory_control(investigation_id)
+        isolation_controls = self.run_all_isolation_controls(investigation_id)
+        artifact = MemoryControlsArtifact(
+            investigation_id=investigation.investigation_id,
+            parent_trace_id=investigation.parent_trace_id,
+            scenario_id=investigation.scenario_id,
+            original_snapshot_hash=self._snapshot_hash(investigation.original_memory_snapshot),
+            no_memory_control=no_memory,
+            isolation_controls=isolation_controls,
+            memory_dependence_classification=self.classify_memory_dependence(
+                investigation_id,
+                control_results=[no_memory, *isolation_controls],
+            ),
+            model=investigation.requested_model,
+            prompt_version=investigation.prompt_version,
+            api_usage=self._aggregate_control_usage([no_memory, *isolation_controls]),
+            git_commit_hash=self._git_commit_hash(),
+            created_at=datetime.now(timezone.utc),
+        )
+        self._write_control_artifacts(artifact)
+        return artifact
+
+    def classify_memory_dependence(
+        self,
+        investigation_id: str,
+        *,
+        pair_results: list[PairwiseReplayResult] | None = None,
+        control_results: list[MemoryControlResult] | None = None,
+    ) -> MemoryDependenceClassification:
+        investigation = self.load_investigation(investigation_id)
+        individual_strong = any(
+            abs(result.influence_delta) >= 0.5
+            and result.original_action_distribution != result.intervention_action_distribution
+            for result in investigation.replay_results
+        )
+        if individual_strong:
+            return MemoryDependenceClassification.INDIVIDUAL_MEMORY_DEPENDENT
+        pair_results = pair_results or self._load_pair_results_if_present(investigation_id)
+        if any(
+            result.evidence_classification == PairEvidenceClassification.INTERACTION_SUPPORTED
+            for result in pair_results
+        ):
+            return MemoryDependenceClassification.PAIRWISE_MEMORY_DEPENDENT
+        control_results = control_results or self._load_controls_if_present(investigation_id)
+        no_memory = next(
+            (
+                result
+                for result in control_results
+                if result.control_type == MemoryControlType.NO_MEMORY
+            ),
+            None,
+        )
+        if no_memory is None:
+            return MemoryDependenceClassification.INCONCLUSIVE
+        original_top_action = (
+            self._dominant_action_from_results(investigation.replay_results)
+            or investigation.original_selected_action
+        )
+        control_top_action = self._dominant_action(no_memory.control_action_distribution)
+        if control_top_action == original_top_action and control_top_action is not None:
+            return MemoryDependenceClassification.LIKELY_MEMORY_INDEPENDENT
+        if control_top_action != original_top_action and not pair_results:
+            return MemoryDependenceClassification.DISTRIBUTED_MEMORY_DEPENDENT
+        if control_top_action != original_top_action:
+            return MemoryDependenceClassification.DISTRIBUTED_MEMORY_DEPENDENT
+        return MemoryDependenceClassification.INCONCLUSIVE
+
     def load_investigation(self, investigation_id: str) -> Investigation:
         path = self._investigation_dir(investigation_id) / "investigation.json"
         if not path.exists():
@@ -211,6 +429,180 @@ class CounterfactualReplayEngine:
         self._write_replay_artifacts(updated)
         return replay_result
 
+    def _run_pair_intervention(
+        self,
+        *,
+        investigation: Investigation,
+        target_memory_ids: list[str],
+        intervention_type: InterventionType,
+        shared_baseline: ReplayBatch | None,
+        shared_trace_ids: list[str],
+        shared_baseline_runs: bool,
+        fresh_baseline_per_pair: bool,
+    ) -> PairwiseReplayResult:
+        case = self._materialize_case(investigation)
+        intervention = self._build_intervention(
+            investigation=investigation,
+            case=case,
+            intervention_type=intervention_type,
+            target_memory_ids=target_memory_ids,
+            reason=f"{intervention_type.value} on {' + '.join(target_memory_ids)}",
+        )
+        intervention_case = self._apply_intervention(case.model_copy(deep=True), intervention)
+
+        if shared_baseline is None or fresh_baseline_per_pair:
+            original_traces = self._execute_batch(
+                investigation=investigation,
+                parent_trace_id=investigation.parent_trace_id,
+                intervention=None,
+                case=case.model_copy(deep=True),
+                role="pairwise_pair_baseline",
+            )
+            original_batch = self._summarize_batch(original_traces)
+            original_trace_ids = [trace.trace_id for trace in original_traces]
+        else:
+            original_batch = shared_baseline
+            original_trace_ids = list(shared_trace_ids)
+
+        intervention_traces = self._execute_batch(
+            investigation=investigation,
+            parent_trace_id=investigation.parent_trace_id,
+            intervention=intervention,
+            case=intervention_case,
+            role="pairwise_intervention",
+        )
+        intervention_batch = self._summarize_batch(intervention_traces)
+        low, high = wilson_score_interval(
+            intervention_batch.successful_runs,
+            intervention_batch.evaluated_runs,
+        )
+        combined_influence = intervention_batch.success_rate - original_batch.success_rate
+        individual_influences = self._lookup_individual_influences(
+            investigation.replay_results,
+            target_memory_ids,
+        )
+        max_individual = max(
+            (abs(value) for value in individual_influences.values()),
+            default=0.0,
+        )
+        interaction_score = combined_influence - max_individual
+        interaction_synergy = combined_influence - sum(
+            abs(value) for value in individual_influences.values()
+        )
+        support_validity = self._audit_support(
+            case=intervention_case,
+            selected_action=self._dominant_action(intervention_batch.action_distribution),
+            expected_action=investigation.expected_action,
+        )
+        return PairwiseReplayResult(
+            investigation_id=investigation.investigation_id,
+            parent_trace_id=investigation.parent_trace_id,
+            scenario_id=investigation.scenario_id,
+            intervention=intervention,
+            shared_baseline_runs=shared_baseline_runs,
+            fresh_baseline_per_pair=fresh_baseline_per_pair,
+            original_successful_runs=original_batch.successful_runs,
+            original_total_evaluated_runs=original_batch.evaluated_runs,
+            original_success_rate=original_batch.success_rate,
+            original_action_distribution=original_batch.action_distribution,
+            individual_influences=individual_influences,
+            combined_successful_runs=intervention_batch.successful_runs,
+            combined_total_evaluated_runs=intervention_batch.evaluated_runs,
+            combined_success_rate=intervention_batch.success_rate,
+            combined_action_distribution=intervention_batch.action_distribution,
+            combined_influence=combined_influence,
+            interaction_score=interaction_score,
+            interaction_synergy=interaction_synergy,
+            confidence_interval_low=low,
+            confidence_interval_high=high,
+            replay_stability=intervention_batch.replay_stability,
+            infrastructure_error_count=len(intervention_batch.errors),
+            token_usage=intervention_batch.token_usage,
+            latency_ms=intervention_batch.latency_ms,
+            support_validity=support_validity,
+            evidence_classification=self._classify_pair_evidence(
+                combined_influence=combined_influence,
+                interaction_score=interaction_score,
+                interaction_synergy=interaction_synergy,
+                action_changed=(
+                    original_batch.action_distribution != intervention_batch.action_distribution
+                ),
+                max_individual_influence=max_individual,
+                infrastructure_error_count=len(intervention_batch.errors),
+            ),
+            original_trace_ids=original_trace_ids,
+            intervention_trace_ids=[trace.trace_id for trace in intervention_traces],
+        )
+
+    def _run_control(
+        self,
+        *,
+        investigation: Investigation,
+        control_type: MemoryControlType,
+        target_memory_id: str | None,
+    ) -> MemoryControlResult:
+        case = self._materialize_case(investigation)
+        original_traces = self._execute_batch(
+            investigation=investigation,
+            parent_trace_id=investigation.parent_trace_id,
+            intervention=None,
+            case=case.model_copy(deep=True),
+            role=f"{control_type.value}_baseline",
+        )
+        original_batch = self._summarize_batch(original_traces)
+        if control_type == MemoryControlType.NO_MEMORY:
+            intervention_type = InterventionType.REMOVE_ALL_MEMORIES
+            target_ids = [memory.memory_id for memory in investigation.original_memory_snapshot]
+            reason = "Remove all memories from the snapshot"
+        else:
+            intervention_type = InterventionType.ISOLATE_MEMORY
+            target_ids = [target_memory_id] if target_memory_id is not None else []
+            reason = f"Retain only {target_memory_id} in the snapshot"
+        intervention = self._build_intervention(
+            investigation=investigation,
+            case=case,
+            intervention_type=intervention_type,
+            target_memory_ids=target_ids,
+            reason=reason,
+        )
+        control_case = self._apply_intervention(case.model_copy(deep=True), intervention)
+        control_traces = self._execute_batch(
+            investigation=investigation,
+            parent_trace_id=investigation.parent_trace_id,
+            intervention=intervention,
+            case=control_case,
+            role=f"{control_type.value}_intervention",
+        )
+        control_batch = self._summarize_batch(control_traces)
+        support_validity = self._audit_support(
+            case=control_case,
+            selected_action=self._dominant_action(control_batch.action_distribution),
+            expected_action=investigation.expected_action,
+        )
+        return MemoryControlResult(
+            investigation_id=investigation.investigation_id,
+            parent_trace_id=investigation.parent_trace_id,
+            scenario_id=investigation.scenario_id,
+            control_type=control_type,
+            target_memory_id=target_memory_id,
+            intervention=intervention,
+            original_successful_runs=original_batch.successful_runs,
+            original_total_evaluated_runs=original_batch.evaluated_runs,
+            original_success_rate=original_batch.success_rate,
+            original_action_distribution=original_batch.action_distribution,
+            control_successful_runs=control_batch.successful_runs,
+            control_total_evaluated_runs=control_batch.evaluated_runs,
+            control_success_rate=control_batch.success_rate,
+            control_action_distribution=control_batch.action_distribution,
+            replay_stability=control_batch.replay_stability,
+            infrastructure_error_count=len(control_batch.errors),
+            token_usage=control_batch.token_usage,
+            latency_ms=control_batch.latency_ms,
+            support_validity=support_validity,
+            original_trace_ids=[trace.trace_id for trace in original_traces],
+            control_trace_ids=[trace.trace_id for trace in control_traces],
+        )
+
     def _execute_batch(
         self,
         *,
@@ -258,11 +650,13 @@ class CounterfactualReplayEngine:
             traces=traces,
             successful_runs=successes,
             total_runs=total,
+            evaluated_runs=len(evaluated),
             success_rate=(successes / total) if total else 0.0,
             action_distribution=dict(sorted(action_counter.items())),
             replay_stability=stability,
             errors=[trace.error for trace in traces if trace.error is not None],
             token_usage=total_usage,
+            latency_ms=sum(trace.latency_ms for trace in traces),
         )
 
     def _materialize_case(self, investigation: Investigation) -> BenchmarkCase:
@@ -291,12 +685,43 @@ class CounterfactualReplayEngine:
         return case
 
     def _apply_intervention(self, case: BenchmarkCase, intervention: Intervention) -> BenchmarkCase:
-        target_memory_id = intervention.target_memory_ids[0]
+        target_memory_id = (
+            intervention.target_memory_ids[0] if intervention.target_memory_ids else ""
+        )
         if intervention.intervention_type == InterventionType.REMOVE_MEMORY:
             case.memories = [memory for memory in case.memories if memory.id != target_memory_id]
             case.scenario.memory_ids = [
                 memory_id for memory_id in case.scenario.memory_ids if memory_id != target_memory_id
             ]
+            return case
+        if intervention.intervention_type == InterventionType.REMOVE_MEMORIES:
+            target_set = set(intervention.target_memory_ids)
+            case.memories = [memory for memory in case.memories if memory.id not in target_set]
+            case.scenario.memory_ids = [
+                memory_id for memory_id in case.scenario.memory_ids if memory_id not in target_set
+            ]
+            return case
+        if intervention.intervention_type == InterventionType.REMOVE_ALL_MEMORIES:
+            case.memories = []
+            case.scenario.memory_ids = []
+            return case
+        if intervention.intervention_type == InterventionType.ISOLATE_MEMORY:
+            target_set = set(intervention.target_memory_ids)
+            case.memories = [memory for memory in case.memories if memory.id in target_set]
+            case.scenario.memory_ids = [
+                memory_id for memory_id in case.scenario.memory_ids if memory_id in target_set
+            ]
+            return case
+
+        if intervention.intervention_type == InterventionType.DISABLE_MEMORIES:
+            target_set = set(intervention.target_memory_ids)
+            for memory in case.memories:
+                if memory.id in target_set:
+                    memory.status = MemoryStatus.INVALID
+                    memory.operational_metadata = {
+                        **memory.operational_metadata,
+                        "disabled_for_replay": True,
+                    }
             return case
 
         target_memory = next(memory for memory in case.memories if memory.id == target_memory_id)
@@ -410,6 +835,28 @@ class CounterfactualReplayEngine:
             encoding="utf-8",
         )
 
+    def _write_pairwise_artifacts(self, artifact: PairwiseReplayArtifact) -> None:
+        investigation_dir = self._investigation_dir(artifact.investigation_id)
+        (investigation_dir / "pairwise-replay.json").write_text(
+            artifact.model_dump_json(indent=2),
+            encoding="utf-8",
+        )
+        (investigation_dir / "pairwise-replay.md").write_text(
+            self._render_pairwise_markdown(artifact),
+            encoding="utf-8",
+        )
+
+    def _write_control_artifacts(self, artifact: MemoryControlsArtifact) -> None:
+        investigation_dir = self._investigation_dir(artifact.investigation_id)
+        (investigation_dir / "memory-controls.json").write_text(
+            artifact.model_dump_json(indent=2),
+            encoding="utf-8",
+        )
+        (investigation_dir / "memory-controls.md").write_text(
+            self._render_controls_markdown(artifact),
+            encoding="utf-8",
+        )
+
     def _render_markdown(self, investigation: Investigation) -> str:
         lines = [
             "# Individual Memory Replay",
@@ -449,6 +896,315 @@ class CounterfactualReplayEngine:
                 for key in totals:
                     totals[key] += trace.request_token_usage.get(key, 0)
         return totals
+
+    def _build_intervention(
+        self,
+        *,
+        investigation: Investigation,
+        case: BenchmarkCase,
+        intervention_type: InterventionType,
+        target_memory_ids: list[str],
+        reason: str,
+    ) -> Intervention:
+        before_states = {
+            memory.id: memory.to_agent_input().model_dump(mode="json")
+            for memory in case.memories
+            if memory.id in target_memory_ids
+        }
+        mutated_case = self._apply_intervention(
+            case.model_copy(deep=True),
+            Intervention(
+                intervention_type=intervention_type,
+                target_memory_ids=target_memory_ids,
+                reason=reason,
+            ),
+        )
+        after_states = {
+            memory.id: memory.to_agent_input().model_dump(mode="json")
+            for memory in mutated_case.memories
+            if memory.id in target_memory_ids
+        }
+        return Intervention(
+            intervention_type=intervention_type,
+            target_memory_ids=target_memory_ids,
+            reason=reason,
+            before_states=before_states,
+            after_states=after_states,
+            unchanged_input_hash=self._snapshot_hash(
+                [
+                    memory
+                    for memory in investigation.original_memory_snapshot
+                    if memory.memory_id not in target_memory_ids
+                ]
+            ),
+            model=investigation.requested_model,
+            prompt_version=investigation.prompt_version,
+            inference_configuration=self._inference_configuration(),
+            created_at=datetime.now(timezone.utc),
+        )
+
+    def _lookup_individual_influences(
+        self,
+        replay_results: list[ReplayResult],
+        target_memory_ids: list[str],
+    ) -> dict[str, float]:
+        influences: dict[str, float] = {}
+        for memory_id in target_memory_ids:
+            matching = [
+                result
+                for result in replay_results
+                if result.intervention.target_memory_ids == [memory_id]
+                and result.intervention.intervention_type
+                in {InterventionType.REMOVE_MEMORY, InterventionType.DISABLE_MEMORY}
+            ]
+            influences[memory_id] = max(
+                (abs(result.influence_delta) for result in matching),
+                default=0.0,
+            )
+        return influences
+
+    def _classify_pair_evidence(
+        self,
+        *,
+        combined_influence: float,
+        interaction_score: float,
+        interaction_synergy: float,
+        action_changed: bool,
+        max_individual_influence: float,
+        infrastructure_error_count: int,
+    ) -> PairEvidenceClassification:
+        if infrastructure_error_count > 0 and not action_changed:
+            return PairEvidenceClassification.INCONCLUSIVE
+        if abs(combined_influence) < 0.01 and not action_changed:
+            return PairEvidenceClassification.NO_OBSERVED_PAIRWISE_INFLUENCE
+        if combined_influence < max_individual_influence - 0.1:
+            return PairEvidenceClassification.NEGATIVE_INTERACTION
+        if max_individual_influence >= 0.5 and abs(interaction_score) < 0.1:
+            return PairEvidenceClassification.DOMINATED_BY_ONE_MEMORY
+        if max_individual_influence > 0 and abs(interaction_synergy) < 0.1:
+            return PairEvidenceClassification.REDUNDANT_PAIR
+        if interaction_score > 0 and action_changed:
+            return PairEvidenceClassification.INTERACTION_SUPPORTED
+        return PairEvidenceClassification.NO_OBSERVED_PAIRWISE_INFLUENCE
+
+    def _audit_support(
+        self,
+        *,
+        case: BenchmarkCase,
+        selected_action: str | None,
+        expected_action: str,
+    ) -> DecisionSupportAudit:
+        if selected_action is None:
+            return DecisionSupportAudit(
+                outcome_correct=False,
+                decision_still_supported=False,
+                support_explanation="No evaluated action was available for the intervention.",
+                requires_human_review=True,
+            )
+        active_policy = any(
+            memory.status == MemoryStatus.ACTIVE
+            and (
+                str(memory.operational_metadata.get("memory_role", "")).endswith("policy")
+                or str(memory.operational_metadata.get("memory_role", "")) == "policy"
+            )
+            for memory in case.memories
+        )
+        active_evidence = any(
+            memory.status == MemoryStatus.ACTIVE
+            and str(memory.operational_metadata.get("memory_role", "")) == "evidence"
+            for memory in case.memories
+        )
+        outcome_correct = selected_action == expected_action
+        if not case.memories:
+            return DecisionSupportAudit(
+                outcome_correct=outcome_correct,
+                decision_still_supported=False,
+                support_explanation=(
+                    "The intervention removed all memories, so the resulting decision is "
+                    "unsupported by memory evidence."
+                ),
+                requires_human_review=True,
+            )
+        if outcome_correct and active_policy and active_evidence:
+            return DecisionSupportAudit(
+                outcome_correct=True,
+                decision_still_supported=True,
+                support_explanation=(
+                    "The expected action remains supported by active policy and evidence "
+                    "in the remaining snapshot."
+                ),
+                requires_human_review=False,
+            )
+        if outcome_correct:
+            return DecisionSupportAudit(
+                outcome_correct=True,
+                decision_still_supported=False,
+                support_explanation=(
+                    "The intervention changed behavior, but the remaining snapshot no "
+                    "longer contains enough active policy and evidence to support the "
+                    "expected action confidently."
+                ),
+                requires_human_review=True,
+            )
+        return DecisionSupportAudit(
+            outcome_correct=False,
+            decision_still_supported=False,
+            support_explanation="The intervention did not reach the expected action.",
+            requires_human_review=False,
+        )
+
+    def _rank_pair_results(
+        self,
+        pair_results: list[PairwiseReplayResult],
+    ) -> list[PairwiseReplayResult]:
+        return sorted(
+            pair_results,
+            key=lambda result: (
+                result.combined_influence,
+                result.interaction_score,
+                result.replay_stability,
+                -result.infrastructure_error_count,
+                int(result.support_validity.decision_still_supported),
+            ),
+            reverse=True,
+        )
+
+    def _aggregate_trace_usage(
+        self,
+        pair_results: list[PairwiseReplayResult],
+    ) -> dict[str, int]:
+        totals = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
+        for result in pair_results:
+            for key in totals:
+                totals[key] += result.token_usage.get(key, 0)
+        return totals
+
+    def _aggregate_control_usage(
+        self,
+        control_results: list[MemoryControlResult],
+    ) -> dict[str, int]:
+        totals = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
+        for result in control_results:
+            for key in totals:
+                totals[key] += result.token_usage.get(key, 0)
+        return totals
+
+    def _snapshot_hash(self, snapshot: list[AgentInputMemory]) -> str:
+        return hashlib.sha256(
+            json.dumps(
+                [memory.model_dump(mode="json") for memory in snapshot],
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        ).hexdigest()
+
+    def _inference_configuration(self) -> dict[str, str | bool | float | int | None]:
+        settings = OpenAISettings.from_env()
+        return {
+            "model": settings.model,
+            "timeout_seconds": settings.timeout_seconds,
+            "max_retries": settings.max_retries,
+            "cache_enabled": settings.cache_enabled,
+            "prompt_version": settings.prompt_version,
+            "reasoning_effort": settings.reasoning_effort,
+            "verbosity": settings.verbosity,
+        }
+
+    def _git_commit_hash(self) -> str:
+        try:
+            return subprocess.check_output(
+                ["git", "rev-parse", "HEAD"],
+                cwd=Path(__file__).resolve().parents[3],
+                text=True,
+            ).strip()
+        except (OSError, subprocess.CalledProcessError):
+            return "unknown"
+
+    def _dominant_action(self, action_distribution: dict[str, int]) -> str | None:
+        if not action_distribution:
+            return None
+        return max(
+            sorted(action_distribution.items()),
+            key=lambda item: item[1],
+        )[0]
+
+    def _dominant_action_from_results(self, replay_results: list[ReplayResult]) -> str | None:
+        if not replay_results:
+            return None
+        return self._dominant_action(replay_results[0].original_action_distribution)
+
+    def _render_pairwise_markdown(self, artifact: PairwiseReplayArtifact) -> str:
+        lines = [
+            "# Pairwise Replay",
+            "",
+            f"- Investigation ID: `{artifact.investigation_id}`",
+            f"- Scenario: `{artifact.scenario_id}`",
+            (
+                f"- Memory-dependence classification: "
+                f"`{artifact.memory_dependence_classification.value}`"
+            ),
+            f"- Shared baseline runs: `{artifact.shared_baseline_runs}`",
+            "",
+            "## Pair Results",
+            "",
+        ]
+        for result in artifact.pair_results:
+            lines.append(
+                f"- `{', '.join(result.intervention.target_memory_ids)}` "
+                f"via `{result.intervention.intervention_type.value}`: "
+                f"combined={result.combined_influence:.3f}, "
+                f"interaction={result.interaction_score:.3f}, "
+                f"synergy={result.interaction_synergy:.3f}, "
+                f"classification={result.evidence_classification.value}, "
+                f"supported={result.support_validity.decision_still_supported}"
+            )
+        return "\n".join(lines) + "\n"
+
+    def _render_controls_markdown(self, artifact: MemoryControlsArtifact) -> str:
+        lines = [
+            "# Memory Controls",
+            "",
+            f"- Investigation ID: `{artifact.investigation_id}`",
+            f"- Scenario: `{artifact.scenario_id}`",
+            (
+                f"- Memory-dependence classification: "
+                f"`{artifact.memory_dependence_classification.value}`"
+            ),
+            "",
+            "## Controls",
+            "",
+            (
+                f"- `no-memory`: actions={artifact.no_memory_control.control_action_distribution}, "
+                f"supported={artifact.no_memory_control.support_validity.decision_still_supported}"
+            ),
+        ]
+        for result in artifact.isolation_controls:
+            lines.append(
+                f"- `only {result.target_memory_id}`: "
+                f"actions={result.control_action_distribution}, "
+                f"supported={result.support_validity.decision_still_supported}"
+            )
+        return "\n".join(lines) + "\n"
+
+    def _load_pair_results_if_present(
+        self,
+        investigation_id: str,
+    ) -> list[PairwiseReplayResult]:
+        path = self._investigation_dir(investigation_id) / "pairwise-replay.json"
+        if not path.exists():
+            return []
+        artifact = PairwiseReplayArtifact.model_validate_json(path.read_text(encoding="utf-8"))
+        return artifact.pair_results
+
+    def _load_controls_if_present(
+        self,
+        investigation_id: str,
+    ) -> list[MemoryControlResult]:
+        path = self._investigation_dir(investigation_id) / "memory-controls.json"
+        if not path.exists():
+            return []
+        artifact = MemoryControlsArtifact.model_validate_json(path.read_text(encoding="utf-8"))
+        return [artifact.no_memory_control, *artifact.isolation_controls]
 
 
 def _hash_prompt(prompt: str) -> str:
