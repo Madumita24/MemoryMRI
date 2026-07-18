@@ -1,0 +1,157 @@
+{
+  "metadata": {
+    "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+    "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+    "scenario_id": "cs_01",
+    "domain": "customer_support",
+    "model": "gpt-5.6",
+    "response_model": "gpt-5.6-sol",
+    "semantic_analysis_prompt_version": "v1",
+    "semantic_analysis_prompt_hash": "ca2b2141049af3e27dbdc10009ef01d2aea9f9038053b8d73f14da4e509e57f7",
+    "memory_snapshot_hash": "a1bff8657db2c84231cf5e68ff288acc19ebc2c6269587c5ef532fc609aa8a4d",
+    "deterministic_score_configuration": {
+      "signal_weights": {
+        "cited_by_original_agent": 1.0,
+        "stale_status": 1.6,
+        "expired_validity": 1.6,
+        "superseded_status": 1.2,
+        "entity_mismatch": 1.4,
+        "missing_validity_dates": 0.5,
+        "unusually_high_retrieval_priority": 0.9,
+        "metadata_conflict_with_another_memory": 1.3,
+        "potentially_wrong_decision_context": 1.1,
+        "invalid_temporal_overlap": 0.8,
+        "active_memory_explicitly_superseded_by_another": 1.5
+      },
+      "normalized_signal_weights": {
+        "cited_by_original_agent": 0.07751937984496124,
+        "stale_status": 0.12403100775193798,
+        "expired_validity": 0.12403100775193798,
+        "superseded_status": 0.09302325581395349,
+        "entity_mismatch": 0.10852713178294572,
+        "missing_validity_dates": 0.03875968992248062,
+        "unusually_high_retrieval_priority": 0.06976744186046512,
+        "metadata_conflict_with_another_memory": 0.10077519379844961,
+        "potentially_wrong_decision_context": 0.08527131782945736,
+        "invalid_temporal_overlap": 0.06201550387596899,
+        "active_memory_explicitly_superseded_by_another": 0.11627906976744186
+      },
+      "high_priority_threshold": 95,
+      "prioritization_weights": {
+        "deterministic": 0.5,
+        "semantic": 0.5
+      }
+    },
+    "created_at": "2026-07-18T07:00:56.019852Z",
+    "api_usage": {
+      "input_tokens": 1231,
+      "output_tokens": 196,
+      "total_tokens": 1427
+    },
+    "git_commit_hash": "45621f99cc0d7dd94fd27cc66398cba6c6ac8af2"
+  },
+  "pair_results": [
+    {
+      "memory_a_id": "cs_01_mem_1",
+      "memory_b_id": "cs_01_mem_2",
+      "deterministic_relationship": {
+        "memory_a_id": "cs_01_mem_1",
+        "memory_b_id": "cs_01_mem_2",
+        "relationship": "supersedes",
+        "evidence_type": "metadata",
+        "concise_reason": "cs_01_mem_2 explicitly supersedes cs_01_mem_1 in metadata.",
+        "relevant_fields": [
+          "supersedes",
+          "status"
+        ],
+        "confidence": 1.0
+      },
+      "semantic_relationship": {
+        "memory_a_id": "cs_01_mem_1",
+        "memory_b_id": "cs_01_mem_2",
+        "relationship": "supersedes",
+        "concise_explanation": "The current playbook explicitly supersedes the outdated approval policy.",
+        "confidence": 0.99,
+        "requires_human_review": false
+      },
+      "relationships_agree": true,
+      "replay_evidence_exists_for_either": true,
+      "pairwise_replay_performed": false
+    },
+    {
+      "memory_a_id": "cs_01_mem_1",
+      "memory_b_id": "cs_01_mem_3",
+      "deterministic_relationship": {
+        "memory_a_id": "cs_01_mem_1",
+        "memory_b_id": "cs_01_mem_3",
+        "relationship": "unrelated",
+        "evidence_type": "metadata",
+        "concise_reason": "Metadata does not show a direct relationship between the memories.",
+        "relevant_fields": [],
+        "confidence": 0.6
+      },
+      "semantic_relationship": {
+        "memory_a_id": "cs_01_mem_1",
+        "memory_b_id": "cs_01_mem_3",
+        "relationship": "potentially_consistent",
+        "concise_explanation": "The legacy approval rule and duplicate-charge evidence can both be true.",
+        "confidence": 0.95,
+        "requires_human_review": false
+      },
+      "relationships_agree": false,
+      "replay_evidence_exists_for_either": true,
+      "pairwise_replay_performed": false
+    },
+    {
+      "memory_a_id": "cs_01_mem_2",
+      "memory_b_id": "cs_01_mem_3",
+      "deterministic_relationship": {
+        "memory_a_id": "cs_01_mem_2",
+        "memory_b_id": "cs_01_mem_3",
+        "relationship": "unrelated",
+        "evidence_type": "metadata",
+        "concise_reason": "Metadata does not show a direct relationship between the memories.",
+        "relevant_fields": [],
+        "confidence": 0.6
+      },
+      "semantic_relationship": {
+        "memory_a_id": "cs_01_mem_2",
+        "memory_b_id": "cs_01_mem_3",
+        "relationship": "potentially_consistent",
+        "concise_explanation": "The ledger verifies duplication, but the amount needed to apply the policy is absent.",
+        "confidence": 0.98,
+        "requires_human_review": false
+      },
+      "relationships_agree": false,
+      "replay_evidence_exists_for_either": true,
+      "pairwise_replay_performed": false
+    }
+  ],
+  "summary": {
+    "top_ranked_memories": [
+      "cs_01_mem_1",
+      "cs_01_mem_3",
+      "cs_01_mem_2"
+    ],
+    "deterministic_concerns": [
+      "cs_01_mem_1: The memory status is marked stale., The memory validity window has already expired., The retrieval priority 99 meets or exceeds the configured high-priority threshold 95.",
+      "cs_01_mem_3: The original agent cited this memory in its rationale., The memory is missing at least one validity boundary.",
+      "cs_01_mem_2: The original agent cited this memory in its rationale., The memory is missing at least one validity boundary."
+    ],
+    "semantic_concerns": [
+      "cs_01_mem_1: Expired legacy policy is superseded by the current playbook but retains the highest retrieval priority.",
+      "cs_01_mem_3: Current ledger evidence supports two settled charges for the referenced order.",
+      "cs_01_mem_2: Active current policy directly states the applicable refund threshold and supersedes the legacy note."
+    ],
+    "contradictions_detected": [
+      "cs_01_mem_1/cs_01_mem_2: supersedes vs supersedes"
+    ],
+    "replay_supported_memories": [],
+    "suspicious_memories_with_no_observed_influence": [
+      "cs_01_mem_1"
+    ],
+    "pairwise_testing_recommended": true,
+    "no_memory_or_prompt_only_testing_recommended": false,
+    "human_review_recommended": false
+  }
+}

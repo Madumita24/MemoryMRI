@@ -1,0 +1,432 @@
+{
+  "metadata": {
+    "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+    "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+    "scenario_id": "cs_01",
+    "domain": "customer_support",
+    "model": "gpt-5.6",
+    "response_model": "gpt-5.6-sol",
+    "semantic_analysis_prompt_version": "v1",
+    "semantic_analysis_prompt_hash": "e7aeb0b92c914e98f7f3275725a51aea48445d7894334a6fed26c89a0a0a4333",
+    "memory_snapshot_hash": "a1bff8657db2c84231cf5e68ff288acc19ebc2c6269587c5ef532fc609aa8a4d",
+    "deterministic_score_configuration": {
+      "signal_weights": {
+        "cited_by_original_agent": 1.0,
+        "stale_status": 1.6,
+        "expired_validity": 1.6,
+        "superseded_status": 1.2,
+        "entity_mismatch": 1.4,
+        "missing_validity_dates": 0.5,
+        "unusually_high_retrieval_priority": 0.9,
+        "metadata_conflict_with_another_memory": 1.3,
+        "potentially_wrong_decision_context": 1.1,
+        "invalid_temporal_overlap": 0.8,
+        "active_memory_explicitly_superseded_by_another": 1.5
+      },
+      "normalized_signal_weights": {
+        "cited_by_original_agent": 0.07751937984496124,
+        "stale_status": 0.12403100775193798,
+        "expired_validity": 0.12403100775193798,
+        "superseded_status": 0.09302325581395349,
+        "entity_mismatch": 0.10852713178294572,
+        "missing_validity_dates": 0.03875968992248062,
+        "unusually_high_retrieval_priority": 0.06976744186046512,
+        "metadata_conflict_with_another_memory": 0.10077519379844961,
+        "potentially_wrong_decision_context": 0.08527131782945736,
+        "invalid_temporal_overlap": 0.06201550387596899,
+        "active_memory_explicitly_superseded_by_another": 0.11627906976744186
+      },
+      "high_priority_threshold": 95,
+      "prioritization_weights": {
+        "deterministic": 0.5,
+        "semantic": 0.5
+      }
+    },
+    "created_at": "2026-07-18T07:00:52.547867Z",
+    "api_usage": {
+      "input_tokens": 1234,
+      "output_tokens": 510,
+      "total_tokens": 1744
+    },
+    "git_commit_hash": "45621f99cc0d7dd94fd27cc66398cba6c6ac8af2"
+  },
+  "memories": [
+    {
+      "memory_id": "cs_01_mem_1",
+      "deterministic_score": 0.3178294573643411,
+      "semantic_score": 0.99,
+      "prioritization_score": 0.6539147286821705,
+      "metadata_observations": [
+        {
+          "memory_id": "cs_01_mem_1",
+          "signal_name": "cited_by_original_agent",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "The original agent did not cite this memory."
+        },
+        {
+          "memory_id": "cs_01_mem_1",
+          "signal_name": "stale_status",
+          "signal_present": true,
+          "signal_contribution": 0.12403100775193798,
+          "concise_reason": "The memory status is marked stale."
+        },
+        {
+          "memory_id": "cs_01_mem_1",
+          "signal_name": "expired_validity",
+          "signal_present": true,
+          "signal_contribution": 0.12403100775193798,
+          "concise_reason": "The memory validity window has already expired."
+        },
+        {
+          "memory_id": "cs_01_mem_1",
+          "signal_name": "superseded_status",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "The memory is not marked superseded."
+        },
+        {
+          "memory_id": "cs_01_mem_1",
+          "signal_name": "entity_mismatch",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "Operational metadata does not mark an entity mismatch."
+        },
+        {
+          "memory_id": "cs_01_mem_1",
+          "signal_name": "missing_validity_dates",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "The memory has both validity boundaries populated."
+        },
+        {
+          "memory_id": "cs_01_mem_1",
+          "signal_name": "unusually_high_retrieval_priority",
+          "signal_present": true,
+          "signal_contribution": 0.06976744186046512,
+          "concise_reason": "The retrieval priority 99 meets or exceeds the configured high-priority threshold 95."
+        },
+        {
+          "memory_id": "cs_01_mem_1",
+          "signal_name": "metadata_conflict_with_another_memory",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "Metadata checks did not find a conflict with another memory."
+        },
+        {
+          "memory_id": "cs_01_mem_1",
+          "signal_name": "potentially_wrong_decision_context",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "Metadata does not flag this memory as outside the current decision context."
+        },
+        {
+          "memory_id": "cs_01_mem_1",
+          "signal_name": "invalid_temporal_overlap",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "No metadata-based temporal overlap concern was detected."
+        },
+        {
+          "memory_id": "cs_01_mem_1",
+          "signal_name": "active_memory_explicitly_superseded_by_another",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "No active supersession signal is present."
+        }
+      ],
+      "semantic_hypothesis": {
+        "memory_id": "cs_01_mem_1",
+        "semantic_suspicion_score": 0.99,
+        "suspected_issue_types": [
+          "stale",
+          "superseded",
+          "contradictory",
+          "excessive_priority"
+        ],
+        "concise_reason": "Expired legacy policy is superseded by the current playbook but retains the highest retrieval priority.",
+        "related_memory_ids": [
+          "cs_01_mem_2"
+        ],
+        "uncertainty": 0.01,
+        "requires_human_review": false
+      },
+      "replay_supported_evidence": {
+        "replay_evidence_available": true,
+        "observed_individual_influence": 0.0,
+        "observed_action_change": false,
+        "intervention_success_rate": 0.0,
+        "replay_run_count": 3,
+        "wilson_interval_low": 0.0,
+        "wilson_interval_high": 0.5615060804490177,
+        "replay_stability": 1.0,
+        "infrastructure_error_count": 0,
+        "evidence_status_label": "replay tested: no observed influence"
+      },
+      "comparison_classification": "suspicion not supported by replay",
+      "deterministic_reasons": [
+        "The memory status is marked stale.",
+        "The memory validity window has already expired.",
+        "The retrieval priority 99 meets or exceeds the configured high-priority threshold 95."
+      ],
+      "semantic_reason": "Expired legacy policy is superseded by the current playbook but retains the highest retrieval priority."
+    },
+    {
+      "memory_id": "cs_01_mem_3",
+      "deterministic_score": 0.11627906976744186,
+      "semantic_score": 0.04,
+      "prioritization_score": 0.07813953488372093,
+      "metadata_observations": [
+        {
+          "memory_id": "cs_01_mem_3",
+          "signal_name": "cited_by_original_agent",
+          "signal_present": true,
+          "signal_contribution": 0.07751937984496124,
+          "concise_reason": "The original agent cited this memory in its rationale."
+        },
+        {
+          "memory_id": "cs_01_mem_3",
+          "signal_name": "stale_status",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "The memory is not marked stale."
+        },
+        {
+          "memory_id": "cs_01_mem_3",
+          "signal_name": "expired_validity",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "The memory validity window has not expired."
+        },
+        {
+          "memory_id": "cs_01_mem_3",
+          "signal_name": "superseded_status",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "The memory is not marked superseded."
+        },
+        {
+          "memory_id": "cs_01_mem_3",
+          "signal_name": "entity_mismatch",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "Operational metadata does not mark an entity mismatch."
+        },
+        {
+          "memory_id": "cs_01_mem_3",
+          "signal_name": "missing_validity_dates",
+          "signal_present": true,
+          "signal_contribution": 0.03875968992248062,
+          "concise_reason": "The memory is missing at least one validity boundary."
+        },
+        {
+          "memory_id": "cs_01_mem_3",
+          "signal_name": "unusually_high_retrieval_priority",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "The retrieval priority is below the configured high-priority threshold."
+        },
+        {
+          "memory_id": "cs_01_mem_3",
+          "signal_name": "metadata_conflict_with_another_memory",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "Metadata checks did not find a conflict with another memory."
+        },
+        {
+          "memory_id": "cs_01_mem_3",
+          "signal_name": "potentially_wrong_decision_context",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "Metadata does not flag this memory as outside the current decision context."
+        },
+        {
+          "memory_id": "cs_01_mem_3",
+          "signal_name": "invalid_temporal_overlap",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "No metadata-based temporal overlap concern was detected."
+        },
+        {
+          "memory_id": "cs_01_mem_3",
+          "signal_name": "active_memory_explicitly_superseded_by_another",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "No active supersession signal is present."
+        }
+      ],
+      "semantic_hypothesis": {
+        "memory_id": "cs_01_mem_3",
+        "semantic_suspicion_score": 0.04,
+        "suspected_issue_types": [
+          "none"
+        ],
+        "concise_reason": "Current ledger evidence supports two settled charges for the referenced order.",
+        "related_memory_ids": [],
+        "uncertainty": 0.04,
+        "requires_human_review": false
+      },
+      "replay_supported_evidence": {
+        "replay_evidence_available": true,
+        "observed_individual_influence": 0.0,
+        "observed_action_change": false,
+        "intervention_success_rate": 0.0,
+        "replay_run_count": 3,
+        "wilson_interval_low": 0.0,
+        "wilson_interval_high": 0.5615060804490177,
+        "replay_stability": 1.0,
+        "infrastructure_error_count": 0,
+        "evidence_status_label": "replay tested: no observed influence"
+      },
+      "comparison_classification": "suspicion not supported by replay",
+      "deterministic_reasons": [
+        "The original agent cited this memory in its rationale.",
+        "The memory is missing at least one validity boundary."
+      ],
+      "semantic_reason": "Current ledger evidence supports two settled charges for the referenced order."
+    },
+    {
+      "memory_id": "cs_01_mem_2",
+      "deterministic_score": 0.11627906976744186,
+      "semantic_score": 0.02,
+      "prioritization_score": 0.06813953488372093,
+      "metadata_observations": [
+        {
+          "memory_id": "cs_01_mem_2",
+          "signal_name": "cited_by_original_agent",
+          "signal_present": true,
+          "signal_contribution": 0.07751937984496124,
+          "concise_reason": "The original agent cited this memory in its rationale."
+        },
+        {
+          "memory_id": "cs_01_mem_2",
+          "signal_name": "stale_status",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "The memory is not marked stale."
+        },
+        {
+          "memory_id": "cs_01_mem_2",
+          "signal_name": "expired_validity",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "The memory validity window has not expired."
+        },
+        {
+          "memory_id": "cs_01_mem_2",
+          "signal_name": "superseded_status",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "The memory is not marked superseded."
+        },
+        {
+          "memory_id": "cs_01_mem_2",
+          "signal_name": "entity_mismatch",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "Operational metadata does not mark an entity mismatch."
+        },
+        {
+          "memory_id": "cs_01_mem_2",
+          "signal_name": "missing_validity_dates",
+          "signal_present": true,
+          "signal_contribution": 0.03875968992248062,
+          "concise_reason": "The memory is missing at least one validity boundary."
+        },
+        {
+          "memory_id": "cs_01_mem_2",
+          "signal_name": "unusually_high_retrieval_priority",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "The retrieval priority is below the configured high-priority threshold."
+        },
+        {
+          "memory_id": "cs_01_mem_2",
+          "signal_name": "metadata_conflict_with_another_memory",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "Metadata checks did not find a conflict with another memory."
+        },
+        {
+          "memory_id": "cs_01_mem_2",
+          "signal_name": "potentially_wrong_decision_context",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "Metadata does not flag this memory as outside the current decision context."
+        },
+        {
+          "memory_id": "cs_01_mem_2",
+          "signal_name": "invalid_temporal_overlap",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "No metadata-based temporal overlap concern was detected."
+        },
+        {
+          "memory_id": "cs_01_mem_2",
+          "signal_name": "active_memory_explicitly_superseded_by_another",
+          "signal_present": false,
+          "signal_contribution": 0.0,
+          "concise_reason": "No active supersession signal is present."
+        }
+      ],
+      "semantic_hypothesis": {
+        "memory_id": "cs_01_mem_2",
+        "semantic_suspicion_score": 0.02,
+        "suspected_issue_types": [
+          "none"
+        ],
+        "concise_reason": "Active current policy directly states the applicable refund threshold and supersedes the legacy note.",
+        "related_memory_ids": [
+          "cs_01_mem_1"
+        ],
+        "uncertainty": 0.02,
+        "requires_human_review": false
+      },
+      "replay_supported_evidence": {
+        "replay_evidence_available": true,
+        "observed_individual_influence": 1.0,
+        "observed_action_change": true,
+        "intervention_success_rate": 1.0,
+        "replay_run_count": 3,
+        "wilson_interval_low": 0.43849391955098227,
+        "wilson_interval_high": 1.0,
+        "replay_stability": 1.0,
+        "infrastructure_error_count": 0,
+        "evidence_status_label": "replay tested: strong observed influence"
+      },
+      "comparison_classification": "low suspicion but replay effect observed",
+      "deterministic_reasons": [
+        "The original agent cited this memory in its rationale.",
+        "The memory is missing at least one validity boundary."
+      ],
+      "semantic_reason": "Active current policy directly states the applicable refund threshold and supersedes the legacy note."
+    }
+  ],
+  "summary": {
+    "top_ranked_memories": [
+      "cs_01_mem_1",
+      "cs_01_mem_3",
+      "cs_01_mem_2"
+    ],
+    "deterministic_concerns": [
+      "cs_01_mem_1: The memory status is marked stale., The memory validity window has already expired., The retrieval priority 99 meets or exceeds the configured high-priority threshold 95.",
+      "cs_01_mem_3: The original agent cited this memory in its rationale., The memory is missing at least one validity boundary.",
+      "cs_01_mem_2: The original agent cited this memory in its rationale., The memory is missing at least one validity boundary."
+    ],
+    "semantic_concerns": [
+      "cs_01_mem_1: Expired legacy policy is superseded by the current playbook but retains the highest retrieval priority.",
+      "cs_01_mem_3: Current ledger evidence supports two settled charges for the referenced order.",
+      "cs_01_mem_2: Active current policy directly states the applicable refund threshold and supersedes the legacy note."
+    ],
+    "contradictions_detected": [
+      "cs_01_mem_1/cs_01_mem_2: cs_01_mem_2 explicitly supersedes cs_01_mem_1 in metadata."
+    ],
+    "replay_supported_memories": [],
+    "suspicious_memories_with_no_observed_influence": [
+      "cs_01_mem_1"
+    ],
+    "pairwise_testing_recommended": true,
+    "no_memory_or_prompt_only_testing_recommended": true,
+    "human_review_recommended": false
+  }
+}
