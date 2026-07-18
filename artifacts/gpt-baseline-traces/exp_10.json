@@ -1,0 +1,228 @@
+{
+  "trace_id": "trace_08a9fd5cded1495597a79263fd55b43a",
+  "scenario_id": "exp_10",
+  "run_id": "run_8b4087a2041b4ecc855654cec8be6c43",
+  "domain": "workplace_expense",
+  "user_input": "Please process my training course reimbursement.",
+  "agent_input": {
+    "schema_version": "day2a-v1",
+    "scenario_id": "exp_10",
+    "domain": "workplace_expense",
+    "user_input": "Please process my training course reimbursement.",
+    "allowed_actions": [
+      "AUTO_APPROVE",
+      "ESCALATE_MANAGER",
+      "ESCALATE_DIRECTOR",
+      "DENY_EXPENSE",
+      "REQUEST_DOCUMENTATION"
+    ],
+    "memories": [
+      {
+        "memory_id": "exp_10_mem_1",
+        "entity_id": "report_10",
+        "content": "No manager pre-approval is on file for this course.",
+        "source": "expense_system_snapshot",
+        "created_at": "2026-07-10T09:00:00Z",
+        "valid_from": "2026-07-10T09:00:00Z",
+        "valid_until": null,
+        "status": "stale",
+        "confidence": 0.81,
+        "retrieval_priority": 98,
+        "supersedes": [],
+        "tags": [
+          "approval"
+        ],
+        "operational_metadata": {
+          "memory_role": "history",
+          "entity_match": true,
+          "temporal_scope": "outdated"
+        }
+      },
+      {
+        "memory_id": "exp_10_mem_2",
+        "entity_id": "report_10",
+        "content": "Manager pre-approval was added later that day in the training request system.",
+        "source": "training_portal",
+        "created_at": "2026-07-10T14:00:00Z",
+        "valid_from": "2026-07-10T14:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.98,
+        "retrieval_priority": 90,
+        "supersedes": [
+          "exp_10_mem_1"
+        ],
+        "tags": [
+          "approval",
+          "current"
+        ],
+        "operational_metadata": {
+          "memory_role": "evidence",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      },
+      {
+        "memory_id": "exp_10_mem_3",
+        "entity_id": "report_10",
+        "content": "The course costs $320, includes receipt, and falls within the auto-approval cap once approved.",
+        "source": "expense_system",
+        "created_at": "2026-07-14T00:00:00Z",
+        "valid_from": "2026-07-14T00:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.99,
+        "retrieval_priority": 87,
+        "supersedes": [],
+        "tags": [
+          "receipt",
+          "amount"
+        ],
+        "operational_metadata": {
+          "memory_role": "evidence",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    ]
+  },
+  "requested_model": "gpt-5.6",
+  "response_model": "gpt-5.6-sol",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "prompt_content_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b",
+  "agent_input_schema_version": "day2a-v1",
+  "request_hash": "906801834631b75640fa6a5b68894774b84e1ee890e01e70deafd44b7a7a045d",
+  "retrieved_memory_ids": [
+    "exp_10_mem_1",
+    "exp_10_mem_2",
+    "exp_10_mem_3"
+  ],
+  "memory_snapshot": [
+    {
+      "memory_id": "exp_10_mem_1",
+      "entity_id": "report_10",
+      "content": "No manager pre-approval is on file for this course.",
+      "source": "expense_system_snapshot",
+      "created_at": "2026-07-10T09:00:00Z",
+      "valid_from": "2026-07-10T09:00:00Z",
+      "valid_until": null,
+      "status": "stale",
+      "confidence": 0.81,
+      "retrieval_priority": 98,
+      "supersedes": [],
+      "tags": [
+        "approval"
+      ],
+      "operational_metadata": {
+        "memory_role": "history",
+        "entity_match": true,
+        "temporal_scope": "outdated"
+      }
+    },
+    {
+      "memory_id": "exp_10_mem_2",
+      "entity_id": "report_10",
+      "content": "Manager pre-approval was added later that day in the training request system.",
+      "source": "training_portal",
+      "created_at": "2026-07-10T14:00:00Z",
+      "valid_from": "2026-07-10T14:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.98,
+      "retrieval_priority": 90,
+      "supersedes": [
+        "exp_10_mem_1"
+      ],
+      "tags": [
+        "approval",
+        "current"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    },
+    {
+      "memory_id": "exp_10_mem_3",
+      "entity_id": "report_10",
+      "content": "The course costs $320, includes receipt, and falls within the auto-approval cap once approved.",
+      "source": "expense_system",
+      "created_at": "2026-07-14T00:00:00Z",
+      "valid_from": "2026-07-14T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.99,
+      "retrieval_priority": 87,
+      "supersedes": [],
+      "tags": [
+        "receipt",
+        "amount"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    }
+  ],
+  "structured_response": {
+    "selected_action": "AUTO_APPROVE",
+    "action_arguments": {},
+    "cited_memory_ids": [
+      "exp_10_mem_2",
+      "exp_10_mem_3"
+    ],
+    "concise_rationale": "Current manager pre-approval supersedes the stale record, and the documented $320 course expense includes a receipt and is within the auto-approval cap.",
+    "uncertainty": 0.01,
+    "needs_human_review": false
+  },
+  "selected_action": "AUTO_APPROVE",
+  "action_arguments": {},
+  "cited_memory_ids": [
+    "exp_10_mem_2",
+    "exp_10_mem_3"
+  ],
+  "concise_rationale": "Current manager pre-approval supersedes the stale record, and the documented $320 course expense includes a receipt and is within the auto-approval cap.",
+  "uncertainty": 0.01,
+  "needs_human_review": false,
+  "tool_call": {
+    "response_id": "resp_0f722e4589ce2a84006a5b123cd014819a923b34752771d06f",
+    "cache_hit": false
+  },
+  "evaluation": {
+    "evaluator_result": {
+      "expected_action": "AUTO_APPROVE",
+      "selected_action": "AUTO_APPROVE",
+      "passed": true,
+      "reason": "selected action matched expected action"
+    }
+  },
+  "passed": true,
+  "execution_source": "live",
+  "cache_lookup_latency_ms": 0,
+  "original_model_latency_ms": null,
+  "latency_ms": 2398,
+  "token_usage": {
+    "input_tokens": 1030,
+    "output_tokens": 92,
+    "total_tokens": 1122
+  },
+  "request_token_usage": {
+    "input_tokens": 1030,
+    "output_tokens": 92,
+    "total_tokens": 1122
+  },
+  "cached_original_token_usage": null,
+  "billable_api_call": true,
+  "cache": {
+    "enabled": false,
+    "request_hash": "906801834631b75640fa6a5b68894774b84e1ee890e01e70deafd44b7a7a045d",
+    "hit": false,
+    "cache_path": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\openai_cache\\906801834631b75640fa6a5b68894774b84e1ee890e01e70deafd44b7a7a045d.json",
+    "cached_at": null
+  },
+  "error": null,
+  "created_at": "2026-07-18T05:42:23.451495Z"
+}
