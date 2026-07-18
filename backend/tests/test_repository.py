@@ -65,3 +65,26 @@ def test_error_trace_persistence_and_failed_listing(tmp_path, benchmark_cases) -
     assert len(failed) == 1
     assert failed[0].error is not None
     assert failed[0].evaluation.evaluator_result is None
+
+
+def test_none_passed_trace_persists_original_payload(tmp_path, benchmark_cases) -> None:
+    session = create_sqlite_session(f"sqlite:///{tmp_path / 'memory.db'}")
+    repository = BenchmarkRepository(session)
+    case = benchmark_cases[0]
+    repository.import_case(case)
+    trace = FakeAgentRunner().run_scenario(case.scenario, case.memories)
+    trace.selected_action = None
+    trace.structured_response = None
+    trace.action_arguments = {}
+    trace.cited_memory_ids = []
+    trace.concise_rationale = None
+    trace.uncertainty = None
+    trace.needs_human_review = None
+    trace.evaluation.evaluator_result = None
+    trace.passed = None
+    repository.save_trace(trace)
+    session.commit()
+
+    stored = repository.get_trace(trace.trace_id)
+    assert stored is not None
+    assert stored.passed is None

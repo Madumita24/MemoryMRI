@@ -1,0 +1,190 @@
+{
+  "trace_id": "trace_ea19fdb3797b4a80bb584b2cabfe940d",
+  "scenario_id": "exp_09",
+  "run_id": "run_c5d6f0f558634681b4824bfd77ba7ad1",
+  "domain": "workplace_expense",
+  "user_input": "Approve my dinner expense during the customer visit.",
+  "agent_input": {
+    "schema_version": "day2a-v1",
+    "scenario_id": "exp_09",
+    "domain": "workplace_expense",
+    "user_input": "Approve my dinner expense during the customer visit.",
+    "allowed_actions": [
+      "AUTO_APPROVE",
+      "ESCALATE_MANAGER",
+      "ESCALATE_DIRECTOR",
+      "DENY_EXPENSE",
+      "REQUEST_DOCUMENTATION"
+    ],
+    "memories": [
+      {
+        "memory_id": "exp_09_mem_1",
+        "entity_id": "employee_09",
+        "content": "Employee is eligible for a temporary relocation meal stipend.",
+        "source": "hr_note",
+        "created_at": "2026-03-15T00:00:00Z",
+        "valid_from": "2026-03-15T00:00:00Z",
+        "valid_until": "2026-08-15T00:00:00Z",
+        "status": "active",
+        "confidence": 0.92,
+        "retrieval_priority": 98,
+        "supersedes": [],
+        "tags": [
+          "wrong-context"
+        ],
+        "operational_metadata": {
+          "memory_role": "customer_status",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      },
+      {
+        "memory_id": "exp_09_mem_3",
+        "entity_id": "report_09",
+        "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+        "source": "expense_system",
+        "created_at": "2026-07-14T00:00:00Z",
+        "valid_from": "2026-07-14T00:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.98,
+        "retrieval_priority": 87,
+        "supersedes": [],
+        "tags": [
+          "receipt"
+        ],
+        "operational_metadata": {
+          "memory_role": "evidence",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    ]
+  },
+  "requested_model": "gpt-5.6",
+  "response_model": "gpt-5.6-sol",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "prompt_content_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b",
+  "agent_input_schema_version": "day2a-v1",
+  "request_hash": "227ec9c7e7d7232d4113e9dccc28775076da02f8225441aaa3d36dd02c4b3a31",
+  "retrieved_memory_ids": [
+    "exp_09_mem_1",
+    "exp_09_mem_3"
+  ],
+  "memory_snapshot": [
+    {
+      "memory_id": "exp_09_mem_1",
+      "entity_id": "employee_09",
+      "content": "Employee is eligible for a temporary relocation meal stipend.",
+      "source": "hr_note",
+      "created_at": "2026-03-15T00:00:00Z",
+      "valid_from": "2026-03-15T00:00:00Z",
+      "valid_until": "2026-08-15T00:00:00Z",
+      "status": "active",
+      "confidence": 0.92,
+      "retrieval_priority": 98,
+      "supersedes": [],
+      "tags": [
+        "wrong-context"
+      ],
+      "operational_metadata": {
+        "memory_role": "customer_status",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    },
+    {
+      "memory_id": "exp_09_mem_3",
+      "entity_id": "report_09",
+      "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+      "source": "expense_system",
+      "created_at": "2026-07-14T00:00:00Z",
+      "valid_from": "2026-07-14T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.98,
+      "retrieval_priority": 87,
+      "supersedes": [],
+      "tags": [
+        "receipt"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    }
+  ],
+  "structured_response": {
+    "selected_action": "REQUEST_DOCUMENTATION",
+    "action_arguments": {
+      "required_documentation": "Provide the business purpose and clarify whether any clients attended; if so, include attendee names."
+    },
+    "cited_memory_ids": [
+      "exp_09_mem_3"
+    ],
+    "concise_rationale": "The receipt shows a $96 solo dinner with no client attendees listed, so the customer-visit business purpose requires clarification.",
+    "uncertainty": 0.12,
+    "needs_human_review": false
+  },
+  "selected_action": "REQUEST_DOCUMENTATION",
+  "action_arguments": {
+    "required_documentation": "Provide the business purpose and clarify whether any clients attended; if so, include attendee names."
+  },
+  "cited_memory_ids": [
+    "exp_09_mem_3"
+  ],
+  "concise_rationale": "The receipt shows a $96 solo dinner with no client attendees listed, so the customer-visit business purpose requires clarification.",
+  "uncertainty": 0.12,
+  "needs_human_review": false,
+  "tool_call": {
+    "response_id": "resp_055929806d26dcbe006a5b17489d78819a8a071f828ccf382a",
+    "cache_hit": false
+  },
+  "evaluation": {
+    "evaluator_result": {
+      "expected_action": "DENY_EXPENSE",
+      "selected_action": "REQUEST_DOCUMENTATION",
+      "passed": false,
+      "reason": "selected action differed"
+    }
+  },
+  "passed": false,
+  "execution_source": "live",
+  "cache_lookup_latency_ms": 0,
+  "original_model_latency_ms": null,
+  "latency_ms": 5807,
+  "token_usage": {
+    "input_tokens": 839,
+    "output_tokens": 210,
+    "total_tokens": 1049
+  },
+  "request_token_usage": {
+    "input_tokens": 839,
+    "output_tokens": 210,
+    "total_tokens": 1049
+  },
+  "cached_original_token_usage": null,
+  "billable_api_call": true,
+  "cache": {
+    "enabled": false,
+    "request_hash": "227ec9c7e7d7232d4113e9dccc28775076da02f8225441aaa3d36dd02c4b3a31",
+    "hit": false,
+    "cache_path": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\openai_cache\\227ec9c7e7d7232d4113e9dccc28775076da02f8225441aaa3d36dd02c4b3a31.json",
+    "cached_at": null
+  },
+  "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+  "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+  "replay_intervention": {
+    "intervention_type": "REMOVE_MEMORY",
+    "target_memory_ids": [
+      "exp_09_mem_2"
+    ],
+    "replacement_values": {},
+    "reason": "Remove exp_09_mem_2 from the snapshot"
+  },
+  "replay_role": "replay_intervention",
+  "error": null,
+  "created_at": "2026-07-18T06:03:58.158104Z"
+}

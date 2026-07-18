@@ -27,6 +27,20 @@ class RepairStatus(StrEnum):
     APPLIED = "applied"
 
 
+class InterventionType(StrEnum):
+    REMOVE_MEMORY = "REMOVE_MEMORY"
+    DISABLE_MEMORY = "DISABLE_MEMORY"
+    LOWER_RETRIEVAL_PRIORITY = "LOWER_RETRIEVAL_PRIORITY"
+    MARK_SUPERSEDED = "MARK_SUPERSEDED"
+    REPLACE_MEMORY_WITH_CANDIDATE = "REPLACE_MEMORY_WITH_CANDIDATE"
+
+
+class ReplayMode(StrEnum):
+    FAST = "fast"
+    DEEP = "deep"
+    CUSTOM = "custom"
+
+
 class Memory(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -220,6 +234,10 @@ class ExecutionTrace(BaseModel):
     cached_original_token_usage: dict[str, int] | None = None
     billable_api_call: bool = False
     cache: TraceCacheStatus = Field(default_factory=lambda: TraceCacheStatus(enabled=False))
+    parent_trace_id: str | None = None
+    investigation_id: str | None = None
+    replay_intervention: Intervention | None = None
+    replay_role: str | None = None
     error: TraceErrorDetails | None = None
     created_at: datetime
 
@@ -239,7 +257,7 @@ class ScenarioResult(BaseModel):
 class Intervention(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    intervention_type: str
+    intervention_type: InterventionType
     target_memory_ids: list[str]
     replacement_values: dict[str, Any] = Field(default_factory=dict)
     reason: str
@@ -248,16 +266,49 @@ class Intervention(BaseModel):
 class ReplayResult(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    investigation_id: str
+    parent_trace_id: str
     scenario_id: str
     intervention: Intervention
+    mode: ReplayMode
     total_runs: int = Field(ge=0)
     successful_runs: int = Field(ge=0)
     success_rate: float = Field(ge=0.0, le=1.0)
     confidence_interval_low: float = Field(ge=0.0, le=1.0)
     confidence_interval_high: float = Field(ge=0.0, le=1.0)
+    original_successful_runs: int = Field(ge=0)
+    original_total_runs: int = Field(ge=0)
     original_success_rate: float = Field(ge=0.0, le=1.0)
     influence_delta: float
-    traces: list[ExecutionTrace] = Field(default_factory=list)
+    original_action_distribution: dict[str, int] = Field(default_factory=dict)
+    intervention_action_distribution: dict[str, int] = Field(default_factory=dict)
+    original_replay_stability: float = Field(ge=0.0, le=1.0)
+    intervention_replay_stability: float = Field(ge=0.0, le=1.0)
+    original_errors: list[TraceErrorDetails] = Field(default_factory=list)
+    intervention_errors: list[TraceErrorDetails] = Field(default_factory=list)
+    original_trace_ids: list[str] = Field(default_factory=list)
+    intervention_trace_ids: list[str] = Field(default_factory=list)
+
+
+class Investigation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    investigation_id: str
+    parent_trace_id: str
+    scenario_id: str
+    domain: DomainName
+    requested_model: str
+    response_model: str
+    prompt_version: str
+    prompt_content_hash: str | None = None
+    run_count: int = Field(ge=1)
+    mode: ReplayMode
+    cache_policy: str
+    original_selected_action: str | None = None
+    expected_action: str
+    original_memory_snapshot: list[AgentInputMemory]
+    replay_results: list[ReplayResult] = Field(default_factory=list)
+    created_at: datetime
 
 
 class RepairProposal(BaseModel):

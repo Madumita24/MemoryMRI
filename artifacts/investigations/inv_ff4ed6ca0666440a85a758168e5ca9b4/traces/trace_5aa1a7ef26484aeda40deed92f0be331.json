@@ -1,0 +1,228 @@
+{
+  "trace_id": "trace_5aa1a7ef26484aeda40deed92f0be331",
+  "scenario_id": "exp_09",
+  "run_id": "run_ff0ad489d0b34a02895ba379007b5e1b",
+  "domain": "workplace_expense",
+  "user_input": "Approve my dinner expense during the customer visit.",
+  "agent_input": {
+    "schema_version": "day2a-v1",
+    "scenario_id": "exp_09",
+    "domain": "workplace_expense",
+    "user_input": "Approve my dinner expense during the customer visit.",
+    "allowed_actions": [
+      "AUTO_APPROVE",
+      "ESCALATE_MANAGER",
+      "ESCALATE_DIRECTOR",
+      "DENY_EXPENSE",
+      "REQUEST_DOCUMENTATION"
+    ],
+    "memories": [
+      {
+        "memory_id": "exp_09_mem_1",
+        "entity_id": "employee_09",
+        "content": "Employee is eligible for a temporary relocation meal stipend.",
+        "source": "hr_note",
+        "created_at": "2026-03-15T00:00:00Z",
+        "valid_from": "2026-03-15T00:00:00Z",
+        "valid_until": "2026-08-15T00:00:00Z",
+        "status": "active",
+        "confidence": 0.92,
+        "retrieval_priority": 98,
+        "supersedes": [],
+        "tags": [
+          "wrong-context"
+        ],
+        "operational_metadata": {
+          "memory_role": "customer_status",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      },
+      {
+        "memory_id": "exp_09_mem_2",
+        "entity_id": "policy_meals",
+        "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+        "source": "policy_portal",
+        "created_at": "2026-01-22T00:00:00Z",
+        "valid_from": "2026-01-22T00:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.98,
+        "retrieval_priority": 91,
+        "supersedes": [],
+        "tags": [
+          "meal-policy"
+        ],
+        "operational_metadata": {
+          "memory_role": "policy",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      },
+      {
+        "memory_id": "exp_09_mem_3",
+        "entity_id": "report_09",
+        "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+        "source": "expense_system",
+        "created_at": "2026-07-14T00:00:00Z",
+        "valid_from": "2026-07-14T00:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.98,
+        "retrieval_priority": 87,
+        "supersedes": [],
+        "tags": [
+          "receipt"
+        ],
+        "operational_metadata": {
+          "memory_role": "evidence",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    ]
+  },
+  "requested_model": "gpt-5.6",
+  "response_model": "gpt-5.6-sol",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "prompt_content_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b",
+  "agent_input_schema_version": "day2a-v1",
+  "request_hash": "9edc676d4aa8479ec7c480f68df5adb31b0d00b1df175669e2a56ddd690321b1",
+  "retrieved_memory_ids": [
+    "exp_09_mem_1",
+    "exp_09_mem_2",
+    "exp_09_mem_3"
+  ],
+  "memory_snapshot": [
+    {
+      "memory_id": "exp_09_mem_1",
+      "entity_id": "employee_09",
+      "content": "Employee is eligible for a temporary relocation meal stipend.",
+      "source": "hr_note",
+      "created_at": "2026-03-15T00:00:00Z",
+      "valid_from": "2026-03-15T00:00:00Z",
+      "valid_until": "2026-08-15T00:00:00Z",
+      "status": "active",
+      "confidence": 0.92,
+      "retrieval_priority": 98,
+      "supersedes": [],
+      "tags": [
+        "wrong-context"
+      ],
+      "operational_metadata": {
+        "memory_role": "customer_status",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    },
+    {
+      "memory_id": "exp_09_mem_2",
+      "entity_id": "policy_meals",
+      "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+      "source": "policy_portal",
+      "created_at": "2026-01-22T00:00:00Z",
+      "valid_from": "2026-01-22T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.98,
+      "retrieval_priority": 91,
+      "supersedes": [],
+      "tags": [
+        "meal-policy"
+      ],
+      "operational_metadata": {
+        "memory_role": "policy",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    },
+    {
+      "memory_id": "exp_09_mem_3",
+      "entity_id": "report_09",
+      "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+      "source": "expense_system",
+      "created_at": "2026-07-14T00:00:00Z",
+      "valid_from": "2026-07-14T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.98,
+      "retrieval_priority": 87,
+      "supersedes": [],
+      "tags": [
+        "receipt"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    }
+  ],
+  "structured_response": {
+    "selected_action": "REQUEST_DOCUMENTATION",
+    "action_arguments": {
+      "required_documentation": "Provide applicable per-diem eligibility and supporting documentation for the solo dinner."
+    },
+    "cited_memory_ids": [
+      "exp_09_mem_2",
+      "exp_09_mem_3"
+    ],
+    "concise_rationale": "The receipt shows a solo dinner, and policy requires documented per-diem eligibility for reimbursement.",
+    "uncertainty": 0.05,
+    "needs_human_review": false
+  },
+  "selected_action": "REQUEST_DOCUMENTATION",
+  "action_arguments": {
+    "required_documentation": "Provide applicable per-diem eligibility and supporting documentation for the solo dinner."
+  },
+  "cited_memory_ids": [
+    "exp_09_mem_2",
+    "exp_09_mem_3"
+  ],
+  "concise_rationale": "The receipt shows a solo dinner, and policy requires documented per-diem eligibility for reimbursement.",
+  "uncertainty": 0.05,
+  "needs_human_review": false,
+  "tool_call": {
+    "response_id": "resp_0e9e8124053e547e006a5b17578014819a94ad73e74dc13fdf",
+    "cache_hit": false
+  },
+  "evaluation": {
+    "evaluator_result": {
+      "expected_action": "DENY_EXPENSE",
+      "selected_action": "REQUEST_DOCUMENTATION",
+      "passed": false,
+      "reason": "selected action differed"
+    }
+  },
+  "passed": false,
+  "execution_source": "live",
+  "cache_lookup_latency_ms": 0,
+  "original_model_latency_ms": null,
+  "latency_ms": 4012,
+  "token_usage": {
+    "input_tokens": 1024,
+    "output_tokens": 140,
+    "total_tokens": 1164
+  },
+  "request_token_usage": {
+    "input_tokens": 1024,
+    "output_tokens": 140,
+    "total_tokens": 1164
+  },
+  "cached_original_token_usage": null,
+  "billable_api_call": true,
+  "cache": {
+    "enabled": false,
+    "request_hash": "9edc676d4aa8479ec7c480f68df5adb31b0d00b1df175669e2a56ddd690321b1",
+    "hit": false,
+    "cache_path": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\openai_cache\\9edc676d4aa8479ec7c480f68df5adb31b0d00b1df175669e2a56ddd690321b1.json",
+    "cached_at": null
+  },
+  "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+  "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+  "replay_intervention": null,
+  "replay_role": "replay_original",
+  "error": null,
+  "created_at": "2026-07-18T06:04:11.183571Z"
+}

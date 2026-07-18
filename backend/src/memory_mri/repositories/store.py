@@ -46,7 +46,7 @@ class BenchmarkRepository:
                 trace_id=trace.trace_id,
                 scenario_id=trace.scenario_id,
                 run_id=trace.run_id,
-                passed=trace.passed,
+                passed=trace.passed if trace.passed is not None else False,
                 selected_action=trace.selected_action,
                 payload_json=trace.model_dump_json(),
             )
