@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { EmptyState } from "@/components/empty-state";
@@ -456,10 +457,22 @@ export function BenchmarkExplorer({ data }: { data: BenchmarkExplorerEvidence })
                     className="rounded-xl bg-surface-950/70 text-ink-100"
                   >
                     <td className="rounded-l-xl border-y border-l border-white/8 px-4 py-4 font-mono">
-                      {row.scenarioId}
+                      <Link
+                        href={`/benchmarks/${row.scenarioId}?source=${selectedSource.key}&trace=${row.traceId}`}
+                        className="transition hover:text-ink-50 hover:underline"
+                      >
+                        {row.scenarioId}
+                      </Link>
                     </td>
                     <td className="border-y border-white/8 px-4 py-4">{getDomainLabel(row.domain)}</td>
-                    <td className="border-y border-white/8 px-4 py-4">{row.title}</td>
+                    <td className="border-y border-white/8 px-4 py-4">
+                      <Link
+                        href={`/benchmarks/${row.scenarioId}?source=${selectedSource.key}&trace=${row.traceId}`}
+                        className="transition hover:text-ink-50 hover:underline"
+                      >
+                        {row.title}
+                      </Link>
+                    </td>
                     <td className="border-y border-white/8 px-4 py-4">{row.runnerLabel}</td>
                     <td className="border-y border-white/8 px-4 py-4 font-mono">{row.actualAction}</td>
                     {showEvaluationDetails ? (
