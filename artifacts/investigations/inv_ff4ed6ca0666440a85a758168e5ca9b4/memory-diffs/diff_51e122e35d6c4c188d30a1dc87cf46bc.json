@@ -1,0 +1,30 @@
+{
+  "diff_id": "diff_51e122e35d6c4c188d30a1dc87cf46bc",
+  "mode": "proposal_preview",
+  "proposal_id": "proposal_7e2d78f3769943b1bb5a6e7281fad2ba",
+  "from_version_id": "version_exp_09_root",
+  "to_version_id": null,
+  "target_memory_ids": [],
+  "added_fields": [],
+  "removed_fields": [],
+  "changed_fields": [],
+  "unchanged_fields": [
+    "exp_09_mem_1",
+    "exp_09_mem_2",
+    "exp_09_mem_3"
+  ],
+  "status_changes": [],
+  "validity_changes": [],
+  "entity_changes": [],
+  "priority_changes": [],
+  "superseding_relationship_changes": [],
+  "context_constraint_changes": [],
+  "generated_at": "2026-07-19T01:48:02.459546Z",
+  "snapshot_hash_before": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+  "snapshot_hash_after": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+  "evidence_references": [
+    "proposal_7e2d78f3769943b1bb5a6e7281fad2ba",
+    "trace_0f0477f7cb5c497cb209414fce5e1016"
+  ],
+  "frontend_sections": []
+}

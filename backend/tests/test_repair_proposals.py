@@ -13,7 +13,15 @@ from memory_mri.config import OpenAISettings, SemanticAnalysisSettings
 from memory_mri.db.session import create_sqlite_session
 from memory_mri.engine.repair_proposals import RepairProposalEngine, RepairProposalError
 from memory_mri.repositories.store import BenchmarkRepository
-from memory_mri.schemas import AuditEventType, MemoryVersionStatus, RepairStatus, RepairType
+from memory_mri.schemas import (
+    AgentInputMemory,
+    AuditEventType,
+    MemoryDiffMode,
+    MemoryStatus,
+    MemoryVersionStatus,
+    RepairStatus,
+    RepairType,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 ARTIFACTS_ROOT = ROOT / "artifacts" / "investigations"
@@ -590,10 +598,253 @@ def test_audit_log_and_version_compare(benchmark_cases, tmp_path: Path) -> None:
     comparison = engine.compare_memory_versions(base_version.version_id, applied.version_id)
     audit_entries = engine.repository.list_audit_logs_for_proposal(proposal.proposal_id)
 
-    assert comparison["changed_memories"]
+    assert comparison.added_fields
     assert audit_entries[0].event_type == AuditEventType.PROPOSAL_CREATED
     assert {entry.event_type for entry in audit_entries} >= {
         AuditEventType.PROPOSAL_CREATED,
         AuditEventType.PROPOSAL_APPROVED,
         AuditEventType.PROPOSAL_APPLIED,
     }
+
+
+def test_preview_memory_diff_for_cs_01_tracks_added_metadata(
+    benchmark_cases,
+    tmp_path: Path,
+) -> None:
+    case = next(case for case in benchmark_cases if case.scenario.id == "cs_01")
+    investigation_id = "inv_6d6c10d634c140f3af029a3eb7826bde"
+    copy_investigation(tmp_path, investigation_id)
+    database_url = seed_trace(
+        tmp_path,
+        case,
+        trace_id="trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+        selected_action="ASK_FOR_INFORMATION",
+    )
+    engine = make_engine(
+        tmp_path,
+        database_url=database_url,
+        client=FakeClient(
+            [
+                draft_response(
+                    repair_type="REQUIRE_HUMAN_CONFIRMATION",
+                    target_memory_ids=["cs_01_mem_2"],
+                )
+            ]
+        ),
+    )
+    proposal = engine.generate_proposal(investigation_id)
+
+    diff = engine.preview_memory_diff(proposal.proposal_id)
+    markdown = engine.export_memory_diff(diff.diff_id, "markdown")
+
+    assert diff.mode == MemoryDiffMode.PROPOSAL_PREVIEW
+    assert diff.target_memory_ids == ["cs_01_mem_2"]
+    assert {change.field_path for change in diff.added_fields} == {
+        "operational_metadata.human_confirmation_note",
+        "operational_metadata.requires_human_confirmation",
+    }
+    assert "Memory: `cs_01_mem_2`" in markdown
+    assert "requires_human_confirmation" in markdown
+
+
+def test_exp_09_preview_diff_reports_no_memory_changes(benchmark_cases, tmp_path: Path) -> None:
+    case = next(case for case in benchmark_cases if case.scenario.id == "exp_09")
+    investigation_id = "inv_ff4ed6ca0666440a85a758168e5ca9b4"
+    copy_investigation(tmp_path, investigation_id)
+    database_url = seed_trace(
+        tmp_path,
+        case,
+        trace_id="trace_0f0477f7cb5c497cb209414fce5e1016",
+        selected_action="REQUEST_DOCUMENTATION",
+    )
+    engine = make_engine(tmp_path, database_url=database_url, client=FakeClient([]))
+    proposal = engine.generate_proposal(investigation_id)
+
+    diff = engine.preview_memory_diff(proposal.proposal_id)
+
+    assert diff.mode == MemoryDiffMode.PROPOSAL_PREVIEW
+    assert not diff.added_fields
+    assert not diff.removed_fields
+    assert not diff.changed_fields
+    assert "No memory changes proposed." in engine.export_memory_diff(diff.diff_id, "markdown")
+
+
+def test_memory_diff_handles_nested_metadata_and_secret_redaction(tmp_path: Path) -> None:
+    engine = make_engine(
+        tmp_path,
+        database_url=f"sqlite:///{tmp_path / 'memory.db'}",
+        client=None,
+    )
+    before = AgentInputMemory(
+        memory_id="mem_1",
+        entity_id="entity_a",
+        content="hello",
+        source="unit",
+        created_at=case_datetime(),
+        status=MemoryStatus.ACTIVE,
+        confidence=0.9,
+        retrieval_priority=10,
+        operational_metadata={"nested": {"api_key": "secret-123", "flag": True}},
+    )
+    after = before.model_copy(
+        update={
+            "operational_metadata": {
+                "nested": {"api_key": "secret-456", "flag": False, "note": "added"}
+            }
+        },
+        deep=True,
+    )
+
+    diff = engine._build_memory_diff(
+        mode=MemoryDiffMode.VERSION_COMPARISON,
+        proposal_id=None,
+        scenario_id="unit",
+        investigation_id="inv_unit",
+        from_version_id="from",
+        to_version_id="to",
+        before_snapshot=[before],
+        after_snapshot=[after],
+        target_memory_ids=["mem_1"],
+        evidence_references=[],
+    )
+
+    secret_changes = [
+        change
+        for change in [*diff.added_fields, *diff.changed_fields]
+        if "api_key" in change.field_path
+    ]
+    assert secret_changes
+    assert all(
+        change.before == "[REDACTED]"
+        for change in secret_changes
+        if change.before != {"__memory_mri_absent__": True}
+    )
+    assert all(change.after == "[REDACTED]" for change in secret_changes)
+    assert any(
+        change.field_path == "operational_metadata.nested.note" for change in diff.added_fields
+    )
+
+
+def test_memory_diff_distinguishes_absent_from_null(tmp_path: Path) -> None:
+    engine = make_engine(
+        tmp_path,
+        database_url=f"sqlite:///{tmp_path / 'memory.db'}",
+        client=None,
+    )
+    before = AgentInputMemory(
+        memory_id="mem_1",
+        entity_id="entity_a",
+        content="hello",
+        source="unit",
+        created_at=case_datetime(),
+        status=MemoryStatus.ACTIVE,
+        confidence=0.9,
+        retrieval_priority=10,
+        operational_metadata={},
+    )
+    after = before.model_copy(
+        update={"valid_until": None},
+        deep=True,
+    )
+
+    diff = engine._build_memory_diff(
+        mode=MemoryDiffMode.VERSION_COMPARISON,
+        proposal_id=None,
+        scenario_id="unit",
+        investigation_id="inv_unit",
+        from_version_id="from",
+        to_version_id="to",
+        before_snapshot=[],
+        after_snapshot=[after],
+        target_memory_ids=["mem_1"],
+        evidence_references=[],
+    )
+
+    assert diff.added_fields[0].before == {"__memory_mri_absent__": True}
+    assert diff.added_fields[0].after["valid_until"] is None
+
+
+def test_compare_memory_versions_requires_matching_preview(benchmark_cases, tmp_path: Path) -> None:
+    case = next(case for case in benchmark_cases if case.scenario.id == "cs_01")
+    investigation_id = "inv_6d6c10d634c140f3af029a3eb7826bde"
+    copy_investigation(tmp_path, investigation_id)
+    database_url = seed_trace(
+        tmp_path,
+        case,
+        trace_id="trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+        selected_action="ASK_FOR_INFORMATION",
+    )
+    engine = make_engine(
+        tmp_path,
+        database_url=database_url,
+        client=FakeClient(
+            [
+                draft_response(
+                    repair_type="REQUIRE_HUMAN_CONFIRMATION",
+                    target_memory_ids=["cs_01_mem_2"],
+                )
+            ]
+        ),
+    )
+    proposal = engine.generate_proposal(investigation_id)
+    preview = engine.preview_memory_diff(proposal.proposal_id)
+    preview.changed_fields = []
+    preview.added_fields = []
+    engine.repository.save_memory_diff(
+        preview,
+        scenario_id=proposal.scenario_id,
+        investigation_id=proposal.investigation_id,
+    )
+    engine.session.commit()
+    engine.approve_proposal(proposal.proposal_id, approval_reason="Reviewed.")
+    applied = engine.apply_proposal(proposal.proposal_id)
+    base = engine.list_memory_versions(case.scenario.id)[0]
+
+    with pytest.raises(ValueError) as exc_info:
+        engine.compare_memory_versions(base.version_id, applied.version_id)
+
+    assert "preview" in str(exc_info.value)
+
+
+def test_show_memory_version_rejects_snapshot_hash_mismatch(
+    benchmark_cases,
+    tmp_path: Path,
+) -> None:
+    case = next(case for case in benchmark_cases if case.scenario.id == "cs_01")
+    investigation_id = "inv_6d6c10d634c140f3af029a3eb7826bde"
+    copy_investigation(tmp_path, investigation_id)
+    database_url = seed_trace(
+        tmp_path,
+        case,
+        trace_id="trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+        selected_action="ASK_FOR_INFORMATION",
+    )
+    engine = make_engine(
+        tmp_path,
+        database_url=database_url,
+        client=FakeClient(
+            [
+                draft_response(
+                    repair_type="REQUIRE_HUMAN_CONFIRMATION",
+                    target_memory_ids=["cs_01_mem_2"],
+                )
+            ]
+        ),
+    )
+    proposal = engine.generate_proposal(investigation_id)
+    engine.approve_proposal(proposal.proposal_id, approval_reason="Reviewed.")
+    applied = engine.apply_proposal(proposal.proposal_id)
+    corrupted = applied.model_copy(update={"snapshot_hash": "bad-hash"}, deep=True)
+    engine.repository.save_memory_version(corrupted)
+    engine.session.commit()
+
+    with pytest.raises(ValueError) as exc_info:
+        engine.show_memory_version(applied.version_id)
+
+    assert "snapshot hash mismatch" in str(exc_info.value)
+
+
+def case_datetime():
+    from datetime import datetime, timezone
+
+    return datetime(2026, 7, 19, tzinfo=timezone.utc)

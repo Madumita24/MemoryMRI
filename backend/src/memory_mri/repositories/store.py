@@ -9,6 +9,7 @@ from memory_mri.db.models import (
     ApprovalRecordModel,
     AuditLogRecord,
     BenchmarkRunRecord,
+    MemoryDiffRecord,
     MemoryRecord,
     MemoryVersionRecord,
     RepairProposalRecord,
@@ -21,6 +22,7 @@ from memory_mri.schemas import (
     AuditLogEntry,
     BenchmarkCase,
     ExecutionTrace,
+    MemoryDiff,
     MemoryStoreVersion,
     RepairProposal,
 )
@@ -119,6 +121,26 @@ class BenchmarkRepository:
             )
         )
 
+    def save_memory_diff(
+        self,
+        diff: MemoryDiff,
+        *,
+        scenario_id: str,
+        investigation_id: str,
+    ) -> None:
+        self.session.merge(
+            MemoryDiffRecord(
+                diff_id=diff.diff_id,
+                scenario_id=scenario_id,
+                investigation_id=investigation_id,
+                proposal_id=diff.proposal_id,
+                from_version_id=diff.from_version_id,
+                to_version_id=diff.to_version_id,
+                mode=diff.mode.value,
+                payload_json=diff.model_dump_json(),
+            )
+        )
+
     def get_trace(self, trace_id: str) -> ExecutionTrace | None:
         record = self.session.get(TraceRecord, trace_id)
         if record is None:
@@ -136,6 +158,12 @@ class BenchmarkRepository:
         if record is None:
             return None
         return MemoryStoreVersion.model_validate_json(record.payload_json)
+
+    def get_memory_diff(self, diff_id: str) -> MemoryDiff | None:
+        record = self.session.get(MemoryDiffRecord, diff_id)
+        if record is None:
+            return None
+        return MemoryDiff.model_validate_json(record.payload_json)
 
     def list_traces(self) -> list[ExecutionTrace]:
         return [
@@ -202,6 +230,15 @@ class BenchmarkRepository:
             .all()
         ]
 
+    def list_memory_diffs_for_proposal(self, proposal_id: str) -> list[MemoryDiff]:
+        return [
+            MemoryDiff.model_validate_json(record.payload_json)
+            for record in self.session.query(MemoryDiffRecord)
+            .filter(MemoryDiffRecord.proposal_id == proposal_id)
+            .order_by(MemoryDiffRecord.created_at)
+            .all()
+        ]
+
     def list_repair_proposals_for_investigation(
         self, investigation_id: str
     ) -> list[RepairProposal]:
@@ -221,6 +258,7 @@ class BenchmarkRepository:
             "approval_records": self.session.query(ApprovalRecordModel).count(),
             "memory_versions": self.session.query(MemoryVersionRecord).count(),
             "audit_logs": self.session.query(AuditLogRecord).count(),
+            "memory_diffs": self.session.query(MemoryDiffRecord).count(),
             "benchmark_runs": self.session.query(BenchmarkRunRecord).count(),
             "verification_artifacts": self.session.query(VerificationArtifactRecord).count(),
         }

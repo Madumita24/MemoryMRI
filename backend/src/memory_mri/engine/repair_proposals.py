@@ -41,6 +41,12 @@ from memory_mri.schemas import (
     Investigation,
     MemoryControlsArtifact,
     MemoryDependenceClassification,
+    MemoryDiff,
+    MemoryDiffChangeType,
+    MemoryDiffFrontendSection,
+    MemoryDiffMode,
+    MemoryDiffRiskLevel,
+    MemoryFieldChange,
     MemoryStatus,
     MemoryStoreVersion,
     MemoryVersionStatus,
@@ -56,6 +62,10 @@ from memory_mri.schemas import (
     ReplayResult,
     SupportValidityResult,
 )
+
+ABSENT = {"__memory_mri_absent__": True}
+REDACTED = "[REDACTED]"
+SECRET_FIELD_TOKENS = ("secret", "token", "password", "api_key", "authorization", "auth")
 
 MEMORY_EDITING_REPAIR_TYPES = {
     RepairType.INVALIDATE_MEMORY,
@@ -580,37 +590,96 @@ class RepairProposalEngine:
         version = self.repository.get_memory_version(version_id)
         if version is None:
             raise ValueError(f"unknown memory version: {version_id}")
+        if version.snapshot_hash != self._snapshot_hash(version.memory_snapshot):
+            raise ValueError(f"memory version snapshot hash mismatch: {version_id}")
         return version
 
-    def compare_memory_versions(self, from_version_id: str, to_version_id: str) -> dict[str, Any]:
+    def preview_memory_diff(self, proposal_id: str) -> MemoryDiff:
+        proposal = self.get_proposal(proposal_id)
+        investigation = self.replay_engine.load_investigation(proposal.investigation_id)
+        current_version = self._version_for_snapshot_hash(
+            scenario_id=proposal.scenario_id,
+            snapshot_hash=proposal.evidence_references.memory_snapshot_hash,
+        ) or self._get_or_create_base_version(investigation)
+        before_snapshot = [
+            memory.model_copy(deep=True) for memory in current_version.memory_snapshot
+        ]
+        after_snapshot = (
+            self._apply_repair_to_snapshot(proposal=proposal, snapshot=before_snapshot)
+            if proposal.repair_type
+            not in {
+                RepairType.NO_MEMORY_REPAIR_RECOMMENDED,
+                RepairType.ESCALATE_PROMPT_OR_POLICY_REVIEW,
+            }
+            else [memory.model_copy(deep=True) for memory in before_snapshot]
+        )
+        diff = self._build_memory_diff(
+            mode=MemoryDiffMode.PROPOSAL_PREVIEW,
+            proposal_id=proposal.proposal_id,
+            scenario_id=proposal.scenario_id,
+            investigation_id=proposal.investigation_id,
+            from_version_id=current_version.version_id,
+            to_version_id=None,
+            before_snapshot=before_snapshot,
+            after_snapshot=after_snapshot,
+            target_memory_ids=proposal.target_memory_ids,
+            evidence_references=[
+                proposal.proposal_id,
+                proposal.evidence_references.parent_trace_id,
+            ],
+        )
+        self._persist_memory_diff(
+            diff,
+            scenario_id=proposal.scenario_id,
+            investigation_id=proposal.investigation_id,
+        )
+        return diff
+
+    def get_memory_diff(self, diff_id: str) -> MemoryDiff:
+        diff = self.repository.get_memory_diff(diff_id)
+        if diff is None:
+            raise ValueError(f"unknown memory diff: {diff_id}")
+        return diff
+
+    def export_memory_diff(self, diff_id: str, fmt: str) -> str:
+        diff = self.get_memory_diff(diff_id)
+        if fmt == "json":
+            return diff.model_dump_json(indent=2)
+        if fmt == "markdown":
+            return self._render_memory_diff_markdown(diff)
+        raise ValueError(f"unsupported format: {fmt}")
+
+    def compare_memory_versions(self, from_version_id: str, to_version_id: str) -> MemoryDiff:
         left = self.show_memory_version(from_version_id)
         right = self.show_memory_version(to_version_id)
-        left_memories = {memory.memory_id: memory for memory in left.memory_snapshot}
-        right_memories = {memory.memory_id: memory for memory in right.memory_snapshot}
-        changed: list[dict[str, Any]] = []
-        for memory_id in sorted(set(left_memories) | set(right_memories)):
-            if left_memories.get(memory_id) == right_memories.get(memory_id):
-                continue
-            changed.append(
-                {
-                    "memory_id": memory_id,
-                    "from": (
-                        left_memories[memory_id].model_dump(mode="json")
-                        if memory_id in left_memories
-                        else None
-                    ),
-                    "to": (
-                        right_memories[memory_id].model_dump(mode="json")
-                        if memory_id in right_memories
-                        else None
-                    ),
-                }
-            )
-        return {
-            "from_version_id": from_version_id,
-            "to_version_id": to_version_id,
-            "changed_memories": changed,
-        }
+        mode = (
+            MemoryDiffMode.REVERTED_VERSION
+            if right.proposal_id is not None
+            and right.status == MemoryVersionStatus.ACTIVE
+            and left.proposal_id == right.proposal_id
+            else MemoryDiffMode.APPLIED_VERSION
+            if right.proposal_id is not None
+            else MemoryDiffMode.VERSION_COMPARISON
+        )
+        diff = self._build_memory_diff(
+            mode=mode,
+            proposal_id=right.proposal_id,
+            scenario_id=right.scenario_id,
+            investigation_id=right.investigation_id,
+            from_version_id=left.version_id,
+            to_version_id=right.version_id,
+            before_snapshot=left.memory_snapshot,
+            after_snapshot=right.memory_snapshot,
+            target_memory_ids=[],
+            evidence_references=[left.version_id, right.version_id],
+        )
+        self._validate_diff_consistency_with_preview(diff)
+        self._persist_memory_diff(
+            diff,
+            scenario_id=right.scenario_id,
+            investigation_id=right.investigation_id,
+        )
+        return diff
 
     def _load_or_build_suspicion(self, investigation_id: str) -> SuspicionRankingArtifact:
         path = self._investigation_dir(investigation_id) / "suspicion-ranking.json"
@@ -1282,6 +1351,17 @@ class RepairProposalEngine:
             return None
         return active[-1]
 
+    def _version_for_snapshot_hash(
+        self,
+        *,
+        scenario_id: str,
+        snapshot_hash: str,
+    ) -> MemoryStoreVersion | None:
+        for version in self.repository.list_memory_versions_for_scenario(scenario_id):
+            if version.snapshot_hash == snapshot_hash:
+                return version
+        return None
+
     def _apply_repair_to_snapshot(
         self,
         *,
@@ -1412,6 +1492,363 @@ class RepairProposalEngine:
         )
         return "\n".join(lines)
 
+    def _build_memory_diff(
+        self,
+        *,
+        mode: MemoryDiffMode,
+        proposal_id: str | None,
+        scenario_id: str,
+        investigation_id: str,
+        from_version_id: str | None,
+        to_version_id: str | None,
+        before_snapshot: list[AgentInputMemory],
+        after_snapshot: list[AgentInputMemory],
+        target_memory_ids: list[str],
+        evidence_references: list[str],
+    ) -> MemoryDiff:
+        before_hash = self._snapshot_hash(before_snapshot)
+        after_hash = self._snapshot_hash(after_snapshot)
+        before_map = {
+            memory.memory_id: memory.model_dump(mode="json") for memory in before_snapshot
+        }
+        after_map = {memory.memory_id: memory.model_dump(mode="json") for memory in after_snapshot}
+        memory_ids = sorted(set(before_map) | set(after_map))
+        added_fields: list[MemoryFieldChange] = []
+        removed_fields: list[MemoryFieldChange] = []
+        changed_fields: list[MemoryFieldChange] = []
+        unchanged_fields: list[str] = []
+        per_memory: dict[str, dict[str, list[MemoryFieldChange]]] = {}
+
+        for memory_id in memory_ids:
+            bucket = per_memory.setdefault(
+                memory_id,
+                {"added": [], "removed": [], "changed": []},
+            )
+            before_payload = before_map.get(memory_id, ABSENT)
+            after_payload = after_map.get(memory_id, ABSENT)
+            diffs = self._collect_field_changes(memory_id, "", before_payload, after_payload)
+            if not diffs:
+                unchanged_fields.append(memory_id)
+                continue
+            for change in diffs:
+                if change.change_type == MemoryDiffChangeType.ADDED:
+                    added_fields.append(change)
+                    bucket["added"].append(change)
+                elif change.change_type == MemoryDiffChangeType.REMOVED:
+                    removed_fields.append(change)
+                    bucket["removed"].append(change)
+                else:
+                    changed_fields.append(change)
+                    bucket["changed"].append(change)
+
+        all_changes = [*added_fields, *removed_fields, *changed_fields]
+        diff = MemoryDiff(
+            diff_id=f"diff_{uuid4().hex}",
+            mode=mode,
+            proposal_id=proposal_id,
+            from_version_id=from_version_id,
+            to_version_id=to_version_id,
+            target_memory_ids=target_memory_ids,
+            added_fields=added_fields,
+            removed_fields=removed_fields,
+            changed_fields=changed_fields,
+            unchanged_fields=unchanged_fields,
+            status_changes=[
+                change for change in all_changes if change.field_path.endswith("status")
+            ],
+            validity_changes=[
+                change
+                for change in all_changes
+                if "valid_from" in change.field_path or "valid_until" in change.field_path
+            ],
+            entity_changes=[
+                change for change in all_changes if change.field_path.endswith("entity_id")
+            ],
+            priority_changes=[
+                change for change in all_changes if change.field_path.endswith("retrieval_priority")
+            ],
+            superseding_relationship_changes=[
+                change
+                for change in all_changes
+                if "supersedes" in change.field_path or "superseded" in change.field_path
+            ],
+            context_constraint_changes=[
+                change
+                for change in all_changes
+                if "context_constraint" in change.field_path
+                or "human_confirmation" in change.field_path
+                or "precedence_note" in change.field_path
+            ],
+            generated_at=datetime.now(timezone.utc),
+            snapshot_hash_before=before_hash,
+            snapshot_hash_after=after_hash,
+            evidence_references=evidence_references,
+            frontend_sections=self._build_frontend_sections(per_memory),
+        )
+        self._validate_diff_hashes(
+            diff=diff,
+            before_snapshot=before_snapshot,
+            after_snapshot=after_snapshot,
+        )
+        return diff
+
+    def _collect_field_changes(
+        self,
+        memory_id: str,
+        field_path: str,
+        before: Any,
+        after: Any,
+    ) -> list[MemoryFieldChange]:
+        if before == after:
+            return []
+        if before == ABSENT:
+            return [
+                self._make_field_change(
+                    memory_id=memory_id,
+                    field_path=field_path or "memory",
+                    before=ABSENT,
+                    after=after,
+                    change_type=MemoryDiffChangeType.ADDED,
+                )
+            ]
+        if after == ABSENT:
+            return [
+                self._make_field_change(
+                    memory_id=memory_id,
+                    field_path=field_path or "memory",
+                    before=before,
+                    after=ABSENT,
+                    change_type=MemoryDiffChangeType.REMOVED,
+                )
+            ]
+        if isinstance(before, dict) and isinstance(after, dict):
+            changes: list[MemoryFieldChange] = []
+            for key in sorted(set(before) | set(after)):
+                next_path = f"{field_path}.{key}" if field_path else key
+                changes.extend(
+                    self._collect_field_changes(
+                        memory_id,
+                        next_path,
+                        before.get(key, ABSENT),
+                        after.get(key, ABSENT),
+                    )
+                )
+            return changes
+        if isinstance(before, list) and isinstance(after, list):
+            return [
+                self._make_field_change(
+                    memory_id=memory_id,
+                    field_path=field_path,
+                    before=before,
+                    after=after,
+                    change_type=MemoryDiffChangeType.CHANGED,
+                )
+            ]
+        return [
+            self._make_field_change(
+                memory_id=memory_id,
+                field_path=field_path,
+                before=before,
+                after=after,
+                change_type=MemoryDiffChangeType.CHANGED,
+            )
+        ]
+
+    def _make_field_change(
+        self,
+        *,
+        memory_id: str,
+        field_path: str,
+        before: Any,
+        after: Any,
+        change_type: MemoryDiffChangeType,
+    ) -> MemoryFieldChange:
+        redacted_before = self._redact_secret_value(field_path, before)
+        redacted_after = self._redact_secret_value(field_path, after)
+        return MemoryFieldChange(
+            memory_id=memory_id,
+            field_path=field_path,
+            before=redacted_before,
+            after=redacted_after,
+            change_type=change_type,
+            risk_level=self._risk_level_for_field(field_path),
+            concise_explanation=self._explain_field_change(field_path, change_type),
+        )
+
+    def _risk_level_for_field(self, field_path: str) -> MemoryDiffRiskLevel:
+        if field_path.endswith("entity_id") or field_path.endswith("content"):
+            return MemoryDiffRiskLevel.HIGH
+        if (
+            "valid_" in field_path
+            or "status" in field_path
+            or "retrieval_priority" in field_path
+            or "supersedes" in field_path
+        ):
+            return MemoryDiffRiskLevel.MEDIUM
+        return MemoryDiffRiskLevel.LOW
+
+    def _explain_field_change(
+        self,
+        field_path: str,
+        change_type: MemoryDiffChangeType,
+    ) -> str:
+        if change_type == MemoryDiffChangeType.ADDED:
+            return f"Adds `{field_path}` to the operational snapshot."
+        if change_type == MemoryDiffChangeType.REMOVED:
+            return f"Removes `{field_path}` from the operational snapshot."
+        return f"Updates `{field_path}` in the operational snapshot."
+
+    def _build_frontend_sections(
+        self,
+        per_memory: dict[str, dict[str, list[MemoryFieldChange]]],
+    ) -> list[MemoryDiffFrontendSection]:
+        sections: list[MemoryDiffFrontendSection] = []
+        for memory_id in sorted(per_memory):
+            bucket = per_memory[memory_id]
+            total_changes = sum(len(values) for values in bucket.values())
+            if total_changes == 0:
+                continue
+            sections.append(
+                MemoryDiffFrontendSection(
+                    memory_id=memory_id,
+                    summary=f"{total_changes} structured field change(s) detected.",
+                    changed_fields=bucket["changed"],
+                    added_fields=bucket["added"],
+                    removed_fields=bucket["removed"],
+                )
+            )
+        return sections
+
+    def _validate_diff_hashes(
+        self,
+        *,
+        diff: MemoryDiff,
+        before_snapshot: list[AgentInputMemory],
+        after_snapshot: list[AgentInputMemory],
+    ) -> None:
+        before_hash = self._snapshot_hash(before_snapshot)
+        after_hash = self._snapshot_hash(after_snapshot)
+        if diff.snapshot_hash_before != before_hash or diff.snapshot_hash_after != after_hash:
+            raise ValueError("memory diff snapshot hash mismatch")
+
+    def _validate_diff_consistency_with_preview(self, diff: MemoryDiff) -> None:
+        if diff.proposal_id is None or diff.mode == MemoryDiffMode.PROPOSAL_PREVIEW:
+            return
+        previews = [
+            preview
+            for preview in self.repository.list_memory_diffs_for_proposal(diff.proposal_id)
+            if preview.mode == MemoryDiffMode.PROPOSAL_PREVIEW
+        ]
+        if not previews:
+            return
+        preview = previews[-1]
+        if self._diff_signature(preview) != self._diff_signature(diff):
+            raise ValueError("applied diff does not match the stored preview diff")
+
+    def _diff_signature(self, diff: MemoryDiff) -> tuple[tuple[str, str, str, str, str], ...]:
+        all_changes = [*diff.added_fields, *diff.removed_fields, *diff.changed_fields]
+        return tuple(
+            sorted(
+                (
+                    change.memory_id,
+                    change.field_path,
+                    json.dumps(change.before, sort_keys=True),
+                    json.dumps(change.after, sort_keys=True),
+                    change.change_type.value,
+                )
+                for change in all_changes
+            )
+        )
+
+    def _redact_secret_value(self, field_path: str, value: Any) -> Any:
+        if any(token in field_path.lower() for token in SECRET_FIELD_TOKENS):
+            return REDACTED if value != ABSENT else ABSENT
+        if isinstance(value, dict):
+            return {
+                key: self._redact_secret_value(f"{field_path}.{key}" if field_path else key, item)
+                for key, item in value.items()
+            }
+        if isinstance(value, list):
+            return [self._redact_secret_value(field_path, item) for item in value]
+        return value
+
+    def _render_memory_diff_markdown(self, diff: MemoryDiff) -> str:
+        lines = [
+            "# Memory Diff",
+            "",
+            "## Summary",
+            "",
+            f"- Diff ID: `{diff.diff_id}`",
+            f"- Mode: `{diff.mode.value}`",
+            f"- Proposal ID: `{diff.proposal_id or 'none'}`",
+            f"- From version: `{diff.from_version_id or 'none'}`",
+            f"- To version: `{diff.to_version_id or 'none'}`",
+            f"- Snapshot hash before: `{diff.snapshot_hash_before}`",
+            f"- Snapshot hash after: `{diff.snapshot_hash_after}`",
+            f"- Changed fields: `{len(diff.changed_fields)}`",
+            f"- Added fields: `{len(diff.added_fields)}`",
+            f"- Removed fields: `{len(diff.removed_fields)}`",
+            "",
+            "## Changed Memories",
+            "",
+        ]
+        if not diff.frontend_sections:
+            lines.append("No memory changes proposed.")
+        for section in diff.frontend_sections:
+            lines.extend(["", f"### Memory: `{section.memory_id}`", ""])
+            for label, changes in (
+                ("Added fields", section.added_fields),
+                ("Removed fields", section.removed_fields),
+                ("Changed fields", section.changed_fields),
+            ):
+                if not changes:
+                    continue
+                lines.extend([f"#### {label}", ""])
+                for change in changes:
+                    lines.extend(
+                        [
+                            f"- {change.field_path}: {self._markdown_value(change.before)}",
+                            f"- {change.field_path}: {self._markdown_value(change.after)}",
+                            f"- Risk: `{change.risk_level.value}`",
+                            f"- Note: {change.concise_explanation}",
+                            "",
+                        ]
+                    )
+        lines.extend(["## Risk Notes", ""])
+        risk_notes = [
+            change
+            for change in [
+                *diff.changed_fields,
+                *diff.added_fields,
+                *diff.removed_fields,
+            ]
+        ]
+        if not risk_notes:
+            lines.append("No memory mutation risk. This diff is informational only.")
+        else:
+            for change in risk_notes:
+                lines.append(
+                    (
+                        f"- `{change.memory_id}` `{change.field_path}` is "
+                        f"`{change.risk_level.value}` risk."
+                    )
+                )
+        lines.extend(["", "## Evidence References", ""])
+        if not diff.evidence_references:
+            lines.append("- None")
+        else:
+            lines.extend([f"- `{reference}`" for reference in diff.evidence_references])
+        return "\n".join(lines)
+
+    def _markdown_value(self, value: Any) -> str:
+        if value == ABSENT:
+            return "`<absent>`"
+        if value is None:
+            return "`null`"
+        if isinstance(value, (dict, list)):
+            return f"`{json.dumps(value, sort_keys=True)}`"
+        return f"`{value}`"
+
     def _record_audit(
         self,
         *,
@@ -1439,6 +1876,21 @@ class RepairProposalEngine:
             )
         )
 
+    def _persist_memory_diff(
+        self,
+        diff: MemoryDiff,
+        *,
+        scenario_id: str,
+        investigation_id: str,
+    ) -> None:
+        self.repository.save_memory_diff(
+            diff,
+            scenario_id=scenario_id,
+            investigation_id=investigation_id,
+        )
+        self.session.commit()
+        self._write_memory_diff_artifacts(diff, investigation_id=investigation_id)
+
     def _write_proposal_artifacts(self, proposal: RepairProposal) -> None:
         proposal_dir = self._proposal_dir(proposal.investigation_id)
         proposal_dir.mkdir(parents=True, exist_ok=True)
@@ -1456,6 +1908,18 @@ class RepairProposalEngine:
         versions_dir.mkdir(parents=True, exist_ok=True)
         (versions_dir / f"{version.version_id}.json").write_text(
             version.model_dump_json(indent=2),
+            encoding="utf-8",
+        )
+
+    def _write_memory_diff_artifacts(self, diff: MemoryDiff, *, investigation_id: str) -> None:
+        diffs_dir = self._investigation_dir(investigation_id) / "memory-diffs"
+        diffs_dir.mkdir(parents=True, exist_ok=True)
+        (diffs_dir / f"{diff.diff_id}.json").write_text(
+            diff.model_dump_json(indent=2),
+            encoding="utf-8",
+        )
+        (diffs_dir / f"{diff.diff_id}.md").write_text(
+            self._render_memory_diff_markdown(diff),
             encoding="utf-8",
         )
 

@@ -92,6 +92,22 @@ class AuditLogRecord(Base):
     )
 
 
+class MemoryDiffRecord(Base):
+    __tablename__ = "memory_diffs"
+
+    diff_id: Mapped[str] = mapped_column(String, primary_key=True)
+    scenario_id: Mapped[str] = mapped_column(String, index=True)
+    investigation_id: Mapped[str] = mapped_column(String, index=True)
+    proposal_id: Mapped[str | None] = mapped_column(String, index=True, nullable=True)
+    from_version_id: Mapped[str | None] = mapped_column(String, index=True, nullable=True)
+    to_version_id: Mapped[str | None] = mapped_column(String, index=True, nullable=True)
+    mode: Mapped[str] = mapped_column(String, index=True)
+    payload_json: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+    )
+
+
 class BenchmarkRunRecord(Base):
     __tablename__ = "benchmark_runs"
 

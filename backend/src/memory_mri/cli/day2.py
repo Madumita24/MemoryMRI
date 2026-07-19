@@ -117,6 +117,16 @@ def main() -> None:
     compare_versions.add_argument("--from", dest="from_version", required=True)
     compare_versions.add_argument("--to", dest="to_version", required=True)
 
+    preview_diff = subparsers.add_parser("preview-memory-diff")
+    preview_diff.add_argument("--proposal-id", required=True)
+
+    show_diff = subparsers.add_parser("show-memory-diff")
+    show_diff.add_argument("--diff-id", required=True)
+
+    export_diff = subparsers.add_parser("export-memory-diff")
+    export_diff.add_argument("--diff-id", required=True)
+    export_diff.add_argument("--format", choices=["json", "markdown"], required=True)
+
     args = parser.parse_args()
     data_dir = Path(args.data_dir).resolve()
     artifacts_dir = Path(args.artifacts_dir).resolve()
@@ -259,11 +269,20 @@ def main() -> None:
         return
     if args.command == "compare-memory-versions":
         print(
-            json.dumps(
-                proposal_engine.compare_memory_versions(args.from_version, args.to_version),
-                indent=2,
-            )
+            proposal_engine.compare_memory_versions(
+                args.from_version,
+                args.to_version,
+            ).model_dump_json(indent=2)
         )
+        return
+    if args.command == "preview-memory-diff":
+        print(proposal_engine.preview_memory_diff(args.proposal_id).model_dump_json(indent=2))
+        return
+    if args.command == "show-memory-diff":
+        print(proposal_engine.get_memory_diff(args.diff_id).model_dump_json(indent=2))
+        return
+    if args.command == "export-memory-diff":
+        print(proposal_engine.export_memory_diff(args.diff_id, args.format))
         return
     raise SystemExit(f"Unsupported command: {args.command}")
 

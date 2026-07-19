@@ -34,6 +34,25 @@ class MemoryVersionStatus(StrEnum):
     REVERTED = "reverted"
 
 
+class MemoryDiffMode(StrEnum):
+    PROPOSAL_PREVIEW = "proposal_preview"
+    APPLIED_VERSION = "applied_version"
+    REVERTED_VERSION = "reverted_version"
+    VERSION_COMPARISON = "version_comparison"
+
+
+class MemoryDiffChangeType(StrEnum):
+    ADDED = "added"
+    REMOVED = "removed"
+    CHANGED = "changed"
+
+
+class MemoryDiffRiskLevel(StrEnum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+
 class AuditEventType(StrEnum):
     PROPOSAL_CREATED = "proposal_created"
     PROPOSAL_APPROVED = "proposal_approved"
@@ -582,6 +601,61 @@ class MemoryStoreVersion(BaseModel):
     snapshot_hash: str
     change_summary: str
     status: MemoryVersionStatus
+
+
+class MemoryFieldChange(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    memory_id: str
+    field_path: str = Field(min_length=1)
+    before: Any
+    after: Any
+    change_type: MemoryDiffChangeType
+    risk_level: MemoryDiffRiskLevel
+    concise_explanation: str = Field(min_length=1, max_length=400)
+
+
+class MemoryDiffFrontendSection(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    memory_id: str
+    summary: str
+    changed_fields: list[MemoryFieldChange] = Field(default_factory=list)
+    added_fields: list[MemoryFieldChange] = Field(default_factory=list)
+    removed_fields: list[MemoryFieldChange] = Field(default_factory=list)
+
+
+class MemoryDiff(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    diff_id: str
+    mode: MemoryDiffMode
+    proposal_id: str | None = None
+    from_version_id: str | None = None
+    to_version_id: str | None = None
+    target_memory_ids: list[str] = Field(default_factory=list)
+    added_fields: list[MemoryFieldChange] = Field(default_factory=list)
+    removed_fields: list[MemoryFieldChange] = Field(default_factory=list)
+    changed_fields: list[MemoryFieldChange] = Field(default_factory=list)
+    unchanged_fields: list[str] = Field(default_factory=list)
+    status_changes: list[MemoryFieldChange] = Field(default_factory=list)
+    validity_changes: list[MemoryFieldChange] = Field(default_factory=list)
+    entity_changes: list[MemoryFieldChange] = Field(default_factory=list)
+    priority_changes: list[MemoryFieldChange] = Field(default_factory=list)
+    superseding_relationship_changes: list[MemoryFieldChange] = Field(default_factory=list)
+    context_constraint_changes: list[MemoryFieldChange] = Field(default_factory=list)
+    generated_at: datetime
+    snapshot_hash_before: str
+    snapshot_hash_after: str
+    evidence_references: list[str] = Field(default_factory=list)
+    frontend_sections: list[MemoryDiffFrontendSection] = Field(default_factory=list)
+
+    @field_validator("target_memory_ids")
+    @classmethod
+    def unique_target_memory_ids(cls, value: list[str]) -> list[str]:
+        if len(value) != len(set(value)):
+            raise ValueError("target_memory_ids must be unique")
+        return value
 
 
 class AuditLogEntry(BaseModel):
