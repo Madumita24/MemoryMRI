@@ -234,3 +234,52 @@ class ApiError(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     detail: str
+    code: str | None = None
+
+
+class ProposalActionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    reason: str = Field(min_length=1)
+    notes: str | None = None
+
+
+class VerificationRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    proposal_id: str
+    runner: Literal["fake", "openai"] = "fake"
+
+
+class BenchmarkRunRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    runner: Literal["fake", "openai"] = "fake"
+    artifact_path: str | None = None
+    summary_json_path: str | None = None
+    summary_md_path: str | None = None
+    traces_dir: str | None = None
+
+
+class ArtifactBuildRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    proposal_id: str
+    verification_id: str | None = None
+
+
+class ArtifactSummary(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    artifact_id: str
+    certificate_id: str
+    verification_verdict: str
+    scenario_id: str
+    proposal_id: str
+
+
+class BenchmarkRunResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    run_id: str | None = None
+    summary: dict[str, Any]

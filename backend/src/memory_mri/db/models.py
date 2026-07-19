@@ -126,3 +126,12 @@ class VerificationArtifactRecord(Base):
     artifact_id: Mapped[str] = mapped_column(String, primary_key=True)
     scenario_id: Mapped[str] = mapped_column(String, index=True)
     payload_json: Mapped[str] = mapped_column(Text)
+
+
+class VerificationCertificateRecord(Base):
+    __tablename__ = "verification_certificates"
+
+    artifact_id: Mapped[str] = mapped_column(String, primary_key=True)
+    scenario_id: Mapped[str] = mapped_column(String, index=True)
+    proposal_id: Mapped[str] = mapped_column(String, index=True)
+    payload_json: Mapped[str] = mapped_column(Text)

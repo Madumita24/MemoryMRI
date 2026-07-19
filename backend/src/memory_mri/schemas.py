@@ -762,16 +762,40 @@ class VerificationArtifact(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     artifact_id: str
+    certificate_id: str
+    artifact_version: str
+    investigation_id: str
+    proposal_id: str
+    applied_version_id: str | None = None
+    verification_id: str
+    domain: DomainName
     scenario_id: str
-    original_failure: ScenarioResult
-    suspected_memories: list[str]
-    replay_evidence: list[ReplayResult]
-    approved_repair: RepairProposal | None = None
-    original_case_after_repair: ScenarioResult | None = None
-    domain_regression_results: dict[str, Any] = Field(default_factory=dict)
-    complete_benchmark_results: dict[str, Any] = Field(default_factory=dict)
-    unrelated_behavior_changes: list[str] = Field(default_factory=list)
+    failure_description: str
+    original_action: str | None = None
+    expected_action: str
+    likely_influential_memories: list[str] = Field(default_factory=list)
+    individual_replay_evidence: list[dict[str, Any]] = Field(default_factory=list)
+    pairwise_replay_evidence: list[dict[str, Any]] = Field(default_factory=list)
+    memory_dependence_classification: str
+    suspicion_analysis: dict[str, Any] = Field(default_factory=dict)
+    contradiction_analysis: dict[str, Any] = Field(default_factory=dict)
+    approved_repair: dict[str, Any]
+    approval_record: dict[str, Any] | None = None
+    memory_diff: dict[str, Any] | None = None
+    original_case_verification: dict[str, Any]
+    domain_verification: dict[str, Any]
+    full_benchmark_verification: dict[str, Any]
+    repaired_failures: list[str] = Field(default_factory=list)
+    new_regressions: list[str] = Field(default_factory=list)
+    support_validity_result: SupportValidityResult
+    verification_verdict: VerificationVerdict
+    known_limitations: list[str] = Field(default_factory=list)
+    model: str
+    prompt_version: str
+    benchmark_version: str
+    git_commit_hash: str
     created_at: datetime
+    content_hash: str
 
 
 class BenchmarkCase(BaseModel):

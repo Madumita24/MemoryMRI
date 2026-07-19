@@ -16,6 +16,7 @@ from memory_mri.db.models import (
     ScenarioRecord,
     TraceRecord,
     VerificationArtifactRecord,
+    VerificationCertificateRecord,
 )
 from memory_mri.schemas import (
     ApprovalRecord,
@@ -25,6 +26,7 @@ from memory_mri.schemas import (
     MemoryDiff,
     MemoryStoreVersion,
     RepairProposal,
+    VerificationArtifact,
     VerificationRun,
 )
 
@@ -151,6 +153,16 @@ class BenchmarkRepository:
             )
         )
 
+    def save_verification_artifact(self, artifact: VerificationArtifact) -> None:
+        self.session.merge(
+            VerificationCertificateRecord(
+                artifact_id=artifact.artifact_id,
+                scenario_id=artifact.scenario_id,
+                proposal_id=artifact.proposal_id,
+                payload_json=artifact.model_dump_json(),
+            )
+        )
+
     def get_trace(self, trace_id: str) -> ExecutionTrace | None:
         record = self.session.get(TraceRecord, trace_id)
         if record is None:
@@ -175,11 +187,26 @@ class BenchmarkRepository:
             return None
         return MemoryDiff.model_validate_json(record.payload_json)
 
+    def get_benchmark_run(self, run_id: str) -> dict[str, Any] | None:
+        record = self.session.get(BenchmarkRunRecord, run_id)
+        if record is None:
+            return None
+        payload = json.loads(record.payload_json)
+        if not isinstance(payload, dict):
+            raise ValueError("benchmark payload must be a JSON object")
+        return payload
+
     def get_verification_run(self, verification_id: str) -> VerificationRun | None:
         record = self.session.get(VerificationArtifactRecord, verification_id)
         if record is None:
             return None
         return VerificationRun.model_validate_json(record.payload_json)
+
+    def get_verification_artifact(self, artifact_id: str) -> str | None:
+        record = self.session.get(VerificationCertificateRecord, artifact_id)
+        if record is None:
+            return None
+        return record.payload_json
 
     def list_traces(self) -> list[ExecutionTrace]:
         return [
@@ -209,6 +236,14 @@ class BenchmarkRepository:
         return [
             RepairProposal.model_validate_json(record.payload_json)
             for record in self.session.query(RepairProposalRecord).all()
+        ]
+
+    def list_benchmark_runs(self) -> list[dict[str, Any]]:
+        return [
+            json.loads(record.payload_json)
+            for record in self.session.query(BenchmarkRunRecord)
+            .order_by(BenchmarkRunRecord.created_at)
+            .all()
         ]
 
     def list_memory_versions(self) -> list[MemoryStoreVersion]:
@@ -263,6 +298,17 @@ class BenchmarkRepository:
                 runs.append(verification)
         return sorted(runs, key=lambda run: run.created_at)
 
+    def list_verification_artifacts_for_proposal(
+        self,
+        proposal_id: str,
+    ) -> list[VerificationArtifact]:
+        return [
+            VerificationArtifact.model_validate_json(record.payload_json)
+            for record in self.session.query(VerificationCertificateRecord)
+            .filter(VerificationCertificateRecord.proposal_id == proposal_id)
+            .all()
+        ]
+
     def list_repair_proposals_for_investigation(
         self, investigation_id: str
     ) -> list[RepairProposal]:
@@ -285,4 +331,5 @@ class BenchmarkRepository:
             "memory_diffs": self.session.query(MemoryDiffRecord).count(),
             "benchmark_runs": self.session.query(BenchmarkRunRecord).count(),
             "verification_artifacts": self.session.query(VerificationArtifactRecord).count(),
+            "verification_certificates": self.session.query(VerificationCertificateRecord).count(),
         }

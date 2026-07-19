@@ -57,6 +57,7 @@ class BenchmarkService:
         )
         self.session.commit()
 
+        summary["run_id"] = run_id
         artifact_path.parent.mkdir(parents=True, exist_ok=True)
         artifact_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
         return summary

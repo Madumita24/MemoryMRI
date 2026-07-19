@@ -151,6 +151,7 @@ class GPTBaselineService:
             payload=summary,
         )
         self.session.commit()
+        summary["run_id"] = run_id
         return summary
 
     def _run_case(self, case: BenchmarkCase) -> ExecutionTrace:

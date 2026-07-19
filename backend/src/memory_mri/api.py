@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Callable, TypeVar
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import PlainTextResponse
 
 from memory_mri.agents.fake import FakeAgentRunner
 from memory_mri.agents.openai_runner import OpenAIAgentRunner, OpenAIRunnerError
@@ -11,6 +12,10 @@ from memory_mri.analysis.engine import InvestigationAnalysisEngine
 from memory_mri.analysis.models import ContradictionAnalysisArtifact, SuspicionRankingArtifact
 from memory_mri.api_models import (
     ApiError,
+    ArtifactBuildRequest,
+    ArtifactSummary,
+    BenchmarkRunRequest,
+    BenchmarkRunResponse,
     CacheClearRequest,
     CacheClearResponse,
     CreateInvestigationRequest,
@@ -19,19 +24,34 @@ from memory_mri.api_models import (
     IndividualReplayRequest,
     InvestigationResultsResponse,
     PairwiseReplayRequest,
+    ProposalActionRequest,
     PublicInvestigation,
     PublicScenarioDetail,
     PublicScenarioSummary,
     PublicTrace,
     RunScenarioRequest,
+    VerificationRequest,
 )
 from memory_mri.benchmark_loader import load_benchmark_cases
 from memory_mri.config import OpenAISettings
 from memory_mri.db.session import create_sqlite_session
 from memory_mri.domain.actions import DOMAIN_ACTIONS
+from memory_mri.engine.benchmark import BenchmarkService
 from memory_mri.engine.counterfactual_replay import CounterfactualReplayEngine
+from memory_mri.engine.gpt_baseline import GPTBaselineService
+from memory_mri.engine.repair_proposals import RepairProposalEngine, RepairProposalError
+from memory_mri.engine.verification import VerificationEngine
+from memory_mri.engine.verification_artifacts import VerificationArtifactEngine
 from memory_mri.repositories.store import BenchmarkRepository
-from memory_mri.schemas import BenchmarkCase, MemoryControlsArtifact, PairwiseReplayArtifact
+from memory_mri.schemas import (
+    BenchmarkCase,
+    MemoryControlsArtifact,
+    MemoryDiff,
+    PairwiseReplayArtifact,
+    RepairProposal,
+    VerificationArtifact,
+    VerificationRun,
+)
 
 
 class MemoryMRIAppServices:
@@ -42,11 +62,17 @@ class MemoryMRIAppServices:
         data_dir: Path,
         artifacts_dir: Path,
         analysis_engine_factory: Callable[[], InvestigationAnalysisEngine] | None = None,
+        proposal_engine_factory: Callable[[], RepairProposalEngine] | None = None,
+        verification_engine_factory: Callable[[], VerificationEngine] | None = None,
+        artifact_engine_factory: Callable[[], VerificationArtifactEngine] | None = None,
     ) -> None:
         self.database_url = database_url
         self.data_dir = data_dir
         self.artifacts_dir = artifacts_dir
         self._analysis_engine_factory = analysis_engine_factory
+        self._proposal_engine_factory = proposal_engine_factory
+        self._verification_engine_factory = verification_engine_factory
+        self._artifact_engine_factory = artifact_engine_factory
 
     def load_cases(self) -> list[BenchmarkCase]:
         return load_benchmark_cases(self.data_dir)
@@ -69,6 +95,33 @@ class MemoryMRIAppServices:
             return self._analysis_engine_factory()
         return InvestigationAnalysisEngine(
             database_url=self.database_url,
+            artifacts_dir=self.artifacts_dir,
+        )
+
+    def proposal_engine(self) -> RepairProposalEngine:
+        if self._proposal_engine_factory is not None:
+            return self._proposal_engine_factory()
+        return RepairProposalEngine(
+            database_url=self.database_url,
+            data_dir=self.data_dir,
+            artifacts_dir=self.artifacts_dir,
+        )
+
+    def verification_engine(self) -> VerificationEngine:
+        if self._verification_engine_factory is not None:
+            return self._verification_engine_factory()
+        return VerificationEngine(
+            database_url=self.database_url,
+            data_dir=self.data_dir,
+            artifacts_dir=self.artifacts_dir,
+        )
+
+    def artifact_engine(self) -> VerificationArtifactEngine:
+        if self._artifact_engine_factory is not None:
+            return self._artifact_engine_factory()
+        return VerificationArtifactEngine(
+            database_url=self.database_url,
+            data_dir=self.data_dir,
             artifacts_dir=self.artifacts_dir,
         )
 
@@ -100,6 +153,9 @@ def create_app(
     data_dir: Path | None = None,
     artifacts_dir: Path | None = None,
     analysis_engine_factory: Callable[[], InvestigationAnalysisEngine] | None = None,
+    proposal_engine_factory: Callable[[], RepairProposalEngine] | None = None,
+    verification_engine_factory: Callable[[], VerificationEngine] | None = None,
+    artifact_engine_factory: Callable[[], VerificationArtifactEngine] | None = None,
 ) -> FastAPI:
     resolved_data_dir = (data_dir or Path("../benchmark/data")).resolve()
     resolved_artifacts_dir = (artifacts_dir or Path("../artifacts")).resolve()
@@ -108,6 +164,9 @@ def create_app(
         data_dir=resolved_data_dir,
         artifacts_dir=resolved_artifacts_dir,
         analysis_engine_factory=analysis_engine_factory,
+        proposal_engine_factory=proposal_engine_factory,
+        verification_engine_factory=verification_engine_factory,
+        artifact_engine_factory=artifact_engine_factory,
     )
     app = FastAPI(title="Memory MRI", version="0.2.0")
 
@@ -247,6 +306,17 @@ def create_app(
         return PublicInvestigation.from_investigation(investigation)
 
     @app.post(
+        "/investigations/{investigation_id}/replay",
+        response_model=PublicInvestigation,
+        responses={404: {"model": ApiError}, 400: {"model": ApiError}},
+    )
+    def replay_alias(
+        investigation_id: str,
+        request: IndividualReplayRequest,
+    ) -> PublicInvestigation:
+        return run_individual_replay(investigation_id, request)
+
+    @app.post(
         "/investigations/{investigation_id}/suspicion-ranking",
         response_model=SuspicionRankingArtifact,
         responses={404: {"model": ApiError}, 502: {"model": ApiError}},
@@ -294,6 +364,33 @@ def create_app(
             message = str(exc)
             status_code = 404 if "unknown investigation" in message else 400
             raise HTTPException(status_code=status_code, detail=message) from exc
+
+    @app.post(
+        "/investigations/{investigation_id}/interactions",
+        response_model=PairwiseReplayArtifact,
+        responses={404: {"model": ApiError}, 400: {"model": ApiError}},
+    )
+    def interactions_alias(
+        investigation_id: str,
+        request: PairwiseReplayRequest,
+    ) -> PairwiseReplayArtifact:
+        return run_pairwise_replay(investigation_id, request)
+
+    @app.post(
+        "/investigations/{investigation_id}/proposals",
+        response_model=RepairProposal,
+        responses={404: {"model": ApiError}, 400: {"model": ApiError}, 502: {"model": ApiError}},
+    )
+    def generate_proposal(investigation_id: str) -> RepairProposal:
+        try:
+            return services.proposal_engine().generate_proposal(investigation_id)
+        except ValueError as exc:
+            raise _http_from_error(str(exc), default_status=404) from exc
+        except RepairProposalError as exc:
+            raise HTTPException(
+                status_code=400,
+                detail={"detail": exc.failure.message, "code": exc.failure.code},
+            ) from exc
 
     @app.get(
         "/investigations/{investigation_id}/results",
@@ -352,6 +449,243 @@ def create_app(
             cleared=runner.clear_cache_for_scenario(request.scenario_id),
         )
 
+    @app.get(
+        "/proposals/{proposal_id}",
+        response_model=RepairProposal,
+        responses={404: {"model": ApiError}},
+    )
+    def get_proposal(proposal_id: str) -> RepairProposal:
+        try:
+            return services.proposal_engine().get_proposal(proposal_id)
+        except ValueError as exc:
+            raise _http_from_error(str(exc), default_status=404) from exc
+
+    @app.post(
+        "/proposals/{proposal_id}/approve",
+        response_model=RepairProposal,
+        responses={400: {"model": ApiError}, 404: {"model": ApiError}},
+    )
+    def approve_proposal(proposal_id: str, request: ProposalActionRequest) -> RepairProposal:
+        try:
+            return services.proposal_engine().approve_proposal(
+                proposal_id,
+                approval_reason=request.reason,
+                notes=request.notes,
+            )
+        except (ValueError, RepairProposalError) as exc:
+            raise _repair_http(exc) from exc
+
+    @app.post(
+        "/proposals/{proposal_id}/reject",
+        response_model=RepairProposal,
+        responses={400: {"model": ApiError}, 404: {"model": ApiError}},
+    )
+    def reject_proposal(proposal_id: str, request: ProposalActionRequest) -> RepairProposal:
+        try:
+            return services.proposal_engine().reject_proposal(
+                proposal_id,
+                rejection_reason=request.reason,
+                notes=request.notes,
+            )
+        except (ValueError, RepairProposalError) as exc:
+            raise _repair_http(exc) from exc
+
+    @app.post(
+        "/proposals/{proposal_id}/apply",
+        response_model=dict[str, object],
+        responses={400: {"model": ApiError}, 404: {"model": ApiError}},
+    )
+    def apply_proposal(proposal_id: str) -> dict[str, object]:
+        try:
+            version = services.proposal_engine().apply_proposal(proposal_id)
+            return version.model_dump(mode="json")
+        except (ValueError, RepairProposalError) as exc:
+            raise _repair_http(exc) from exc
+
+    @app.post(
+        "/proposals/{proposal_id}/revert",
+        response_model=dict[str, object],
+        responses={400: {"model": ApiError}, 404: {"model": ApiError}},
+    )
+    def revert_proposal(
+        proposal_id: str,
+        request: ProposalActionRequest,
+    ) -> dict[str, object]:
+        try:
+            version = services.proposal_engine().revert_proposal(
+                proposal_id,
+                revert_reason=request.reason,
+            )
+            return version.model_dump(mode="json")
+        except (ValueError, RepairProposalError) as exc:
+            raise _repair_http(exc) from exc
+
+    @app.get(
+        "/proposals/{proposal_id}/diff",
+        response_model=MemoryDiff,
+        responses={404: {"model": ApiError}, 400: {"model": ApiError}},
+    )
+    def get_proposal_diff(proposal_id: str) -> MemoryDiff:
+        try:
+            return services.proposal_engine().preview_memory_diff(proposal_id)
+        except (ValueError, RepairProposalError) as exc:
+            raise _repair_http(exc) from exc
+
+    @app.post(
+        "/verifications/original",
+        response_model=VerificationRun,
+        responses={400: {"model": ApiError}, 404: {"model": ApiError}},
+    )
+    def verify_original(request: VerificationRequest) -> VerificationRun:
+        try:
+            return services.verification_engine().verify_original(
+                request.proposal_id,
+                runner_name=request.runner,
+            )
+        except ValueError as exc:
+            raise _http_from_error(str(exc), default_status=400) from exc
+
+    @app.post(
+        "/verifications/domain",
+        response_model=VerificationRun,
+        responses={400: {"model": ApiError}, 404: {"model": ApiError}},
+    )
+    def verify_domain(request: VerificationRequest) -> VerificationRun:
+        try:
+            return services.verification_engine().verify_domain(
+                request.proposal_id,
+                runner_name=request.runner,
+            )
+        except ValueError as exc:
+            raise _http_from_error(str(exc), default_status=400) from exc
+
+    @app.post(
+        "/verifications/full",
+        response_model=VerificationRun,
+        responses={400: {"model": ApiError}, 404: {"model": ApiError}},
+    )
+    def verify_full(request: VerificationRequest) -> VerificationRun:
+        try:
+            return services.verification_engine().verify_full_benchmark(
+                request.proposal_id,
+                runner_name=request.runner,
+            )
+        except ValueError as exc:
+            raise _http_from_error(str(exc), default_status=400) from exc
+
+    @app.get(
+        "/verifications/{verification_id}",
+        response_model=VerificationRun,
+        responses={404: {"model": ApiError}},
+    )
+    def get_verification(verification_id: str) -> VerificationRun:
+        try:
+            return services.verification_engine().show_verification(verification_id)
+        except ValueError as exc:
+            raise _http_from_error(str(exc), default_status=404) from exc
+
+    @app.post(
+        "/benchmarks/run",
+        response_model=BenchmarkRunResponse,
+        responses={400: {"model": ApiError}},
+    )
+    def run_benchmark(request: BenchmarkRunRequest) -> BenchmarkRunResponse:
+        if request.runner == "fake":
+            summary = BenchmarkService(
+                database_url=services.database_url,
+                runner=FakeAgentRunner(),
+                data_dir=services.data_dir,
+            ).run_baseline(
+                Path(request.artifact_path or services.artifacts_dir / "api-benchmark-summary.json")
+            )
+            run_id = summary.get("run_id")
+            return BenchmarkRunResponse(
+                run_id=None if run_id is None else str(run_id),
+                summary=summary,
+            )
+        summary = GPTBaselineService(
+            database_url=services.database_url,
+            runner=OpenAIAgentRunner(OpenAISettings.from_env()),
+            data_dir=services.data_dir,
+            git_commit_hash="api-run",
+            git_branch_state="api-run",
+        ).run_official_baseline(
+            summary_json_path=Path(request.summary_json_path)
+            if request.summary_json_path is not None
+            else services.artifacts_dir / "api-gpt-benchmark-summary.json",
+            summary_md_path=Path(
+                request.summary_md_path or services.artifacts_dir / "api-gpt-benchmark-summary.md"
+            ),
+            traces_dir=Path(request.traces_dir or services.artifacts_dir / "api-gpt-traces"),
+        )
+        run_id = summary.get("run_id")
+        return BenchmarkRunResponse(
+            run_id=None if run_id is None else str(run_id),
+            summary=summary,
+        )
+
+    @app.get(
+        "/benchmarks/{run_id}",
+        response_model=dict[str, object],
+        responses={404: {"model": ApiError}},
+    )
+    def get_benchmark(run_id: str) -> dict[str, object]:
+        run = services.repository().get_benchmark_run(run_id)
+        if run is None:
+            raise HTTPException(status_code=404, detail="unknown benchmark run")
+        return run
+
+    @app.post(
+        "/artifacts",
+        response_model=ArtifactSummary,
+        responses={400: {"model": ApiError}, 404: {"model": ApiError}},
+    )
+    def build_artifact(request: ArtifactBuildRequest) -> ArtifactSummary:
+        try:
+            artifact = services.artifact_engine().build_artifact(
+                request.proposal_id,
+                verification_id=request.verification_id,
+            )
+        except ValueError as exc:
+            raise _http_from_error(str(exc), default_status=400) from exc
+        return ArtifactSummary(
+            artifact_id=artifact.artifact_id,
+            certificate_id=artifact.certificate_id,
+            verification_verdict=artifact.verification_verdict.value,
+            scenario_id=artifact.scenario_id,
+            proposal_id=artifact.proposal_id,
+        )
+
+    @app.get(
+        "/artifacts/{artifact_id}",
+        response_model=VerificationArtifact,
+        responses={404: {"model": ApiError}, 400: {"model": ApiError}},
+    )
+    def get_artifact(artifact_id: str) -> VerificationArtifact:
+        try:
+            return services.artifact_engine().get_artifact(artifact_id)
+        except ValueError as exc:
+            raise _http_from_error(str(exc), default_status=404) from exc
+
+    @app.get(
+        "/artifacts/{artifact_id}/json",
+        response_model=VerificationArtifact,
+        responses={404: {"model": ApiError}, 400: {"model": ApiError}},
+    )
+    def get_artifact_json(artifact_id: str) -> VerificationArtifact:
+        return get_artifact(artifact_id)
+
+    @app.get(
+        "/artifacts/{artifact_id}/markdown",
+        response_class=PlainTextResponse,
+        responses={404: {"model": ApiError}, 400: {"model": ApiError}},
+    )
+    def get_artifact_markdown(artifact_id: str) -> str:
+        try:
+            return services.artifact_engine().render_markdown(artifact_id)
+        except ValueError as exc:
+            raise _http_from_error(str(exc), default_status=404) from exc
+
     return app
 
 
@@ -362,6 +696,40 @@ def _load_optional_json_model(path: Path, model_type: type[ModelT]) -> ModelT | 
     if not path.exists():
         return None
     return model_type.model_validate_json(path.read_text(encoding="utf-8"))  # type: ignore[no-any-return, attr-defined]
+
+
+def _http_from_error(message: str, *, default_status: int) -> HTTPException:
+    lowered = message.lower()
+    code = "bad_request"
+    status = default_status
+    if "unknown" in lowered or "missing" in lowered:
+        status = 404
+        code = "not_found"
+    elif "stale" in lowered:
+        status = 409
+        code = "stale_snapshot"
+    elif "not applicable" in lowered:
+        status = 400
+        code = "verification_not_applicable"
+    elif "hash mismatch" in lowered:
+        status = 409
+        code = "hash_mismatch"
+    elif "invalid" in lowered:
+        status = 400
+        code = "invalid_transition"
+    return HTTPException(status_code=status, detail={"detail": message, "code": code})
+
+
+def _repair_http(exc: ValueError | RepairProposalError) -> HTTPException:
+    if isinstance(exc, RepairProposalError):
+        status = 409 if "stale" in exc.failure.code else 400
+        if exc.failure.code.startswith("missing") or exc.failure.code == "unknown_proposal":
+            status = 404
+        return HTTPException(
+            status_code=status,
+            detail={"detail": exc.failure.message, "code": exc.failure.code},
+        )
+    return _http_from_error(str(exc), default_status=400)
 
 
 app = create_app()
