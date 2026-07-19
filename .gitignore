@@ -11,3 +11,7 @@ artifacts/memory_mri.db
 artifacts/openai_cache/
 artifacts/demo-runtime/
 backend/.mypy_cache/
+frontend/node_modules/
+frontend/.next/
+frontend/.env.local
+frontend/tsconfig.tsbuildinfo
