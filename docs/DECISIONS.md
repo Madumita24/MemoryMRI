@@ -1,53 +1,79 @@
 # Decisions
 
-## Day 1
+## Day 1 foundations
 
-### JSON benchmark source files
+### Reviewed JSON benchmark source
 
-Reviewed source data lives in version-controlled JSON files so scenarios and memories remain auditable and easy to diff.
+The benchmark lives in version-controlled JSON so scenarios, memories, and expected actions stay auditable and diffable.
 
-### Shared scenario model
+### Shared schema model
 
-All domains reuse the same `AgentScenario` model and benchmark execution engine. Domain-specific differences are expressed through action enums, prompt templates, and scenario content rather than separate pipelines.
+All three domains use one schema and execution pipeline. Domain differences are expressed through action sets, prompts, and content rather than separate systems.
 
 ### Deterministic fake runner
 
-Tests and local development use a fake runner that never needs API credentials. It exercises retrieval, action selection, evaluation, and persistence without introducing LLM variance.
+The fake runner remains the fast regression authority for local development and tests.
 
-### Mixed benchmark baseline
+### Mixed baseline instead of all-failing
 
-The benchmark baseline must contain both passes and failures in each domain. This preserves already-correct cases for regression protection and keeps failed cases available for later replay, repair proposal, and verification work. The fake runner therefore uses reviewed heuristic scoring from memory attributes instead of a universal fail-first rule.
+The benchmark must contain both passes and failures in every domain so already-correct cases can detect regressions later.
 
 ### Explicit agent-input serializer
 
-Benchmark cases include private answer-key fields that are necessary for deterministic evaluation but unsafe to expose to GPT-5.6. The codebase now uses an explicit serializer that emits only agent-visible operational data, while fake-runner hints and evaluation labels remain private benchmark data.
+Benchmark answer-key fields are intentionally separated from model-visible operational data.
 
-### Responses API with strict schema parsing
+## Day 2 runner and investigation decisions
 
-The GPT-backed runner uses the OpenAI Responses API with a strict Pydantic response schema. This keeps model output constrained to allowed actions, cited memory IDs, concise rationale, and uncertainty flags while rejecting malformed or out-of-policy responses before they reach the evaluator.
+### Strict structured OpenAI responses
 
-### SQLite first
+The GPT runner uses validated structured output so unsupported actions, bad memory citations, and malformed payloads fail safely.
 
-SQLite is sufficient for local benchmark imports, trace persistence, and artifact generation during the MVP foundation phase.
+### Cache keys include prompt-content hash
 
-## Day 2
+Human-readable prompt versions are insufficient for cache safety, so the request key also uses the rendered prompt hash and serializer schema version.
 
-### Public API uses sanitized scenario and trace views
+### Cache-hit accounting is separate from live-call accounting
 
-The Day 2 API exposes only agent-visible scenario data and sanitized traces. Expected actions, failure labels, and other benchmark-private answer-key fields remain internal artifacts.
+Latency and token usage for cached responses are stored separately from billable live requests.
 
-### Cache keys depend on prompt content, not prompt version alone
+### Public API uses sanitized views
 
-The OpenAI request hash includes the rendered prompt-content hash and the serializer schema version. This prevents stale cache hits when prompt text or serialization logic changes without a human-readable version bump.
+Public scenario and trace endpoints never expose benchmark answer-key fields.
 
-### Cache-hit accounting is separated from live-call accounting
+## Day 3 repair and verification decisions
 
-Cache lookup latency, original model latency, current request token usage, cached original usage, and billable-call status are stored separately. This avoids overcounting cost or making cache hits appear slow.
+### Evidence gates come before repair
 
-### Day 2 summary is artifact-driven
+Replay, suspicion ranking, contradiction analysis, and support-validity checks are required before proposing a memory edit.
 
-The final Day 2 rollup reads persisted benchmark, replay, and analysis artifacts instead of reconstructing results heuristically. This keeps the summary aligned with executed runs.
+### Approval is explicit
 
-### Repair workflows remain out of scope
+Repairs must move through a proposal state machine instead of mutating the store directly.
 
-Day 2 stops at diagnosis, replay, ranking, contradiction analysis, and pairwise interaction analysis. Automated repair proposals are intentionally deferred to Day 3.
+### Memory changes are versioned
+
+Applicable repairs create versioned memory snapshots so diffs, rollback, and verification all point to concrete states.
+
+### Git-style diffs are first-class artifacts
+
+Both machine-readable and Markdown diffs are persisted for proposal previews and applied versions.
+
+### Verification compares against frozen baselines
+
+Repair verification must compare against the preserved pre-repair result rather than silently rerunning and replacing it.
+
+### Unsupported behavior changes are not counted as repairs
+
+Producing an expected action is insufficient when the remaining evidence no longer supports that outcome.
+
+### Non-memory failures must stay non-memory
+
+`exp_09` demonstrated that some failures are better classified as prompt or policy issues. The system therefore supports `ESCALATE_PROMPT_OR_POLICY_REVIEW` and `NO_MEMORY_REPAIR_RECOMMENDED`.
+
+### Verification artifacts use deterministic content fingerprints
+
+Artifacts include a reproducible fingerprint for auditability, but the project does not claim external cryptographic attestation beyond the implemented hash.
+
+### Reviewed evidence and runtime smoke outputs stay separate
+
+During Day 3G stabilization, the default demo runtime path was moved to `artifacts/demo-runtime/` so resettable smoke runs no longer threaten reviewed artifact trees.

@@ -154,15 +154,15 @@ def main() -> None:
     compare_benchmarks.add_argument("--after", required=True)
 
     seed_demo = subparsers.add_parser("seed-demo")
-    seed_demo.add_argument("--demo-root", default="../artifacts/day3f-demo")
+    seed_demo.add_argument("--demo-root", default="../artifacts/demo-runtime/day3f-demo")
     seed_demo.add_argument("--seed-dir", default="../artifacts/demo-seed")
     seed_demo.add_argument("--source-artifacts-dir", default="../artifacts")
 
     reset_demo = subparsers.add_parser("reset-demo")
-    reset_demo.add_argument("--demo-root", default="../artifacts/day3f-demo")
+    reset_demo.add_argument("--demo-root", default="../artifacts/demo-runtime/day3f-demo")
 
     run_demo = subparsers.add_parser("run-demo-workflow")
-    run_demo.add_argument("--demo-root", default="../artifacts/day3f-demo")
+    run_demo.add_argument("--demo-root", default="../artifacts/demo-runtime/day3f-demo")
     run_demo.add_argument("--seed-dir", default="../artifacts/demo-seed")
     run_demo.add_argument("--source-artifacts-dir", default="../artifacts")
     run_demo.add_argument("--summary-json-path", default="../artifacts/day3f-demo-summary.json")
@@ -217,9 +217,7 @@ def main() -> None:
                 summary,
                 indent=2,
                 default=lambda value: (
-                    value.model_dump(mode="json")
-                    if hasattr(value, "model_dump")
-                    else str(value)
+                    value.model_dump(mode="json") if hasattr(value, "model_dump") else str(value)
                 ),
             )
         )

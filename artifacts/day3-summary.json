@@ -1,0 +1,142 @@
+{
+  "generated_at": "2026-07-19T03:15:00Z",
+  "git_commit_hash": "74a6ae2233ad8cd56eca00b10242ed4f850e4ac3",
+  "day2_baseline": {
+    "deterministic_result": "22/30",
+    "deterministic_by_domain": {
+      "customer_support": "7/10",
+      "devops": "8/10",
+      "workplace_expense": "7/10"
+    },
+    "gpt_result": "28/30",
+    "gpt_by_domain": {
+      "customer_support": "9/10",
+      "devops": "10/10",
+      "workplace_expense": "9/10"
+    },
+    "gpt_failed_scenarios": [
+      "cs_01",
+      "exp_09"
+    ]
+  },
+  "investigations": [
+    {
+      "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+      "scenario_id": "cs_01",
+      "domain": "customer_support",
+      "memory_dependence_classification": "individual-memory dependent",
+      "outcome": "unsafe-repair prevention"
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "scenario_id": "exp_09",
+      "domain": "workplace_expense",
+      "memory_dependence_classification": "likely memory-independent",
+      "outcome": "prompt-or-policy escalation"
+    }
+  ],
+  "proposals": [
+    {
+      "proposal_id": "proposal_bf551979f6ea4313893c45a505967b91",
+      "scenario_id": "cs_01",
+      "repair_type": "REQUIRE_HUMAN_CONFIRMATION",
+      "proposal_status": "applied",
+      "outcome": "support-valid automated memory repair not established"
+    },
+    {
+      "proposal_id": "proposal_7e2d78f3769943b1bb5a6e7281fad2ba",
+      "scenario_id": "exp_09",
+      "repair_type": "ESCALATE_PROMPT_OR_POLICY_REVIEW",
+      "proposal_status": "proposed",
+      "outcome": "no memory mutation recommended"
+    }
+  ],
+  "proposal_outcomes": {
+    "applied": 1,
+    "rejected": 0,
+    "non_memory_escalations": 1
+  },
+  "versions_created": [
+    "version_cs_01_root",
+    "version_e5d391ef6ffe4d8396dc91ac84c1bf02",
+    "version_exp_09_root"
+  ],
+  "verification_results": {
+    "runs_recorded": 6,
+    "verdict_counts": {
+      "UNSUPPORTED_BEHAVIOR_CHANGE": 3,
+      "VERIFICATION_INCONCLUSIVE": 2,
+      "MEMORY_REPAIR_NOT_APPLICABLE": 1
+    },
+    "reviewed_outcomes": [
+      {
+        "scenario_id": "cs_01",
+        "artifact_id": "artifact_2eeca7add7ca4e0194280e37c0835b43",
+        "verification_verdict": "VERIFICATION_INCONCLUSIVE",
+        "regressions": []
+      },
+      {
+        "scenario_id": "exp_09",
+        "artifact_id": "artifact_d70a75d09c59496fbf98f85a039b8f8d",
+        "verification_verdict": "MEMORY_REPAIR_NOT_APPLICABLE",
+        "regressions": []
+      }
+    ]
+  },
+  "artifact_ids": [
+    {
+      "artifact_id": "artifact_2eeca7add7ca4e0194280e37c0835b43",
+      "scenario_id": "cs_01",
+      "fingerprint": "6047d5dfbbab4fe89048ee6869a6ab1687b949ec82ac30595a079f28b9476ef4"
+    },
+    {
+      "artifact_id": "artifact_d70a75d09c59496fbf98f85a039b8f8d",
+      "scenario_id": "exp_09",
+      "fingerprint": "994509dae7f615aa68f95609b0454f5e13c0b036f0b97362f52bf3b41d0e49c7"
+    }
+  ],
+  "quality_checks": {
+    "ruff_check": "passed",
+    "ruff_format_check": "passed",
+    "mypy": "passed",
+    "pytest": {
+      "status": "passed",
+      "test_count": 104
+    },
+    "deterministic_benchmark_regression": "passed",
+    "frozen_gpt_baseline_integrity": "passed",
+    "cs_01_workflow": "passed",
+    "exp_09_workflow": "passed",
+    "api_smoke_test": "passed",
+    "artifact_hash_verification": "passed",
+    "demo_seed_reset": "passed"
+  },
+  "api_endpoint_count": 34,
+  "repair_types_supported": [
+    "INVALIDATE_MEMORY",
+    "ADD_EXPIRATION_DATE",
+    "MARK_SUPERSEDED",
+    "CORRECT_ENTITY_ASSOCIATION",
+    "MERGE_CONTRADICTORY_MEMORIES",
+    "LOWER_RETRIEVAL_PRIORITY",
+    "REQUIRE_HUMAN_CONFIRMATION",
+    "REPLACE_WITH_CORRECTED_FACT",
+    "ADD_CONTEXT_CONSTRAINT",
+    "ADD_PRECEDENCE_METADATA",
+    "NO_MEMORY_REPAIR_RECOMMENDED",
+    "ESCALATE_PROMPT_OR_POLICY_REVIEW"
+  ],
+  "approximate_cumulative_api_usage": {
+    "input_tokens": 35212,
+    "output_tokens": 4494,
+    "total_tokens": 39706,
+    "note": "Approximation from the frozen GPT baseline plus persisted semantic-analysis artifacts, excluding cache hits and ignored runtime smoke duplicates."
+  },
+  "known_limitations": [
+    "Fast replay uses small sample sizes and wide confidence intervals.",
+    "Some failures remain prompt-level or policy-level rather than memory-fixable.",
+    "A changed action does not by itself prove a support-valid repair.",
+    "Full GPT verification remains expensive and should stay selective.",
+    "Frontend views still need careful separation between public scenario data and internal benchmark evidence."
+  ]
+}

@@ -1,49 +1,91 @@
 # Benchmark
 
-## Dataset shape
+## Corpus shape
 
-The Day 1 benchmark corpus contains 30 scenarios:
+The reviewed benchmark contains 30 scenarios:
 
-- 10 customer support scenarios
-- 10 DevOps deployment scenarios
-- 10 workplace expense approval scenarios
+- 10 `customer_support`
+- 10 `devops`
+- 10 `workplace_expense`
 
-Each scenario includes:
+Every scenario preserves:
 
+- a stable scenario ID
+- stable memory IDs
 - at least three memories
-- a deterministic expected action
-- at least one intentionally problematic memory
-- a documented failure category
-- a natural-language explanation of the expected action
+- a valid expected action
+- a documented expected outcome
+- valid domain actions
+
+## Mixed benchmark rationale
+
+The benchmark is intentionally mixed rather than all-failing.
+
+It includes:
+
+- clearly correct-memory cases that should pass
+- stale-memory cases that should fail
+- contradictory-memory cases
+- suspicious-memory cases that should be ignored
+- wrong-entity cases
+- pairwise interaction failures
+- difficult cases that remain hard after simple intervention
+
+This matters for regression analysis because an all-failing suite can make broad behavior changes look like improvement. The mixed suite preserves already-correct cases so repairs can be judged for both benefit and collateral damage.
 
 ## Privacy boundary
 
-Benchmark source files contain both operational data and private evaluation data.
+Benchmark source files combine operational data and benchmark-private evaluation data.
 
-- Agent-visible operational data includes user input, allowed actions, and realistic memory fields such as content, dates, status, confidence, superseding relationships, and operational metadata.
-- Benchmark-private data includes `expected_action`, `expected_problematic_memory_ids`, `failure_category`, `explanation`, `evaluator_config`, and memory-level deterministic hints kept in `benchmark_metadata`.
+Agent-visible data:
 
-Only the explicit agent-input serializer may be used to prepare model-facing payloads.
+- scenario ID
+- domain
+- user input
+- allowed actions
+- operational memory fields
 
-## GPT smoke testing
+Benchmark-private data:
 
-Day 2B introduced a GPT-backed smoke-test runner for exactly one selected scenario at a time. These runs:
+- `expected_action`
+- `expected_problematic_memory_ids`
+- `failure_category`
+- expected explanation
+- evaluator configuration
+- fake-runner-only hints
 
-- use the same safe agent-visible serialization boundary
-- use versioned domain prompts
-- persist development traces
-- are not treated as the final benchmark baseline
+Only the explicit serializer may feed an LLM request.
 
-The deterministic 22/30 fake baseline remains the regression reference for non-LLM regression checks.
+## Deterministic baseline
 
-## Official Day 2 GPT baseline
+Stored artifact:
 
-The official GPT baseline was executed on Saturday, July 18, 2026 and persisted in `artifacts/gpt-baseline-summary.json`.
+- `artifacts/day1-mixed-baseline-summary.json`
 
-- Model: `gpt-5.6`
-- Prompt versions: `v1` for `customer_support`, `devops`, and `workplace_expense`
-- Result: `28/30`
-- Infrastructure errors: `0`
+Current result:
+
+- overall: `22/30`
+- customer support: `7/10`
+- devops: `8/10`
+- workplace expense: `7/10`
+
+The deterministic baseline still contains both passes and failures in every domain.
+
+## Frozen GPT baseline
+
+Stored artifacts:
+
+- `artifacts/gpt-baseline-summary.json`
+- `artifacts/gpt-baseline-summary.md`
+- `artifacts/gpt-baseline-traces/`
+
+Official run facts:
+
+- date: Saturday, July 18, 2026
+- model: `gpt-5.6`
+- prompt versions: `v1` for all three domains
+- result: `28/30`
+- infrastructure errors: `0`
 
 By domain:
 
@@ -51,85 +93,45 @@ By domain:
 - devops: `10/10`
 - workplace expense: `9/10`
 
-Observed failed scenarios:
+Failed scenarios:
 
-- `cs_01` in `stale-memory`
-- `exp_09` in `wrong-context-valid-memory`
+- `cs_01`
+- `exp_09`
 
-The corrected Day 1.5 benchmark is intentionally mixed rather than all-failing. A realistic regression benchmark needs:
+Integrity was re-verified on Sunday, July 19, 2026:
 
-- already-correct cases so later repairs can prove they did not break working behavior
-- believable failure cases so replay and repair logic still has meaningful targets
-- suspicious-memory cases that should be ignored, which exercises retrieval quality rather than only action selection
-- multiple failure categories among failed cases so a single repair strategy cannot trivially optimize the whole suite
+- 30 stored trace files exist
+- the frozen summary still reports the same two failures
+- no benchmark fields or prompts were altered during verification
 
-An all-failing baseline weakens regression analysis because any broad behavior change can look like improvement. The mixed suite makes it possible to detect both helpful repairs and unintended regressions.
+## Failure categories
 
-## Covered failure categories
+The benchmark covers:
 
-- stale memory
-- contradictory memories
-- wrong-user memory
-- hallucinated preference
-- obsolete policy
-- missing expiration
-- incorrect retrieval priority
-- two-memory interaction
-- wrong-context valid memory
-- newer-correct-memory-ignored
+- `stale-memory`
+- `contradictory-memories`
+- `wrong-user-memory`
+- `hallucinated-preference`
+- `obsolete-policy`
+- `missing-expiration`
+- `incorrect-retrieval-priority`
+- `two-memory-interaction`
+- `wrong-context-valid-memory`
+- `newer-correct-memory-ignored`
 
-## Fake runner behavior
+## Day 3 benchmark use
 
-The fake runner remains deterministic, but it no longer blindly follows the first biased memory. Instead it scores candidate action-supporting memories from reviewed attributes, including:
+Day 3 repair work does not overwrite the frozen GPT baseline.
 
-- retrieval priority
-- memory status
-- confidence
-- validity range
-- superseded or stale state
-- memory role, such as policy, evidence, inference, or customer-status note
-- entity match metadata
-- explicit ignore hints for suspicious memories that should not drive the decision
-- pairwise interaction boosts for grouped problematic memories
+Instead, verification compares repair outcomes against:
 
-This produces a stable mixed baseline with both passes and failures in every domain while keeping the behavior grounded in memory attributes rather than scenario IDs.
-
-The operational serializer never exposes the benchmark-only ignore hints, interaction labels, answer key, or failure labels to GPT-facing runners.
-
-## Replay methodology
-
-Individual replay uses the formula:
-
-`influence_delta = intervention_success_rate - original_success_rate`
-
-Wilson score intervals are computed for intervention success rates to make the uncertainty of small replay batches explicit.
-
-Pairwise replay adds:
-
-- `combined_influence`
-- `interaction_score = combined_influence - max(individual influences)`
-- `interaction_synergy`
-
-These values are descriptive rather than causal. A changed action does not, by itself, prove a memory is semantically wrong.
-
-## Suspicion ranking and contradiction analysis
-
-Suspicion ranking combines:
-
-- deterministic metadata signals
-- semantic suspicion scoring
-- replay evidence, when available
-
-Contradiction analysis compares:
-
-- deterministic pair relationships from metadata
-- semantic pair relationships inferred from the live model
-
-These outputs help prioritize hypotheses, but they do not replace replay evidence.
+- the frozen official baseline trace when available
+- the deterministic mixed baseline for fast regression checks
+- versioned verification outputs persisted under `artifacts/verifications/`
 
 ## Statistical limitations
 
-- Fast replay mode uses only three runs, so intervals remain wide.
-- Some failures, such as `exp_09`, can remain insensitive to individual or pairwise memory interventions.
-- Correct outcomes after ablation may still be unsupported by the remaining snapshot.
-- Pairwise effects remain sensitive to prompt interpretation and model behavior.
+- Fast replay uses only three runs.
+- Some failures remain insensitive to individual or pairwise memory changes.
+- A correct action after ablation may still be unsupported by the remaining evidence.
+- A prompt or policy problem can masquerade as a memory problem, as seen in `exp_09`.

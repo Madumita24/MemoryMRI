@@ -9,4 +9,5 @@ __pycache__/
 .env
 artifacts/memory_mri.db
 artifacts/openai_cache/
+artifacts/demo-runtime/
 backend/.mypy_cache/

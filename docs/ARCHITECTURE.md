@@ -1,44 +1,82 @@
 # Architecture
 
-## Current Day 2 architecture
+## Current backend shape
 
-Memory MRI uses one shared backend across all three domains:
+As of Sunday, July 19, 2026, Memory MRI is a single Python backend organized around six layers:
 
-- `benchmark/data/*.json` contains the reviewed benchmark corpus.
-- `memory_mri.schemas` defines validated contracts for benchmark records, agent-visible input, traces, investigations, and replay artifacts.
-- `memory_mri.benchmark_loader` loads and validates the 30 scenarios.
-- `memory_mri.agents.fake.FakeAgentRunner` provides deterministic regression behavior.
-- `memory_mri.agents.openai_runner.OpenAIAgentRunner` provides GPT-backed execution with strict structured outputs, caching, and trace persistence.
-- `memory_mri.analysis.engine.InvestigationAnalysisEngine` handles suspicion ranking and contradiction analysis.
-- `memory_mri.engine.counterfactual_replay.CounterfactualReplayEngine` handles individual replay, no-memory controls, isolation controls, and pairwise replay.
-- `memory_mri.api` exposes a public FastAPI surface with sanitized response models.
+1. Benchmark loading and schemas
+2. Agent runners
+3. Trace persistence and caching
+4. Investigation and replay analysis
+5. Repair proposal, approval, diff, and versioning
+6. Verification artifacts and public API access
+
+## Core modules
+
+- `benchmark/data/*.json`: reviewed 30-scenario benchmark corpus
+- `backend/src/memory_mri/schemas.py`: shared contracts for scenarios, memories, traces, replay artifacts, repair proposals, diffs, verifications, and verification artifacts
+- `backend/src/memory_mri/benchmark_loader.py`: validated benchmark loading
+- `backend/src/memory_mri/agents/fake.py`: deterministic regression runner
+- `backend/src/memory_mri/agents/openai_runner.py`: GPT-backed runner with strict structured output validation
+- `backend/src/memory_mri/engine/`: benchmark, replay, repair, verification, and artifact engines
+- `backend/src/memory_mri/api.py`: public FastAPI surface
+- `backend/src/memory_mri/demo.py`: reproducible Day 3 demo seeding and smoke workflow helpers
 
 ## Privacy boundary
 
-Benchmark records contain both operational and benchmark-private data.
+Benchmark records contain both operational data and benchmark-private evaluation data.
 
-- Agent-visible operational data:
-  scenario ID, domain, user input, allowed actions, and memory fields that a real system could retrieve.
-- Benchmark-private data:
-  `expected_action`, `expected_problematic_memory_ids`, `failure_category`, `explanation`, `evaluator_config`, and fake-runner-only benchmark hints.
+Agent-visible operational data includes:
 
-`build_agent_input(...)` and `AgentScenario.to_agent_input(...)` are the only supported model-facing serializers. Public scenario API endpoints also use only the agent-visible subset.
+- scenario ID
+- domain
+- user input
+- allowed actions
+- realistic memory fields such as content, dates, status, confidence, source, entity, priority, and superseding relationships
 
-## Prompt and runner flow
+Benchmark-private data includes:
 
-1. Load benchmark case data.
-2. Build agent-visible input in canonical memory order from `scenario.memory_ids`.
-3. Load the versioned prompt for the domain.
-4. Call the OpenAI Responses API with a strict JSON-schema response model.
-5. Validate the selected action against `allowed_actions`.
-6. Validate cited memory IDs against the agent-visible snapshot.
-7. Persist a structured trace with latency, usage, cache metadata, and any structured error details.
+- `expected_action`
+- `expected_problematic_memory_ids`
+- `failure_category`
+- `explanation`
+- evaluator configuration
+- fake-runner-only hints
 
-The runner never stores hidden chain-of-thought. Only a short rationale is persisted.
+Only `AgentScenario.to_agent_input(...)` and `build_agent_input(...)` may produce model-facing payloads. Public scenario endpoints also use the sanitized operational subset.
 
-## Caching
+## Runner layer
 
-The OpenAI cache key includes:
+### FakeAgentRunner
+
+The deterministic runner uses documented heuristics from memory content and metadata rather than scenario IDs. It reads:
+
+- retrieval priority
+- status
+- validity windows
+- superseding relationships
+- entity match
+- policy and customer-status combinations
+
+This produces the stable mixed baseline of `22/30`.
+
+### OpenAIAgentRunner
+
+The GPT runner:
+
+- uses the safe serializer
+- loads versioned prompts per domain
+- validates structured responses
+- rejects unknown actions and cited memory IDs
+- records latency and usage
+- supports caching
+- persists structured errors separately from evaluated failures
+
+The frozen official baseline remains `28/30` on `gpt-5.6`.
+
+## Caching and traces
+
+The request hash depends on:
 
 - scenario ID
 - user input
@@ -47,66 +85,72 @@ The OpenAI cache key includes:
 - requested model
 - prompt version
 - rendered prompt-content hash
-- agent-input schema version
+- serializer schema version
 - relevant inference settings
 
-It explicitly excludes benchmark-private answer-key data.
-
-Cache hits are reported separately from live model latency:
-
-- `execution_source`
-- `cache_lookup_latency_ms`
-- `original_model_latency_ms`
-- `request_token_usage`
-- `cached_original_token_usage`
-- `billable_api_call`
-
-## Trace format
+It explicitly excludes benchmark-private answer-key fields.
 
 Each trace persists:
 
-- scenario and run IDs
-- agent-visible input and memory snapshot
+- run and trace IDs
+- agent-visible input
+- retrieved memories
 - model and prompt version
-- selected action, action arguments, citations, rationale, and uncertainty
-- cache status
-- latency
-- token usage
-- pass/fail when evaluation exists
-- structured infrastructure errors when evaluation does not occur
+- selected action, arguments, citations, rationale, and uncertainty
+- cache metadata
+- latency and usage
+- evaluation result when available
+- infrastructure errors when evaluation does not occur
 
-The public API exposes sanitized traces that omit benchmark answer-key fields such as the evaluator’s expected action.
+## Investigation and repair flow
 
-## Investigation flow
+1. Start from a failed trace.
+2. Reconstruct the original agent-visible snapshot.
+3. Run individual replay and controls.
+4. Run suspicion ranking, contradiction analysis, and pairwise replay.
+5. Generate an evidence-gated repair proposal.
+6. Require approval before memory mutation.
+7. Persist memory versions and Git-style diffs when changes are applicable.
+8. Verify original case, domain, and full benchmark outcomes.
+9. Generate a deterministic verification artifact with a content fingerprint.
 
-1. Create an investigation from a genuine failed trace.
-2. Reconstruct the original agent-visible memory snapshot.
-3. Run individual replay interventions.
-4. Rank suspicious memories.
-5. Analyze pairwise contradictions.
-6. Run pairwise replay and control conditions.
-7. Persist JSON and Markdown artifacts for every executed step.
+## Verification and artifacts
 
-## Public interfaces
+Verification supports these verdicts:
 
-FastAPI endpoints now expose:
+- `VERIFIED_IMPROVEMENT`
+- `IMPROVEMENT_WITH_REGRESSIONS`
+- `NO_MEASURABLE_CHANGE`
+- `FAILED_TO_REPAIR`
+- `UNSUPPORTED_BEHAVIOR_CHANGE`
+- `VERIFICATION_INCONCLUSIVE`
+- `MEMORY_REPAIR_NOT_APPLICABLE`
 
-- health and domain metadata
-- sanitized scenario metadata
-- trace retrieval
-- scenario-scoped trace listing
-- investigation creation and retrieval
-- individual replay
-- suspicion ranking
-- contradiction analysis
-- pairwise replay
+Reviewed Day 3 outcomes:
+
+- `cs_01`: unsafe repair blocked, artifact verdict `VERIFICATION_INCONCLUSIVE`
+- `exp_09`: no memory repair recommended, artifact verdict `MEMORY_REPAIR_NOT_APPLICABLE`
+
+## API and CLI
+
+The FastAPI app currently exposes `34` endpoints covering:
+
+- health
+- domains and scenarios
+- trace execution and retrieval
+- investigations
+- replay and analysis
+- proposals, approvals, apply/revert
+- diffs
+- verifications
+- benchmarks
+- verification artifacts
 - cache clearing
 
-The unified Day 2 CLI mirrors these core workflows.
+The CLI mirrors the same Day 3 workflow for local use and scripted smoke tests.
 
-## Deliberate constraints
+## Runtime isolation
 
-- Deterministic evaluation remains the pass/fail authority.
-- Benchmark answer-key fields do not cross the agent boundary.
-- Repair proposals are intentionally deferred to Day 3.
-- Day 2 metrics come only from executed runs and persisted artifacts.
+Reviewed artifacts live under `artifacts/`.
+
+Mutable runtime smoke outputs now live under `artifacts/demo-runtime/` by default so `seed-demo` and `reset-demo` do not delete reviewed evidence trees. That separation was added during Day 3G stabilization.
