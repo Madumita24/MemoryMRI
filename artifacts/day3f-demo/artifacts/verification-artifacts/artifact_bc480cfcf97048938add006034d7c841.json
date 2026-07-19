@@ -1,0 +1,2389 @@
+{
+  "artifact_id": "artifact_bc480cfcf97048938add006034d7c841",
+  "certificate_id": "df2015491be2c7d9f6efcb4a274788661fbe59b23b4bed4e61def5bccebb0ca2",
+  "artifact_version": "day3e-v1",
+  "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+  "proposal_id": "proposal_ed823b08504b469196a0281159162451",
+  "applied_version_id": null,
+  "verification_id": "verification_f0d43ded66f044bc83ee518f52618bbd",
+  "domain": "workplace_expense",
+  "scenario_id": "exp_09",
+  "failure_description": "Replay evidence does not justify a memory edit. The failure appears memory-independent or remains unchanged without memory.",
+  "original_action": "REQUEST_DOCUMENTATION",
+  "expected_action": "DENY_EXPENSE",
+  "likely_influential_memories": [
+    "exp_09_mem_1",
+    "exp_09_mem_2",
+    "exp_09_mem_3"
+  ],
+  "individual_replay_evidence": [
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_1"
+        ],
+        "replacement_values": {},
+        "reason": "Remove exp_09_mem_1 from the snapshot",
+        "intervention_id": "intervention_e545c75062be416199979391591058ec",
+        "before_states": {},
+        "after_states": {},
+        "unchanged_input_hash": null,
+        "model": null,
+        "prompt_version": null,
+        "inference_configuration": {},
+        "created_at": "2026-07-19T02:45:32.401484Z"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_3472b02cc2664526a5f9a7403d1e01d1",
+        "trace_9b4af15875da4cdda9a79cb6d2355e9b",
+        "trace_0f118637644544ffbe01f1fdd4be2204"
+      ],
+      "intervention_trace_ids": [
+        "trace_4415fcfd6bd64d9db9913c2d2f38f709",
+        "trace_00aa26c101734124bc9cc8ed01427c2c",
+        "trace_e03cd18c1dc24987bc5de57e32af19ad"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_1"
+        ],
+        "replacement_values": {},
+        "reason": "Disable exp_09_mem_1 while preserving the rest of the snapshot",
+        "intervention_id": "intervention_b51b8c34e9824adbbd31bf3f99835f74",
+        "before_states": {},
+        "after_states": {},
+        "unchanged_input_hash": null,
+        "model": null,
+        "prompt_version": null,
+        "inference_configuration": {},
+        "created_at": "2026-07-19T02:45:32.401528Z"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_ffb3dd17e93549398cfa3fe8b44a5275",
+        "trace_10742bc6f3a344dd93522a72f3a828e5",
+        "trace_17a54d60c7744ce7bca0b8dc1875cd2f"
+      ],
+      "intervention_trace_ids": [
+        "trace_5aaacac797264b91bff15bbedc7c2a6a",
+        "trace_110c59145b6140a1b06cecc6d006b83d",
+        "trace_2ce8b45ea6c54a2fbb1a21916343745f"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_2"
+        ],
+        "replacement_values": {},
+        "reason": "Remove exp_09_mem_2 from the snapshot",
+        "intervention_id": "intervention_40890ebdc6814d3e813b7cb07e49b1f2",
+        "before_states": {},
+        "after_states": {},
+        "unchanged_input_hash": null,
+        "model": null,
+        "prompt_version": null,
+        "inference_configuration": {},
+        "created_at": "2026-07-19T02:45:32.401552Z"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_d75c1c2d5a41429cbfa80b880fcfed55",
+        "trace_524b7e2ad34f429e9437123dd99b6070",
+        "trace_3b28dfdd3dd24581b88abf508b3b8a15"
+      ],
+      "intervention_trace_ids": [
+        "trace_ea19fdb3797b4a80bb584b2cabfe940d",
+        "trace_1ab5c62ae6bd47a48036b61b4e5aad86",
+        "trace_107aad39f557438e9de815630faa4b53"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_2"
+        ],
+        "replacement_values": {},
+        "reason": "Disable exp_09_mem_2 while preserving the rest of the snapshot",
+        "intervention_id": "intervention_97fa14d8b5c94138a533b064c514e7d2",
+        "before_states": {},
+        "after_states": {},
+        "unchanged_input_hash": null,
+        "model": null,
+        "prompt_version": null,
+        "inference_configuration": {},
+        "created_at": "2026-07-19T02:45:32.401571Z"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_5aa1a7ef26484aeda40deed92f0be331",
+        "trace_e0aa906771cd42c1a6b8cb8b369ec077",
+        "trace_0cbd70489495483b9ce9c445632e4de7"
+      ],
+      "intervention_trace_ids": [
+        "trace_f84b8fa7b85d4b82978257331bf49970",
+        "trace_c4480d6ac3334d0aa88a1b23863ca141",
+        "trace_b064b7c72898409287f3c3abf67569a8"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "Remove exp_09_mem_3 from the snapshot",
+        "intervention_id": "intervention_e3d4a09c52ab4755ab1c075825123a70",
+        "before_states": {},
+        "after_states": {},
+        "unchanged_input_hash": null,
+        "model": null,
+        "prompt_version": null,
+        "inference_configuration": {},
+        "created_at": "2026-07-19T02:45:32.401588Z"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_4fd92c58e76d413aaa9a0464aea06425",
+        "trace_ba35196f037b43d593e62d4fb90a6118",
+        "trace_9d0fccf90dd14f899c8996a62c0a03ab"
+      ],
+      "intervention_trace_ids": [
+        "trace_6745b438a1cf43bd9fbc837019ce2af4",
+        "trace_bccc4090d9a446629881926f5dab8142",
+        "trace_98f5457655b04898a488420008380ceb"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "Disable exp_09_mem_3 while preserving the rest of the snapshot",
+        "intervention_id": "intervention_939a4d79978a41c5991a6e30de1948be",
+        "before_states": {},
+        "after_states": {},
+        "unchanged_input_hash": null,
+        "model": null,
+        "prompt_version": null,
+        "inference_configuration": {},
+        "created_at": "2026-07-19T02:45:32.401604Z"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_9a8effa1c81b4a029b8181d445e1cc56",
+        "trace_637ea508bb9a4ed88dda27cc2fd610c6",
+        "trace_ba3c32d77a67482494c5c4c38c24398b"
+      ],
+      "intervention_trace_ids": [
+        "trace_125500eccdcb44b1a37ac15f1a8c34b8",
+        "trace_2d080334aa044a03878b00b2e57fde55",
+        "trace_ab21f6498e374d82a3e18184b74e2abd"
+      ]
+    }
+  ],
+  "pairwise_replay_evidence": [
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORIES",
+        "target_memory_ids": [
+          "exp_09_mem_1",
+          "exp_09_mem_2"
+        ],
+        "replacement_values": {},
+        "reason": "REMOVE_MEMORIES on exp_09_mem_1 + exp_09_mem_2",
+        "intervention_id": "intervention_fa0b088646ba41ecbce3a7e5df6af1a0",
+        "before_states": {
+          "exp_09_mem_1": {
+            "memory_id": "exp_09_mem_1",
+            "entity_id": "employee_09",
+            "content": "Employee is eligible for a temporary relocation meal stipend.",
+            "source": "hr_note",
+            "created_at": "2026-03-15T00:00:00Z",
+            "valid_from": "2026-03-15T00:00:00Z",
+            "valid_until": "2026-08-15T00:00:00Z",
+            "status": "active",
+            "confidence": 0.92,
+            "retrieval_priority": 98,
+            "supersedes": [],
+            "tags": [
+              "wrong-context"
+            ],
+            "operational_metadata": {
+              "memory_role": "customer_status",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          },
+          "exp_09_mem_2": {
+            "memory_id": "exp_09_mem_2",
+            "entity_id": "policy_meals",
+            "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+            "source": "policy_portal",
+            "created_at": "2026-01-22T00:00:00Z",
+            "valid_from": "2026-01-22T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.98,
+            "retrieval_priority": 91,
+            "supersedes": [],
+            "tags": [
+              "meal-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {},
+        "unchanged_input_hash": "f7067f2dbd61362a224cb84369e5208f08099e27f860de136af8411a2cb05f4c",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:28:15.220057Z"
+      },
+      "shared_baseline_runs": true,
+      "fresh_baseline_per_pair": false,
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "individual_influences": {
+        "exp_09_mem_1": 0.0,
+        "exp_09_mem_2": 0.0
+      },
+      "combined_successful_runs": 0,
+      "combined_total_evaluated_runs": 3,
+      "combined_success_rate": 0.0,
+      "combined_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "combined_influence": 0.0,
+      "interaction_score": 0.0,
+      "interaction_synergy": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 1953,
+        "output_tokens": 425,
+        "total_tokens": 2378
+      },
+      "latency_ms": 12551,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "evidence_classification": "no observed pairwise influence",
+      "original_trace_ids": [
+        "trace_3803c8899a28433e8b6e0208a86f1663",
+        "trace_e955032023f242fc92202acd0d3fa06f",
+        "trace_a51b2669ba934c5b87dca7adbc142ef6"
+      ],
+      "intervention_trace_ids": [
+        "trace_feccc7c7de5d47299bd15c314fa42c2b",
+        "trace_fcd0318010e1461387a33cedd6e43ce3",
+        "trace_4f3cac23769a438a90756e7cdc203ab6"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORIES",
+        "target_memory_ids": [
+          "exp_09_mem_1",
+          "exp_09_mem_2"
+        ],
+        "replacement_values": {},
+        "reason": "DISABLE_MEMORIES on exp_09_mem_1 + exp_09_mem_2",
+        "intervention_id": "intervention_178835569fe3419ebdd70546b01efcc0",
+        "before_states": {
+          "exp_09_mem_1": {
+            "memory_id": "exp_09_mem_1",
+            "entity_id": "employee_09",
+            "content": "Employee is eligible for a temporary relocation meal stipend.",
+            "source": "hr_note",
+            "created_at": "2026-03-15T00:00:00Z",
+            "valid_from": "2026-03-15T00:00:00Z",
+            "valid_until": "2026-08-15T00:00:00Z",
+            "status": "active",
+            "confidence": 0.92,
+            "retrieval_priority": 98,
+            "supersedes": [],
+            "tags": [
+              "wrong-context"
+            ],
+            "operational_metadata": {
+              "memory_role": "customer_status",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          },
+          "exp_09_mem_2": {
+            "memory_id": "exp_09_mem_2",
+            "entity_id": "policy_meals",
+            "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+            "source": "policy_portal",
+            "created_at": "2026-01-22T00:00:00Z",
+            "valid_from": "2026-01-22T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.98,
+            "retrieval_priority": 91,
+            "supersedes": [],
+            "tags": [
+              "meal-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {
+          "exp_09_mem_1": {
+            "memory_id": "exp_09_mem_1",
+            "entity_id": "employee_09",
+            "content": "Employee is eligible for a temporary relocation meal stipend.",
+            "source": "hr_note",
+            "created_at": "2026-03-15T00:00:00Z",
+            "valid_from": "2026-03-15T00:00:00Z",
+            "valid_until": "2026-08-15T00:00:00Z",
+            "status": "invalid",
+            "confidence": 0.92,
+            "retrieval_priority": 98,
+            "supersedes": [],
+            "tags": [
+              "wrong-context"
+            ],
+            "operational_metadata": {
+              "memory_role": "customer_status",
+              "entity_match": true,
+              "temporal_scope": "current",
+              "disabled_for_replay": true
+            }
+          },
+          "exp_09_mem_2": {
+            "memory_id": "exp_09_mem_2",
+            "entity_id": "policy_meals",
+            "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+            "source": "policy_portal",
+            "created_at": "2026-01-22T00:00:00Z",
+            "valid_from": "2026-01-22T00:00:00Z",
+            "valid_until": null,
+            "status": "invalid",
+            "confidence": 0.98,
+            "retrieval_priority": 91,
+            "supersedes": [],
+            "tags": [
+              "meal-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current",
+              "disabled_for_replay": true
+            }
+          }
+        },
+        "unchanged_input_hash": "f7067f2dbd61362a224cb84369e5208f08099e27f860de136af8411a2cb05f4c",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:28:27.819160Z"
+      },
+      "shared_baseline_runs": true,
+      "fresh_baseline_per_pair": false,
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "individual_influences": {
+        "exp_09_mem_1": 0.0,
+        "exp_09_mem_2": 0.0
+      },
+      "combined_successful_runs": 0,
+      "combined_total_evaluated_runs": 3,
+      "combined_success_rate": 0.0,
+      "combined_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "combined_influence": 0.0,
+      "interaction_score": 0.0,
+      "interaction_synergy": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 3126,
+        "output_tokens": 484,
+        "total_tokens": 3610
+      },
+      "latency_ms": 14373,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "evidence_classification": "no observed pairwise influence",
+      "original_trace_ids": [
+        "trace_3803c8899a28433e8b6e0208a86f1663",
+        "trace_e955032023f242fc92202acd0d3fa06f",
+        "trace_a51b2669ba934c5b87dca7adbc142ef6"
+      ],
+      "intervention_trace_ids": [
+        "trace_acf12aa04ad441768bf38d46905059cd",
+        "trace_f5cb0b28b28e41a58a8fc4d3009c0004",
+        "trace_4b5aeff16c4944cbab200ce156270912"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORIES",
+        "target_memory_ids": [
+          "exp_09_mem_1",
+          "exp_09_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "REMOVE_MEMORIES on exp_09_mem_1 + exp_09_mem_3",
+        "intervention_id": "intervention_521e31374c7e4f77ba5372764a62b5dc",
+        "before_states": {
+          "exp_09_mem_1": {
+            "memory_id": "exp_09_mem_1",
+            "entity_id": "employee_09",
+            "content": "Employee is eligible for a temporary relocation meal stipend.",
+            "source": "hr_note",
+            "created_at": "2026-03-15T00:00:00Z",
+            "valid_from": "2026-03-15T00:00:00Z",
+            "valid_until": "2026-08-15T00:00:00Z",
+            "status": "active",
+            "confidence": 0.92,
+            "retrieval_priority": 98,
+            "supersedes": [],
+            "tags": [
+              "wrong-context"
+            ],
+            "operational_metadata": {
+              "memory_role": "customer_status",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          },
+          "exp_09_mem_3": {
+            "memory_id": "exp_09_mem_3",
+            "entity_id": "report_09",
+            "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+            "source": "expense_system",
+            "created_at": "2026-07-14T00:00:00Z",
+            "valid_from": "2026-07-14T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.98,
+            "retrieval_priority": 87,
+            "supersedes": [],
+            "tags": [
+              "receipt"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {},
+        "unchanged_input_hash": "651f85d9a31100f7864f6927d1695430896bb3eeda13a52b7bfead80988852e0",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:28:42.256513Z"
+      },
+      "shared_baseline_runs": true,
+      "fresh_baseline_per_pair": false,
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "individual_influences": {
+        "exp_09_mem_1": 0.0,
+        "exp_09_mem_3": 0.0
+      },
+      "combined_successful_runs": 0,
+      "combined_total_evaluated_runs": 3,
+      "combined_success_rate": 0.0,
+      "combined_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "combined_influence": 0.0,
+      "interaction_score": 0.0,
+      "interaction_synergy": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 1968,
+        "output_tokens": 463,
+        "total_tokens": 2431
+      },
+      "latency_ms": 14688,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "evidence_classification": "no observed pairwise influence",
+      "original_trace_ids": [
+        "trace_3803c8899a28433e8b6e0208a86f1663",
+        "trace_e955032023f242fc92202acd0d3fa06f",
+        "trace_a51b2669ba934c5b87dca7adbc142ef6"
+      ],
+      "intervention_trace_ids": [
+        "trace_d7c578f7e90340ccba089f1854d3cb3c",
+        "trace_6709819259ad45bc98680260d44983da",
+        "trace_7f38be002bc640a49a7b4cbb1796f703"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORIES",
+        "target_memory_ids": [
+          "exp_09_mem_1",
+          "exp_09_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "DISABLE_MEMORIES on exp_09_mem_1 + exp_09_mem_3",
+        "intervention_id": "intervention_79f93dc0cd2c448896e879c48af5c9ca",
+        "before_states": {
+          "exp_09_mem_1": {
+            "memory_id": "exp_09_mem_1",
+            "entity_id": "employee_09",
+            "content": "Employee is eligible for a temporary relocation meal stipend.",
+            "source": "hr_note",
+            "created_at": "2026-03-15T00:00:00Z",
+            "valid_from": "2026-03-15T00:00:00Z",
+            "valid_until": "2026-08-15T00:00:00Z",
+            "status": "active",
+            "confidence": 0.92,
+            "retrieval_priority": 98,
+            "supersedes": [],
+            "tags": [
+              "wrong-context"
+            ],
+            "operational_metadata": {
+              "memory_role": "customer_status",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          },
+          "exp_09_mem_3": {
+            "memory_id": "exp_09_mem_3",
+            "entity_id": "report_09",
+            "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+            "source": "expense_system",
+            "created_at": "2026-07-14T00:00:00Z",
+            "valid_from": "2026-07-14T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.98,
+            "retrieval_priority": 87,
+            "supersedes": [],
+            "tags": [
+              "receipt"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {
+          "exp_09_mem_1": {
+            "memory_id": "exp_09_mem_1",
+            "entity_id": "employee_09",
+            "content": "Employee is eligible for a temporary relocation meal stipend.",
+            "source": "hr_note",
+            "created_at": "2026-03-15T00:00:00Z",
+            "valid_from": "2026-03-15T00:00:00Z",
+            "valid_until": "2026-08-15T00:00:00Z",
+            "status": "invalid",
+            "confidence": 0.92,
+            "retrieval_priority": 98,
+            "supersedes": [],
+            "tags": [
+              "wrong-context"
+            ],
+            "operational_metadata": {
+              "memory_role": "customer_status",
+              "entity_match": true,
+              "temporal_scope": "current",
+              "disabled_for_replay": true
+            }
+          },
+          "exp_09_mem_3": {
+            "memory_id": "exp_09_mem_3",
+            "entity_id": "report_09",
+            "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+            "source": "expense_system",
+            "created_at": "2026-07-14T00:00:00Z",
+            "valid_from": "2026-07-14T00:00:00Z",
+            "valid_until": null,
+            "status": "invalid",
+            "confidence": 0.98,
+            "retrieval_priority": 87,
+            "supersedes": [],
+            "tags": [
+              "receipt"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current",
+              "disabled_for_replay": true
+            }
+          }
+        },
+        "unchanged_input_hash": "651f85d9a31100f7864f6927d1695430896bb3eeda13a52b7bfead80988852e0",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:28:56.995579Z"
+      },
+      "shared_baseline_runs": true,
+      "fresh_baseline_per_pair": false,
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "individual_influences": {
+        "exp_09_mem_1": 0.0,
+        "exp_09_mem_3": 0.0
+      },
+      "combined_successful_runs": 0,
+      "combined_total_evaluated_runs": 3,
+      "combined_success_rate": 0.0,
+      "combined_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "combined_influence": 0.0,
+      "interaction_score": 0.0,
+      "interaction_synergy": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 3126,
+        "output_tokens": 460,
+        "total_tokens": 3586
+      },
+      "latency_ms": 18314,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "evidence_classification": "no observed pairwise influence",
+      "original_trace_ids": [
+        "trace_3803c8899a28433e8b6e0208a86f1663",
+        "trace_e955032023f242fc92202acd0d3fa06f",
+        "trace_a51b2669ba934c5b87dca7adbc142ef6"
+      ],
+      "intervention_trace_ids": [
+        "trace_55879a5ba82a483899c19f0d5fd8e18c",
+        "trace_d70f627ced8c4066b000a6855323618d",
+        "trace_8e822ac1c9a644f3b3bdfe524f0a5f86"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORIES",
+        "target_memory_ids": [
+          "exp_09_mem_2",
+          "exp_09_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "REMOVE_MEMORIES on exp_09_mem_2 + exp_09_mem_3",
+        "intervention_id": "intervention_bcd6f6cd026a437a95c3bb197d185667",
+        "before_states": {
+          "exp_09_mem_2": {
+            "memory_id": "exp_09_mem_2",
+            "entity_id": "policy_meals",
+            "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+            "source": "policy_portal",
+            "created_at": "2026-01-22T00:00:00Z",
+            "valid_from": "2026-01-22T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.98,
+            "retrieval_priority": 91,
+            "supersedes": [],
+            "tags": [
+              "meal-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          },
+          "exp_09_mem_3": {
+            "memory_id": "exp_09_mem_3",
+            "entity_id": "report_09",
+            "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+            "source": "expense_system",
+            "created_at": "2026-07-14T00:00:00Z",
+            "valid_from": "2026-07-14T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.98,
+            "retrieval_priority": 87,
+            "supersedes": [],
+            "tags": [
+              "receipt"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {},
+        "unchanged_input_hash": "ec2a584d22cabf84f3a7a0453e7e895f91ec229dc9809cc439dec742926af979",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:29:15.372541Z"
+      },
+      "shared_baseline_runs": true,
+      "fresh_baseline_per_pair": false,
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "individual_influences": {
+        "exp_09_mem_2": 0.0,
+        "exp_09_mem_3": 0.0
+      },
+      "combined_successful_runs": 0,
+      "combined_total_evaluated_runs": 3,
+      "combined_success_rate": 0.0,
+      "combined_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "combined_influence": 0.0,
+      "interaction_score": 0.0,
+      "interaction_synergy": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 1977,
+        "output_tokens": 486,
+        "total_tokens": 2463
+      },
+      "latency_ms": 16086,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "evidence_classification": "no observed pairwise influence",
+      "original_trace_ids": [
+        "trace_3803c8899a28433e8b6e0208a86f1663",
+        "trace_e955032023f242fc92202acd0d3fa06f",
+        "trace_a51b2669ba934c5b87dca7adbc142ef6"
+      ],
+      "intervention_trace_ids": [
+        "trace_c90f817b80be46d9848fe6944b335b79",
+        "trace_c260515423c84e7cab0d6496ece1de7d",
+        "trace_7d796f6c1bd14dd58c8472291e5ed2d5"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORIES",
+        "target_memory_ids": [
+          "exp_09_mem_2",
+          "exp_09_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "DISABLE_MEMORIES on exp_09_mem_2 + exp_09_mem_3",
+        "intervention_id": "intervention_853fc6e3b03c41e49a5c4ad5821f94f2",
+        "before_states": {
+          "exp_09_mem_2": {
+            "memory_id": "exp_09_mem_2",
+            "entity_id": "policy_meals",
+            "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+            "source": "policy_portal",
+            "created_at": "2026-01-22T00:00:00Z",
+            "valid_from": "2026-01-22T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.98,
+            "retrieval_priority": 91,
+            "supersedes": [],
+            "tags": [
+              "meal-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          },
+          "exp_09_mem_3": {
+            "memory_id": "exp_09_mem_3",
+            "entity_id": "report_09",
+            "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+            "source": "expense_system",
+            "created_at": "2026-07-14T00:00:00Z",
+            "valid_from": "2026-07-14T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.98,
+            "retrieval_priority": 87,
+            "supersedes": [],
+            "tags": [
+              "receipt"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {
+          "exp_09_mem_2": {
+            "memory_id": "exp_09_mem_2",
+            "entity_id": "policy_meals",
+            "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+            "source": "policy_portal",
+            "created_at": "2026-01-22T00:00:00Z",
+            "valid_from": "2026-01-22T00:00:00Z",
+            "valid_until": null,
+            "status": "invalid",
+            "confidence": 0.98,
+            "retrieval_priority": 91,
+            "supersedes": [],
+            "tags": [
+              "meal-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current",
+              "disabled_for_replay": true
+            }
+          },
+          "exp_09_mem_3": {
+            "memory_id": "exp_09_mem_3",
+            "entity_id": "report_09",
+            "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+            "source": "expense_system",
+            "created_at": "2026-07-14T00:00:00Z",
+            "valid_from": "2026-07-14T00:00:00Z",
+            "valid_until": null,
+            "status": "invalid",
+            "confidence": 0.98,
+            "retrieval_priority": 87,
+            "supersedes": [],
+            "tags": [
+              "receipt"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current",
+              "disabled_for_replay": true
+            }
+          }
+        },
+        "unchanged_input_hash": "ec2a584d22cabf84f3a7a0453e7e895f91ec229dc9809cc439dec742926af979",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:29:31.520467Z"
+      },
+      "shared_baseline_runs": true,
+      "fresh_baseline_per_pair": false,
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "individual_influences": {
+        "exp_09_mem_2": 0.0,
+        "exp_09_mem_3": 0.0
+      },
+      "combined_successful_runs": 0,
+      "combined_total_evaluated_runs": 3,
+      "combined_success_rate": 0.0,
+      "combined_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "combined_influence": 0.0,
+      "interaction_score": 0.0,
+      "interaction_synergy": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 3126,
+        "output_tokens": 390,
+        "total_tokens": 3516
+      },
+      "latency_ms": 12531,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "evidence_classification": "no observed pairwise influence",
+      "original_trace_ids": [
+        "trace_3803c8899a28433e8b6e0208a86f1663",
+        "trace_e955032023f242fc92202acd0d3fa06f",
+        "trace_a51b2669ba934c5b87dca7adbc142ef6"
+      ],
+      "intervention_trace_ids": [
+        "trace_ac8b34a98c2b47adab27dca18f11fde1",
+        "trace_b3a200fc1bf24d158a5b7a334775a07a",
+        "trace_d6c8ccbe53c842b2901394848bbb8583"
+      ]
+    }
+  ],
+  "memory_dependence_classification": "likely memory-independent",
+  "suspicion_analysis": {
+    "metadata": {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "domain": "workplace_expense",
+      "model": "gpt-5.6",
+      "response_model": "gpt-5.6-sol",
+      "semantic_analysis_prompt_version": "v1",
+      "semantic_analysis_prompt_hash": "e7aeb0b92c914e98f7f3275725a51aea48445d7894334a6fed26c89a0a0a4333",
+      "memory_snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+      "deterministic_score_configuration": {
+        "signal_weights": {
+          "cited_by_original_agent": 1.0,
+          "stale_status": 1.6,
+          "expired_validity": 1.6,
+          "superseded_status": 1.2,
+          "entity_mismatch": 1.4,
+          "missing_validity_dates": 0.5,
+          "unusually_high_retrieval_priority": 0.9,
+          "metadata_conflict_with_another_memory": 1.3,
+          "potentially_wrong_decision_context": 1.1,
+          "invalid_temporal_overlap": 0.8,
+          "active_memory_explicitly_superseded_by_another": 1.5
+        },
+        "normalized_signal_weights": {
+          "cited_by_original_agent": 0.07751937984496124,
+          "stale_status": 0.12403100775193798,
+          "expired_validity": 0.12403100775193798,
+          "superseded_status": 0.09302325581395349,
+          "entity_mismatch": 0.10852713178294572,
+          "missing_validity_dates": 0.03875968992248062,
+          "unusually_high_retrieval_priority": 0.06976744186046512,
+          "metadata_conflict_with_another_memory": 0.10077519379844961,
+          "potentially_wrong_decision_context": 0.08527131782945736,
+          "invalid_temporal_overlap": 0.06201550387596899,
+          "active_memory_explicitly_superseded_by_another": 0.11627906976744186
+        },
+        "high_priority_threshold": 95,
+        "prioritization_weights": {
+          "deterministic": 0.5,
+          "semantic": 0.5
+        }
+      },
+      "created_at": "2026-07-19T00:03:52.215602Z",
+      "api_usage": {
+        "input_tokens": 1207,
+        "output_tokens": 388,
+        "total_tokens": 1595
+      },
+      "git_commit_hash": "2d0943fb74079292bf8473931a19fd71494d2140"
+    },
+    "memories": [
+      {
+        "memory_id": "exp_09_mem_1",
+        "deterministic_score": 0.15503875968992248,
+        "semantic_score": 0.94,
+        "prioritization_score": 0.5475193798449612,
+        "metadata_observations": [
+          {
+            "memory_id": "exp_09_mem_1",
+            "signal_name": "cited_by_original_agent",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The original agent did not cite this memory."
+          },
+          {
+            "memory_id": "exp_09_mem_1",
+            "signal_name": "stale_status",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The memory is not marked stale."
+          },
+          {
+            "memory_id": "exp_09_mem_1",
+            "signal_name": "expired_validity",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The memory validity window has not expired."
+          },
+          {
+            "memory_id": "exp_09_mem_1",
+            "signal_name": "superseded_status",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The memory is not marked superseded."
+          },
+          {
+            "memory_id": "exp_09_mem_1",
+            "signal_name": "entity_mismatch",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "Operational metadata does not mark an entity mismatch."
+          },
+          {
+            "memory_id": "exp_09_mem_1",
+            "signal_name": "missing_validity_dates",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The memory has both validity boundaries populated."
+          },
+          {
+            "memory_id": "exp_09_mem_1",
+            "signal_name": "unusually_high_retrieval_priority",
+            "signal_present": true,
+            "signal_contribution": 0.06976744186046512,
+            "concise_reason": "The retrieval priority 98 meets or exceeds the configured high-priority threshold 95."
+          },
+          {
+            "memory_id": "exp_09_mem_1",
+            "signal_name": "metadata_conflict_with_another_memory",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "Metadata checks did not find a conflict with another memory."
+          },
+          {
+            "memory_id": "exp_09_mem_1",
+            "signal_name": "potentially_wrong_decision_context",
+            "signal_present": true,
+            "signal_contribution": 0.08527131782945736,
+            "concise_reason": "Metadata indicates the memory may be outside the current decision context."
+          },
+          {
+            "memory_id": "exp_09_mem_1",
+            "signal_name": "invalid_temporal_overlap",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "No metadata-based temporal overlap concern was detected."
+          },
+          {
+            "memory_id": "exp_09_mem_1",
+            "signal_name": "active_memory_explicitly_superseded_by_another",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "No active supersession signal is present."
+          }
+        ],
+        "semantic_hypothesis": {
+          "memory_id": "exp_09_mem_1",
+          "semantic_suspicion_score": 0.94,
+          "suspected_issue_types": [
+            "wrong_context",
+            "excessive_priority"
+          ],
+          "concise_reason": "Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet has highest retrieval priority.",
+          "related_memory_ids": [
+            "exp_09_mem_2"
+          ],
+          "uncertainty": 0.12,
+          "requires_human_review": false
+        },
+        "replay_supported_evidence": {
+          "replay_evidence_available": true,
+          "observed_individual_influence": 0.0,
+          "observed_action_change": false,
+          "intervention_success_rate": 0.0,
+          "replay_run_count": 3,
+          "wilson_interval_low": 0.0,
+          "wilson_interval_high": 0.5615060804490177,
+          "replay_stability": 1.0,
+          "infrastructure_error_count": 0,
+          "evidence_status_label": "replay tested: no observed influence"
+        },
+        "comparison_classification": "suspicion not supported by replay",
+        "deterministic_reasons": [
+          "The retrieval priority 98 meets or exceeds the configured high-priority threshold 95.",
+          "Metadata indicates the memory may be outside the current decision context."
+        ],
+        "semantic_reason": "Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet has highest retrieval priority."
+      },
+      {
+        "memory_id": "exp_09_mem_2",
+        "deterministic_score": 0.11627906976744186,
+        "semantic_score": 0.03,
+        "prioritization_score": 0.07313953488372094,
+        "metadata_observations": [
+          {
+            "memory_id": "exp_09_mem_2",
+            "signal_name": "cited_by_original_agent",
+            "signal_present": true,
+            "signal_contribution": 0.07751937984496124,
+            "concise_reason": "The original agent cited this memory in its rationale."
+          },
+          {
+            "memory_id": "exp_09_mem_2",
+            "signal_name": "stale_status",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The memory is not marked stale."
+          },
+          {
+            "memory_id": "exp_09_mem_2",
+            "signal_name": "expired_validity",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The memory validity window has not expired."
+          },
+          {
+            "memory_id": "exp_09_mem_2",
+            "signal_name": "superseded_status",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The memory is not marked superseded."
+          },
+          {
+            "memory_id": "exp_09_mem_2",
+            "signal_name": "entity_mismatch",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "Operational metadata does not mark an entity mismatch."
+          },
+          {
+            "memory_id": "exp_09_mem_2",
+            "signal_name": "missing_validity_dates",
+            "signal_present": true,
+            "signal_contribution": 0.03875968992248062,
+            "concise_reason": "The memory is missing at least one validity boundary."
+          },
+          {
+            "memory_id": "exp_09_mem_2",
+            "signal_name": "unusually_high_retrieval_priority",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The retrieval priority is below the configured high-priority threshold."
+          },
+          {
+            "memory_id": "exp_09_mem_2",
+            "signal_name": "metadata_conflict_with_another_memory",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "Metadata checks did not find a conflict with another memory."
+          },
+          {
+            "memory_id": "exp_09_mem_2",
+            "signal_name": "potentially_wrong_decision_context",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "Metadata does not flag this memory as outside the current decision context."
+          },
+          {
+            "memory_id": "exp_09_mem_2",
+            "signal_name": "invalid_temporal_overlap",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "No metadata-based temporal overlap concern was detected."
+          },
+          {
+            "memory_id": "exp_09_mem_2",
+            "signal_name": "active_memory_explicitly_superseded_by_another",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "No active supersession signal is present."
+          }
+        ],
+        "semantic_hypothesis": {
+          "memory_id": "exp_09_mem_2",
+          "semantic_suspicion_score": 0.03,
+          "suspected_issue_types": [
+            "none"
+          ],
+          "concise_reason": "Current meal policy directly addresses documented per-diem requirements for solo dinners during customer travel.",
+          "related_memory_ids": [
+            "exp_09_mem_3"
+          ],
+          "uncertainty": 0.04,
+          "requires_human_review": false
+        },
+        "replay_supported_evidence": {
+          "replay_evidence_available": true,
+          "observed_individual_influence": 0.0,
+          "observed_action_change": false,
+          "intervention_success_rate": 0.0,
+          "replay_run_count": 3,
+          "wilson_interval_low": 0.0,
+          "wilson_interval_high": 0.5615060804490177,
+          "replay_stability": 1.0,
+          "infrastructure_error_count": 0,
+          "evidence_status_label": "replay tested: no observed influence"
+        },
+        "comparison_classification": "suspicion not supported by replay",
+        "deterministic_reasons": [
+          "The original agent cited this memory in its rationale.",
+          "The memory is missing at least one validity boundary."
+        ],
+        "semantic_reason": "Current meal policy directly addresses documented per-diem requirements for solo dinners during customer travel."
+      },
+      {
+        "memory_id": "exp_09_mem_3",
+        "deterministic_score": 0.11627906976744186,
+        "semantic_score": 0.02,
+        "prioritization_score": 0.06813953488372093,
+        "metadata_observations": [
+          {
+            "memory_id": "exp_09_mem_3",
+            "signal_name": "cited_by_original_agent",
+            "signal_present": true,
+            "signal_contribution": 0.07751937984496124,
+            "concise_reason": "The original agent cited this memory in its rationale."
+          },
+          {
+            "memory_id": "exp_09_mem_3",
+            "signal_name": "stale_status",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The memory is not marked stale."
+          },
+          {
+            "memory_id": "exp_09_mem_3",
+            "signal_name": "expired_validity",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The memory validity window has not expired."
+          },
+          {
+            "memory_id": "exp_09_mem_3",
+            "signal_name": "superseded_status",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The memory is not marked superseded."
+          },
+          {
+            "memory_id": "exp_09_mem_3",
+            "signal_name": "entity_mismatch",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "Operational metadata does not mark an entity mismatch."
+          },
+          {
+            "memory_id": "exp_09_mem_3",
+            "signal_name": "missing_validity_dates",
+            "signal_present": true,
+            "signal_contribution": 0.03875968992248062,
+            "concise_reason": "The memory is missing at least one validity boundary."
+          },
+          {
+            "memory_id": "exp_09_mem_3",
+            "signal_name": "unusually_high_retrieval_priority",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "The retrieval priority is below the configured high-priority threshold."
+          },
+          {
+            "memory_id": "exp_09_mem_3",
+            "signal_name": "metadata_conflict_with_another_memory",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "Metadata checks did not find a conflict with another memory."
+          },
+          {
+            "memory_id": "exp_09_mem_3",
+            "signal_name": "potentially_wrong_decision_context",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "Metadata does not flag this memory as outside the current decision context."
+          },
+          {
+            "memory_id": "exp_09_mem_3",
+            "signal_name": "invalid_temporal_overlap",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "No metadata-based temporal overlap concern was detected."
+          },
+          {
+            "memory_id": "exp_09_mem_3",
+            "signal_name": "active_memory_explicitly_superseded_by_another",
+            "signal_present": false,
+            "signal_contribution": 0.0,
+            "concise_reason": "No active supersession signal is present."
+          }
+        ],
+        "semantic_hypothesis": {
+          "memory_id": "exp_09_mem_3",
+          "semantic_suspicion_score": 0.02,
+          "suspected_issue_types": [
+            "none"
+          ],
+          "concise_reason": "Current receipt evidence directly supports that the dinner was employee-only.",
+          "related_memory_ids": [
+            "exp_09_mem_2"
+          ],
+          "uncertainty": 0.03,
+          "requires_human_review": false
+        },
+        "replay_supported_evidence": {
+          "replay_evidence_available": true,
+          "observed_individual_influence": 0.0,
+          "observed_action_change": false,
+          "intervention_success_rate": 0.0,
+          "replay_run_count": 3,
+          "wilson_interval_low": 0.0,
+          "wilson_interval_high": 0.5615060804490177,
+          "replay_stability": 1.0,
+          "infrastructure_error_count": 0,
+          "evidence_status_label": "replay tested: no observed influence"
+        },
+        "comparison_classification": "suspicion not supported by replay",
+        "deterministic_reasons": [
+          "The original agent cited this memory in its rationale.",
+          "The memory is missing at least one validity boundary."
+        ],
+        "semantic_reason": "Current receipt evidence directly supports that the dinner was employee-only."
+      }
+    ],
+    "summary": {
+      "top_ranked_memories": [
+        "exp_09_mem_1",
+        "exp_09_mem_2",
+        "exp_09_mem_3"
+      ],
+      "deterministic_concerns": [
+        "exp_09_mem_1: The retrieval priority 98 meets or exceeds the configured high-priority threshold 95., Metadata indicates the memory may be outside the current decision context.",
+        "exp_09_mem_2: The original agent cited this memory in its rationale., The memory is missing at least one validity boundary.",
+        "exp_09_mem_3: The original agent cited this memory in its rationale., The memory is missing at least one validity boundary."
+      ],
+      "semantic_concerns": [
+        "exp_09_mem_1: Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet has highest retrieval priority.",
+        "exp_09_mem_2: Current meal policy directly addresses documented per-diem requirements for solo dinners during customer travel.",
+        "exp_09_mem_3: Current receipt evidence directly supports that the dinner was employee-only."
+      ],
+      "contradictions_detected": [],
+      "replay_supported_memories": [],
+      "suspicious_memories_with_no_observed_influence": [
+        "exp_09_mem_1"
+      ],
+      "pairwise_testing_recommended": true,
+      "no_memory_or_prompt_only_testing_recommended": true,
+      "human_review_recommended": false
+    }
+  },
+  "contradiction_analysis": {
+    "metadata": {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "domain": "workplace_expense",
+      "model": "gpt-5.6",
+      "response_model": "gpt-5.6-sol",
+      "semantic_analysis_prompt_version": "v1",
+      "semantic_analysis_prompt_hash": "ca2b2141049af3e27dbdc10009ef01d2aea9f9038053b8d73f14da4e509e57f7",
+      "memory_snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+      "deterministic_score_configuration": {
+        "signal_weights": {
+          "cited_by_original_agent": 1.0,
+          "stale_status": 1.6,
+          "expired_validity": 1.6,
+          "superseded_status": 1.2,
+          "entity_mismatch": 1.4,
+          "missing_validity_dates": 0.5,
+          "unusually_high_retrieval_priority": 0.9,
+          "metadata_conflict_with_another_memory": 1.3,
+          "potentially_wrong_decision_context": 1.1,
+          "invalid_temporal_overlap": 0.8,
+          "active_memory_explicitly_superseded_by_another": 1.5
+        },
+        "normalized_signal_weights": {
+          "cited_by_original_agent": 0.07751937984496124,
+          "stale_status": 0.12403100775193798,
+          "expired_validity": 0.12403100775193798,
+          "superseded_status": 0.09302325581395349,
+          "entity_mismatch": 0.10852713178294572,
+          "missing_validity_dates": 0.03875968992248062,
+          "unusually_high_retrieval_priority": 0.06976744186046512,
+          "metadata_conflict_with_another_memory": 0.10077519379844961,
+          "potentially_wrong_decision_context": 0.08527131782945736,
+          "invalid_temporal_overlap": 0.06201550387596899,
+          "active_memory_explicitly_superseded_by_another": 0.11627906976744186
+        },
+        "high_priority_threshold": 95,
+        "prioritization_weights": {
+          "deterministic": 0.5,
+          "semantic": 0.5
+        }
+      },
+      "created_at": "2026-07-19T00:03:59.883655Z",
+      "api_usage": {
+        "input_tokens": 1204,
+        "output_tokens": 407,
+        "total_tokens": 1611
+      },
+      "git_commit_hash": "2d0943fb74079292bf8473931a19fd71494d2140"
+    },
+    "pair_results": [
+      {
+        "memory_a_id": "exp_09_mem_1",
+        "memory_b_id": "exp_09_mem_2",
+        "deterministic_relationship": {
+          "memory_a_id": "exp_09_mem_1",
+          "memory_b_id": "exp_09_mem_2",
+          "relationship": "unrelated",
+          "evidence_type": "metadata",
+          "concise_reason": "Metadata does not show a direct relationship between the memories.",
+          "relevant_fields": [],
+          "confidence": 0.6
+        },
+        "semantic_relationship": {
+          "memory_a_id": "exp_09_mem_1",
+          "memory_b_id": "exp_09_mem_2",
+          "relationship": "unrelated",
+          "concise_explanation": "Relocation stipend eligibility does not address customer-travel meal policy.",
+          "confidence": 0.95,
+          "requires_human_review": false
+        },
+        "relationships_agree": true,
+        "replay_evidence_exists_for_either": true,
+        "pairwise_replay_performed": false
+      },
+      {
+        "memory_a_id": "exp_09_mem_1",
+        "memory_b_id": "exp_09_mem_3",
+        "deterministic_relationship": {
+          "memory_a_id": "exp_09_mem_1",
+          "memory_b_id": "exp_09_mem_3",
+          "relationship": "unrelated",
+          "evidence_type": "metadata",
+          "concise_reason": "Metadata does not show a direct relationship between the memories.",
+          "relevant_fields": [],
+          "confidence": 0.6
+        },
+        "semantic_relationship": {
+          "memory_a_id": "exp_09_mem_1",
+          "memory_b_id": "exp_09_mem_3",
+          "relationship": "unrelated",
+          "concise_explanation": "The relocation stipend does not establish eligibility for this customer-visit dinner.",
+          "confidence": 0.92,
+          "requires_human_review": false
+        },
+        "relationships_agree": true,
+        "replay_evidence_exists_for_either": true,
+        "pairwise_replay_performed": false
+      },
+      {
+        "memory_a_id": "exp_09_mem_2",
+        "memory_b_id": "exp_09_mem_3",
+        "deterministic_relationship": {
+          "memory_a_id": "exp_09_mem_2",
+          "memory_b_id": "exp_09_mem_3",
+          "relationship": "unrelated",
+          "evidence_type": "metadata",
+          "concise_reason": "Metadata does not show a direct relationship between the memories.",
+          "relevant_fields": [],
+          "confidence": 0.6
+        },
+        "semantic_relationship": {
+          "memory_a_id": "exp_09_mem_2",
+          "memory_b_id": "exp_09_mem_3",
+          "relationship": "potentially_consistent",
+          "concise_explanation": "The solo-dinner receipt fits the policy condition requiring documented per-diem eligibility.",
+          "confidence": 0.99,
+          "requires_human_review": false
+        },
+        "relationships_agree": false,
+        "replay_evidence_exists_for_either": true,
+        "pairwise_replay_performed": false
+      }
+    ],
+    "summary": {
+      "top_ranked_memories": [
+        "exp_09_mem_1",
+        "exp_09_mem_2",
+        "exp_09_mem_3"
+      ],
+      "deterministic_concerns": [
+        "exp_09_mem_1: The retrieval priority 98 meets or exceeds the configured high-priority threshold 95., Metadata indicates the memory may be outside the current decision context.",
+        "exp_09_mem_2: The original agent cited this memory in its rationale., The memory is missing at least one validity boundary.",
+        "exp_09_mem_3: The original agent cited this memory in its rationale., The memory is missing at least one validity boundary."
+      ],
+      "semantic_concerns": [
+        "exp_09_mem_1: Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet has highest retrieval priority.",
+        "exp_09_mem_2: Current meal policy directly addresses documented per-diem requirements for solo dinners during customer travel.",
+        "exp_09_mem_3: Current receipt evidence directly supports that the dinner was employee-only."
+      ],
+      "contradictions_detected": [],
+      "replay_supported_memories": [],
+      "suspicious_memories_with_no_observed_influence": [
+        "exp_09_mem_1"
+      ],
+      "pairwise_testing_recommended": true,
+      "no_memory_or_prompt_only_testing_recommended": false,
+      "human_review_recommended": false
+    }
+  },
+  "approved_repair": {
+    "proposal_id": "proposal_ed823b08504b469196a0281159162451",
+    "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+    "scenario_id": "exp_09",
+    "domain": "workplace_expense",
+    "repair_type": "ESCALATE_PROMPT_OR_POLICY_REVIEW",
+    "target_memory_ids": [],
+    "before_state": {
+      "original_selected_action": "REQUEST_DOCUMENTATION",
+      "expected_action": "DENY_EXPENSE",
+      "memory_ids": [
+        "exp_09_mem_1",
+        "exp_09_mem_2",
+        "exp_09_mem_3"
+      ],
+      "memory_dependence_classification": "likely memory-independent",
+      "pairwise_memory_dependence_classification": "inconclusive",
+      "evidence_gate_passed": false
+    },
+    "proposed_after_state": {
+      "action": "none"
+    },
+    "replay_evidence": {
+      "replay_evidence_exists": true,
+      "behavior_change_observed": false,
+      "memory_dependent_failure": false,
+      "no_memory_control_preserved_wrong_action": true,
+      "strongest_intervention_type": null,
+      "strongest_target_memory_ids": [],
+      "strongest_influence_delta": null,
+      "strongest_action_distribution": {},
+      "support_explanation": "No behavior-changing replay evidence was observed.",
+      "evidence_references": {
+        "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+        "replay_artifact_ids": [
+          "investigation.json",
+          "memory-controls.json",
+          "pairwise-replay.json",
+          "suspicion-ranking.json"
+        ],
+        "contradiction_artifact_ids": [
+          "contradictions.json"
+        ],
+        "memory_snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+        "git_commit_hash": "4e050c06c5821190f11ea4abcf83b2e83449dc9c",
+        "prompt_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b"
+      }
+    },
+    "suspicion_evidence": {
+      "top_ranked_memory_ids": [
+        "exp_09_mem_1",
+        "exp_09_mem_2",
+        "exp_09_mem_3"
+      ],
+      "replay_supported_memory_ids": [],
+      "suspicious_without_observed_influence": [
+        "exp_09_mem_1"
+      ],
+      "semantic_hypotheses": [
+        "exp_09_mem_1: Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet has highest retrieval priority.",
+        "exp_09_mem_2: Current meal policy directly addresses documented per-diem requirements for solo dinners during customer travel.",
+        "exp_09_mem_3: Current receipt evidence directly supports that the dinner was employee-only."
+      ],
+      "evidence_references": {
+        "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+        "replay_artifact_ids": [
+          "investigation.json",
+          "memory-controls.json",
+          "pairwise-replay.json",
+          "suspicion-ranking.json"
+        ],
+        "contradiction_artifact_ids": [
+          "contradictions.json"
+        ],
+        "memory_snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+        "git_commit_hash": "4e050c06c5821190f11ea4abcf83b2e83449dc9c",
+        "prompt_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b"
+      }
+    },
+    "contradiction_evidence": {
+      "contradiction_pairs": [],
+      "contradictory_target_memory_ids": [],
+      "semantic_findings": [
+        "exp_09_mem_1/exp_09_mem_2: Relocation stipend eligibility does not address customer-travel meal policy.",
+        "exp_09_mem_1/exp_09_mem_3: The relocation stipend does not establish eligibility for this customer-visit dinner.",
+        "exp_09_mem_2/exp_09_mem_3: The solo-dinner receipt fits the policy condition requiring documented per-diem eligibility."
+      ],
+      "evidence_references": {
+        "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+        "replay_artifact_ids": [
+          "investigation.json",
+          "memory-controls.json",
+          "pairwise-replay.json",
+          "suspicion-ranking.json"
+        ],
+        "contradiction_artifact_ids": [
+          "contradictions.json"
+        ],
+        "memory_snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+        "git_commit_hash": "4e050c06c5821190f11ea4abcf83b2e83449dc9c",
+        "prompt_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b"
+      }
+    },
+    "support_validity_result": {
+      "decision_still_supported": false,
+      "outcome_correct": false,
+      "requires_human_review": true,
+      "support_explanation": "Replay evidence does not justify a memory edit. The failure appears memory-independent or remains unchanged without memory."
+    },
+    "expected_affected_scenarios": [],
+    "expected_behavior_change": "Escalate review of prompt or policy interpretation instead of editing memory.",
+    "risks": [
+      "Prompt-level problem mistaken for a memory problem.",
+      "Broader behavior changes could be hidden outside the memory layer.",
+      "Editing memories here could erase valid historical information without fixing the failure."
+    ],
+    "rollback_plan": "No memory change is applied. Re-run investigation after prompt or policy review.",
+    "concise_explanation": "Replay evidence does not justify a memory edit. The failure appears memory-independent or remains unchanged without memory.",
+    "confidence": 0.95,
+    "requires_human_approval": true,
+    "proposal_status": "approved",
+    "model": "deterministic-evidence-gate",
+    "prompt_version": "v1",
+    "created_at": "2026-07-19T02:45:31.961146Z",
+    "evidence_references": {
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "replay_artifact_ids": [
+        "investigation.json",
+        "memory-controls.json",
+        "pairwise-replay.json",
+        "suspicion-ranking.json"
+      ],
+      "contradiction_artifact_ids": [
+        "contradictions.json"
+      ],
+      "memory_snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+      "git_commit_hash": "4e050c06c5821190f11ea4abcf83b2e83449dc9c",
+      "prompt_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b"
+    },
+    "approval_record": {
+      "proposal_id": "proposal_ed823b08504b469196a0281159162451",
+      "approver_id": "local_user",
+      "approval_reason": "Approved to document the prompt/policy escalation path.",
+      "approved_at": "2026-07-19T02:45:32.024758Z",
+      "evidence_reviewed": [
+        "investigation.json",
+        "memory-controls.json",
+        "pairwise-replay.json",
+        "suspicion-ranking.json",
+        "contradictions.json"
+      ],
+      "acknowledged_risks": [
+        "Prompt-level problem mistaken for a memory problem.",
+        "Broader behavior changes could be hidden outside the memory layer.",
+        "Editing memories here could erase valid historical information without fixing the failure."
+      ],
+      "notes": null
+    },
+    "rejection_record": null,
+    "applied_version_id": null,
+    "reverted_version_id": null
+  },
+  "approval_record": {
+    "proposal_id": "proposal_ed823b08504b469196a0281159162451",
+    "approver_id": "local_user",
+    "approval_reason": "Approved to document the prompt/policy escalation path.",
+    "approved_at": "2026-07-19T02:45:32.024758Z",
+    "evidence_reviewed": [
+      "investigation.json",
+      "memory-controls.json",
+      "pairwise-replay.json",
+      "suspicion-ranking.json",
+      "contradictions.json"
+    ],
+    "acknowledged_risks": [
+      "Prompt-level problem mistaken for a memory problem.",
+      "Broader behavior changes could be hidden outside the memory layer.",
+      "Editing memories here could erase valid historical information without fixing the failure."
+    ],
+    "notes": null
+  },
+  "memory_diff": {
+    "diff_id": "diff_ea7a2a06bd5b483fb9615fe6dd6e47f3",
+    "mode": "proposal_preview",
+    "proposal_id": "proposal_ed823b08504b469196a0281159162451",
+    "from_version_id": "version_exp_09_root",
+    "to_version_id": null,
+    "target_memory_ids": [],
+    "added_fields": [],
+    "removed_fields": [],
+    "changed_fields": [],
+    "unchanged_fields": [
+      "exp_09_mem_1",
+      "exp_09_mem_2",
+      "exp_09_mem_3"
+    ],
+    "status_changes": [],
+    "validity_changes": [],
+    "entity_changes": [],
+    "priority_changes": [],
+    "superseding_relationship_changes": [],
+    "context_constraint_changes": [],
+    "generated_at": "2026-07-19T02:45:32.195429Z",
+    "snapshot_hash_before": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+    "snapshot_hash_after": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+    "evidence_references": [
+      "proposal_ed823b08504b469196a0281159162451",
+      "trace_0f0477f7cb5c497cb209414fce5e1016"
+    ],
+    "frontend_sections": []
+  },
+  "original_case_verification": {
+    "verification_id": "verification_f0d43ded66f044bc83ee518f52618bbd",
+    "proposal_id": "proposal_ed823b08504b469196a0281159162451",
+    "applied_version_id": null,
+    "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+    "scenario_id": "exp_09",
+    "domain": "workplace_expense",
+    "model": "fake-deterministic",
+    "prompt_version": "day1-5-v1",
+    "before_benchmark_id": "day1-mixed-baseline-summary.json",
+    "after_benchmark_id": "not-applicable",
+    "original_case_before": {
+      "scenario_id": "exp_09",
+      "selected_action": "AUTO_APPROVE",
+      "expected_action": "DENY_EXPENSE",
+      "passed": false,
+      "repaired": false,
+      "action_distribution": {
+        "AUTO_APPROVE": 1
+      },
+      "replay_stability": 1.0,
+      "supported_decision": false,
+      "infrastructure_errors": [],
+      "trace_id": "trace_f730094f2d624fdf803d78f9155c3afe",
+      "needs_human_review": false,
+      "action_changed": false
+    },
+    "original_case_after": {
+      "scenario_id": "exp_09",
+      "selected_action": "AUTO_APPROVE",
+      "expected_action": "DENY_EXPENSE",
+      "passed": false,
+      "repaired": false,
+      "action_distribution": {
+        "AUTO_APPROVE": 1
+      },
+      "replay_stability": 1.0,
+      "supported_decision": false,
+      "infrastructure_errors": [],
+      "trace_id": "trace_f730094f2d624fdf803d78f9155c3afe",
+      "needs_human_review": false,
+      "action_changed": false
+    },
+    "domain_before": {
+      "domain": "workplace_expense",
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 7,
+      "failed": 3,
+      "infrastructure_errors": 0,
+      "changed_scenarios": [
+        "exp_01",
+        "exp_02",
+        "exp_03",
+        "exp_04",
+        "exp_05",
+        "exp_06",
+        "exp_07",
+        "exp_08",
+        "exp_09",
+        "exp_10"
+      ]
+    },
+    "domain_after": {
+      "domain": "workplace_expense",
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 7,
+      "failed": 3,
+      "infrastructure_errors": 0,
+      "changed_scenarios": [
+        "exp_01",
+        "exp_02",
+        "exp_03",
+        "exp_04",
+        "exp_05",
+        "exp_06",
+        "exp_07",
+        "exp_08",
+        "exp_09",
+        "exp_10"
+      ]
+    },
+    "full_before": {
+      "attempted_scenarios": 30,
+      "evaluated_scenarios": 30,
+      "passed_scenarios": 22,
+      "failed_scenarios": 8,
+      "infrastructure_errors": 0,
+      "pass_rate": 0.7333333333333333
+    },
+    "full_after": {
+      "attempted_scenarios": 30,
+      "evaluated_scenarios": 30,
+      "passed_scenarios": 22,
+      "failed_scenarios": 8,
+      "infrastructure_errors": 0,
+      "pass_rate": 0.7333333333333333
+    },
+    "repaired_failures": [],
+    "persistent_failures": [
+      "exp_09"
+    ],
+    "new_regressions": [],
+    "unchanged_passes": [],
+    "unchanged_failures": [
+      "exp_09"
+    ],
+    "action_changes": [],
+    "tool_call_changes": [],
+    "support_validity_result": {
+      "decision_still_supported": false,
+      "outcome_correct": false,
+      "requires_human_review": true,
+      "support_explanation": "Memory repair is not applicable for prompt or policy escalation proposals."
+    },
+    "infrastructure_errors": [],
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "latency": {
+      "total_latency_ms": 0
+    },
+    "verdict": "MEMORY_REPAIR_NOT_APPLICABLE",
+    "created_at": "2026-07-19T02:45:32.341829Z"
+  },
+  "domain_verification": {
+    "verification_id": "verification_f0d43ded66f044bc83ee518f52618bbd",
+    "proposal_id": "proposal_ed823b08504b469196a0281159162451",
+    "applied_version_id": null,
+    "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+    "scenario_id": "exp_09",
+    "domain": "workplace_expense",
+    "model": "fake-deterministic",
+    "prompt_version": "day1-5-v1",
+    "before_benchmark_id": "day1-mixed-baseline-summary.json",
+    "after_benchmark_id": "not-applicable",
+    "original_case_before": {
+      "scenario_id": "exp_09",
+      "selected_action": "AUTO_APPROVE",
+      "expected_action": "DENY_EXPENSE",
+      "passed": false,
+      "repaired": false,
+      "action_distribution": {
+        "AUTO_APPROVE": 1
+      },
+      "replay_stability": 1.0,
+      "supported_decision": false,
+      "infrastructure_errors": [],
+      "trace_id": "trace_f730094f2d624fdf803d78f9155c3afe",
+      "needs_human_review": false,
+      "action_changed": false
+    },
+    "original_case_after": {
+      "scenario_id": "exp_09",
+      "selected_action": "AUTO_APPROVE",
+      "expected_action": "DENY_EXPENSE",
+      "passed": false,
+      "repaired": false,
+      "action_distribution": {
+        "AUTO_APPROVE": 1
+      },
+      "replay_stability": 1.0,
+      "supported_decision": false,
+      "infrastructure_errors": [],
+      "trace_id": "trace_f730094f2d624fdf803d78f9155c3afe",
+      "needs_human_review": false,
+      "action_changed": false
+    },
+    "domain_before": {
+      "domain": "workplace_expense",
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 7,
+      "failed": 3,
+      "infrastructure_errors": 0,
+      "changed_scenarios": [
+        "exp_01",
+        "exp_02",
+        "exp_03",
+        "exp_04",
+        "exp_05",
+        "exp_06",
+        "exp_07",
+        "exp_08",
+        "exp_09",
+        "exp_10"
+      ]
+    },
+    "domain_after": {
+      "domain": "workplace_expense",
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 7,
+      "failed": 3,
+      "infrastructure_errors": 0,
+      "changed_scenarios": [
+        "exp_01",
+        "exp_02",
+        "exp_03",
+        "exp_04",
+        "exp_05",
+        "exp_06",
+        "exp_07",
+        "exp_08",
+        "exp_09",
+        "exp_10"
+      ]
+    },
+    "full_before": {
+      "attempted_scenarios": 30,
+      "evaluated_scenarios": 30,
+      "passed_scenarios": 22,
+      "failed_scenarios": 8,
+      "infrastructure_errors": 0,
+      "pass_rate": 0.7333333333333333
+    },
+    "full_after": {
+      "attempted_scenarios": 30,
+      "evaluated_scenarios": 30,
+      "passed_scenarios": 22,
+      "failed_scenarios": 8,
+      "infrastructure_errors": 0,
+      "pass_rate": 0.7333333333333333
+    },
+    "repaired_failures": [],
+    "persistent_failures": [
+      "exp_09"
+    ],
+    "new_regressions": [],
+    "unchanged_passes": [],
+    "unchanged_failures": [
+      "exp_09"
+    ],
+    "action_changes": [],
+    "tool_call_changes": [],
+    "support_validity_result": {
+      "decision_still_supported": false,
+      "outcome_correct": false,
+      "requires_human_review": true,
+      "support_explanation": "Memory repair is not applicable for prompt or policy escalation proposals."
+    },
+    "infrastructure_errors": [],
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "latency": {
+      "total_latency_ms": 0
+    },
+    "verdict": "MEMORY_REPAIR_NOT_APPLICABLE",
+    "created_at": "2026-07-19T02:45:32.341829Z"
+  },
+  "full_benchmark_verification": {
+    "verification_id": "verification_f0d43ded66f044bc83ee518f52618bbd",
+    "proposal_id": "proposal_ed823b08504b469196a0281159162451",
+    "applied_version_id": null,
+    "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+    "scenario_id": "exp_09",
+    "domain": "workplace_expense",
+    "model": "fake-deterministic",
+    "prompt_version": "day1-5-v1",
+    "before_benchmark_id": "day1-mixed-baseline-summary.json",
+    "after_benchmark_id": "not-applicable",
+    "original_case_before": {
+      "scenario_id": "exp_09",
+      "selected_action": "AUTO_APPROVE",
+      "expected_action": "DENY_EXPENSE",
+      "passed": false,
+      "repaired": false,
+      "action_distribution": {
+        "AUTO_APPROVE": 1
+      },
+      "replay_stability": 1.0,
+      "supported_decision": false,
+      "infrastructure_errors": [],
+      "trace_id": "trace_f730094f2d624fdf803d78f9155c3afe",
+      "needs_human_review": false,
+      "action_changed": false
+    },
+    "original_case_after": {
+      "scenario_id": "exp_09",
+      "selected_action": "AUTO_APPROVE",
+      "expected_action": "DENY_EXPENSE",
+      "passed": false,
+      "repaired": false,
+      "action_distribution": {
+        "AUTO_APPROVE": 1
+      },
+      "replay_stability": 1.0,
+      "supported_decision": false,
+      "infrastructure_errors": [],
+      "trace_id": "trace_f730094f2d624fdf803d78f9155c3afe",
+      "needs_human_review": false,
+      "action_changed": false
+    },
+    "domain_before": {
+      "domain": "workplace_expense",
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 7,
+      "failed": 3,
+      "infrastructure_errors": 0,
+      "changed_scenarios": [
+        "exp_01",
+        "exp_02",
+        "exp_03",
+        "exp_04",
+        "exp_05",
+        "exp_06",
+        "exp_07",
+        "exp_08",
+        "exp_09",
+        "exp_10"
+      ]
+    },
+    "domain_after": {
+      "domain": "workplace_expense",
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 7,
+      "failed": 3,
+      "infrastructure_errors": 0,
+      "changed_scenarios": [
+        "exp_01",
+        "exp_02",
+        "exp_03",
+        "exp_04",
+        "exp_05",
+        "exp_06",
+        "exp_07",
+        "exp_08",
+        "exp_09",
+        "exp_10"
+      ]
+    },
+    "full_before": {
+      "attempted_scenarios": 30,
+      "evaluated_scenarios": 30,
+      "passed_scenarios": 22,
+      "failed_scenarios": 8,
+      "infrastructure_errors": 0,
+      "pass_rate": 0.7333333333333333
+    },
+    "full_after": {
+      "attempted_scenarios": 30,
+      "evaluated_scenarios": 30,
+      "passed_scenarios": 22,
+      "failed_scenarios": 8,
+      "infrastructure_errors": 0,
+      "pass_rate": 0.7333333333333333
+    },
+    "repaired_failures": [],
+    "persistent_failures": [
+      "exp_09"
+    ],
+    "new_regressions": [],
+    "unchanged_passes": [],
+    "unchanged_failures": [
+      "exp_09"
+    ],
+    "action_changes": [],
+    "tool_call_changes": [],
+    "support_validity_result": {
+      "decision_still_supported": false,
+      "outcome_correct": false,
+      "requires_human_review": true,
+      "support_explanation": "Memory repair is not applicable for prompt or policy escalation proposals."
+    },
+    "infrastructure_errors": [],
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "latency": {
+      "total_latency_ms": 0
+    },
+    "verdict": "MEMORY_REPAIR_NOT_APPLICABLE",
+    "created_at": "2026-07-19T02:45:32.341829Z"
+  },
+  "repaired_failures": [],
+  "new_regressions": [],
+  "support_validity_result": {
+    "decision_still_supported": false,
+    "outcome_correct": false,
+    "requires_human_review": true,
+    "support_explanation": "Replay evidence does not justify a memory edit. The failure appears memory-independent or remains unchanged without memory."
+  },
+  "verification_verdict": "MEMORY_REPAIR_NOT_APPLICABLE",
+  "known_limitations": [
+    "Prompt-level problem mistaken for a memory problem.",
+    "Broader behavior changes could be hidden outside the memory layer.",
+    "Editing memories here could erase valid historical information without fixing the failure.",
+    "Full benchmark verification was not applicable for this proposal.",
+    "No memory mutation was recommended; prompt or policy review is still required."
+  ],
+  "model": "deterministic-evidence-gate",
+  "prompt_version": "v1",
+  "benchmark_version": "day1-mixed-baseline-summary.json",
+  "git_commit_hash": "4e050c06c5821190f11ea4abcf83b2e83449dc9c",
+  "created_at": "2026-07-19T02:45:32.539936Z",
+  "content_hash": "df2015491be2c7d9f6efcb4a274788661fbe59b23b4bed4e61def5bccebb0ca2"
+}

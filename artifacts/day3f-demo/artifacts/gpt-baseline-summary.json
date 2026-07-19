@@ -1,0 +1,786 @@
+{
+  "model": "gpt-5.6",
+  "prompt_versions": {
+    "customer_support": "v1",
+    "devops": "v1",
+    "workplace_expense": "v1"
+  },
+  "run_configuration": {
+    "requested_model": "gpt-5.6",
+    "prompt_version": "v1",
+    "timeout_seconds": 30.0,
+    "max_retries": 2,
+    "cache_enabled": false,
+    "reasoning_effort": null,
+    "verbosity": "low",
+    "cache_dir": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\openai_cache"
+  },
+  "timestamp": "2026-07-18T05:42:23.462472Z",
+  "git_commit_hash": "8cc4d1f406870e33a3e3822db4d4f96ae2eac234",
+  "git_branch_state": "## main...origin/main [ahead 1]",
+  "overall": {
+    "attempted_scenarios": 30,
+    "evaluated_scenarios": 30,
+    "passed_scenarios": 28,
+    "failed_scenarios": 2,
+    "infrastructure_errors": 0,
+    "pass_rate": 0.9333333333333333
+  },
+  "results_by_domain": {
+    "customer_support": {
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 9,
+      "failed": 1,
+      "infrastructure_errors": 0
+    },
+    "devops": {
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 10,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "workplace_expense": {
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 9,
+      "failed": 1,
+      "infrastructure_errors": 0
+    }
+  },
+  "results_by_failure_category": {
+    "contradictory-memories": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "hallucinated-preference": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "incorrect-retrieval-priority": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "missing-expiration": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "newer-correct-memory-ignored": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "obsolete-policy": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "stale-memory": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 2,
+      "failed": 1,
+      "infrastructure_errors": 0
+    },
+    "two-memory-interaction": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "wrong-context-valid-memory": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 2,
+      "failed": 1,
+      "infrastructure_errors": 0
+    },
+    "wrong-user-memory": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    }
+  },
+  "failed_scenario_ids": [
+    "cs_01",
+    "exp_09"
+  ],
+  "scenario_results": [
+    {
+      "scenario_id": "cs_01",
+      "domain": "customer_support",
+      "failure_category": "stale-memory",
+      "trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "ASK_FOR_INFORMATION",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 7101,
+      "request_token_usage": {
+        "input_tokens": 1032,
+        "output_tokens": 158,
+        "total_tokens": 1190
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_02",
+      "domain": "customer_support",
+      "failure_category": "contradictory-memories",
+      "trace_id": "trace_12b21d5dd8c04e7eaeb0d677a9df2746",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_MANAGER_APPROVAL",
+      "actual_selected_action": "REQUEST_MANAGER_APPROVAL",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 3317,
+      "request_token_usage": {
+        "input_tokens": 996,
+        "output_tokens": 103,
+        "total_tokens": 1099
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_03",
+      "domain": "customer_support",
+      "failure_category": "wrong-user-memory",
+      "trace_id": "trace_336c07ddb65d46d9bd22d40bdfd7c07c",
+      "result_type": "evaluated",
+      "expected_action": "DENY_REFUND",
+      "actual_selected_action": "DENY_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2597,
+      "request_token_usage": {
+        "input_tokens": 989,
+        "output_tokens": 85,
+        "total_tokens": 1074
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_04",
+      "domain": "customer_support",
+      "failure_category": "hallucinated-preference",
+      "trace_id": "trace_8e5fecb8999548afa4d5b1fbd7a09f6e",
+      "result_type": "evaluated",
+      "expected_action": "ASK_FOR_INFORMATION",
+      "actual_selected_action": "ASK_FOR_INFORMATION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2658,
+      "request_token_usage": {
+        "input_tokens": 988,
+        "output_tokens": 103,
+        "total_tokens": 1091
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_05",
+      "domain": "customer_support",
+      "failure_category": "obsolete-policy",
+      "trace_id": "trace_c0d33546ddb145b290ac1d257bcb9feb",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 3395,
+      "request_token_usage": {
+        "input_tokens": 1028,
+        "output_tokens": 90,
+        "total_tokens": 1118
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_06",
+      "domain": "customer_support",
+      "failure_category": "missing-expiration",
+      "trace_id": "trace_469f52fcad554fc0a1dbd48b70d0ab65",
+      "result_type": "evaluated",
+      "expected_action": "DENY_REFUND",
+      "actual_selected_action": "DENY_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2442,
+      "request_token_usage": {
+        "input_tokens": 992,
+        "output_tokens": 79,
+        "total_tokens": 1071
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_07",
+      "domain": "customer_support",
+      "failure_category": "incorrect-retrieval-priority",
+      "trace_id": "trace_b180567283f04f34906a3ac396ad7741",
+      "result_type": "evaluated",
+      "expected_action": "ASK_FOR_INFORMATION",
+      "actual_selected_action": "ASK_FOR_INFORMATION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 11530,
+      "request_token_usage": {
+        "input_tokens": 1014,
+        "output_tokens": 95,
+        "total_tokens": 1109
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_08",
+      "domain": "customer_support",
+      "failure_category": "two-memory-interaction",
+      "trace_id": "trace_3cb9c22b0b73405f958c47d9848084c8",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 3100,
+      "request_token_usage": {
+        "input_tokens": 982,
+        "output_tokens": 69,
+        "total_tokens": 1051
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_09",
+      "domain": "customer_support",
+      "failure_category": "wrong-context-valid-memory",
+      "trace_id": "trace_6fa2ea36ca124b48aad2cb1ac2eef478",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_MANAGER_APPROVAL",
+      "actual_selected_action": "REQUEST_MANAGER_APPROVAL",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2488,
+      "request_token_usage": {
+        "input_tokens": 983,
+        "output_tokens": 109,
+        "total_tokens": 1092
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_10",
+      "domain": "customer_support",
+      "failure_category": "newer-correct-memory-ignored",
+      "trace_id": "trace_5ce4ebea7f7d4fed9819e9c659558aae",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 3275,
+      "request_token_usage": {
+        "input_tokens": 1002,
+        "output_tokens": 108,
+        "total_tokens": 1110
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_01",
+      "domain": "devops",
+      "failure_category": "stale-memory",
+      "trace_id": "trace_04f193c9eeb245fc8f37015c000e1f5d",
+      "result_type": "evaluated",
+      "expected_action": "DEPLOY_PRODUCTION",
+      "actual_selected_action": "DEPLOY_PRODUCTION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2270,
+      "request_token_usage": {
+        "input_tokens": 1047,
+        "output_tokens": 99,
+        "total_tokens": 1146
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_02",
+      "domain": "devops",
+      "failure_category": "contradictory-memories",
+      "trace_id": "trace_a7190d025a8641acb7da6d73857501f6",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_ENGINEER_REVIEW",
+      "actual_selected_action": "REQUEST_ENGINEER_REVIEW",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 3262,
+      "request_token_usage": {
+        "input_tokens": 1020,
+        "output_tokens": 111,
+        "total_tokens": 1131
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_03",
+      "domain": "devops",
+      "failure_category": "wrong-user-memory",
+      "trace_id": "trace_9fe4a33d9ebe4b90a0d8a15431a48b10",
+      "result_type": "evaluated",
+      "expected_action": "BLOCK_DEPLOYMENT",
+      "actual_selected_action": "BLOCK_DEPLOYMENT",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2735,
+      "request_token_usage": {
+        "input_tokens": 1009,
+        "output_tokens": 88,
+        "total_tokens": 1097
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_04",
+      "domain": "devops",
+      "failure_category": "hallucinated-preference",
+      "trace_id": "trace_0a933b6419ee4a409024b3c74973cb69",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_ENGINEER_REVIEW",
+      "actual_selected_action": "REQUEST_ENGINEER_REVIEW",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2669,
+      "request_token_usage": {
+        "input_tokens": 1004,
+        "output_tokens": 84,
+        "total_tokens": 1088
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_05",
+      "domain": "devops",
+      "failure_category": "obsolete-policy",
+      "trace_id": "trace_6434fa3480f149a8839b1ca0c9cd7b07",
+      "result_type": "evaluated",
+      "expected_action": "DEPLOY_PRODUCTION",
+      "actual_selected_action": "DEPLOY_PRODUCTION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 11218,
+      "request_token_usage": {
+        "input_tokens": 1009,
+        "output_tokens": 84,
+        "total_tokens": 1093
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_06",
+      "domain": "devops",
+      "failure_category": "missing-expiration",
+      "trace_id": "trace_4da8c595bd134fec8795272c8d3762a1",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_ENGINEER_REVIEW",
+      "actual_selected_action": "REQUEST_ENGINEER_REVIEW",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2645,
+      "request_token_usage": {
+        "input_tokens": 1004,
+        "output_tokens": 85,
+        "total_tokens": 1089
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_07",
+      "domain": "devops",
+      "failure_category": "incorrect-retrieval-priority",
+      "trace_id": "trace_0379a337b40741419c2bb701ca93c92a",
+      "result_type": "evaluated",
+      "expected_action": "DEPLOY_STAGING",
+      "actual_selected_action": "DEPLOY_STAGING",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2884,
+      "request_token_usage": {
+        "input_tokens": 1031,
+        "output_tokens": 115,
+        "total_tokens": 1146
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_08",
+      "domain": "devops",
+      "failure_category": "two-memory-interaction",
+      "trace_id": "trace_f7d5b17e08d647e7946452ae3b308756",
+      "result_type": "evaluated",
+      "expected_action": "BLOCK_DEPLOYMENT",
+      "actual_selected_action": "BLOCK_DEPLOYMENT",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 3625,
+      "request_token_usage": {
+        "input_tokens": 1004,
+        "output_tokens": 71,
+        "total_tokens": 1075
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_09",
+      "domain": "devops",
+      "failure_category": "wrong-context-valid-memory",
+      "trace_id": "trace_f3fb7128477041a5b032da6e723ff0ed",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_ENGINEER_REVIEW",
+      "actual_selected_action": "REQUEST_ENGINEER_REVIEW",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 3276,
+      "request_token_usage": {
+        "input_tokens": 1010,
+        "output_tokens": 82,
+        "total_tokens": 1092
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_10",
+      "domain": "devops",
+      "failure_category": "newer-correct-memory-ignored",
+      "trace_id": "trace_12c98503a1dc4960bc1b714ee8c65240",
+      "result_type": "evaluated",
+      "expected_action": "DEPLOY_PRODUCTION",
+      "actual_selected_action": "DEPLOY_PRODUCTION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2665,
+      "request_token_usage": {
+        "input_tokens": 1004,
+        "output_tokens": 103,
+        "total_tokens": 1107
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_01",
+      "domain": "workplace_expense",
+      "failure_category": "stale-memory",
+      "trace_id": "trace_940a34d9c86f4f25ae7d09ce3ad74fa9",
+      "result_type": "evaluated",
+      "expected_action": "AUTO_APPROVE",
+      "actual_selected_action": "AUTO_APPROVE",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 3063,
+      "request_token_usage": {
+        "input_tokens": 1034,
+        "output_tokens": 121,
+        "total_tokens": 1155
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_02",
+      "domain": "workplace_expense",
+      "failure_category": "contradictory-memories",
+      "trace_id": "trace_4148751a92c24310b13cfc2d9cbcedc7",
+      "result_type": "evaluated",
+      "expected_action": "ESCALATE_MANAGER",
+      "actual_selected_action": "ESCALATE_MANAGER",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2413,
+      "request_token_usage": {
+        "input_tokens": 1012,
+        "output_tokens": 106,
+        "total_tokens": 1118
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_03",
+      "domain": "workplace_expense",
+      "failure_category": "wrong-user-memory",
+      "trace_id": "trace_c73f256a07e640d9baff21533f1f61b0",
+      "result_type": "evaluated",
+      "expected_action": "DENY_EXPENSE",
+      "actual_selected_action": "DENY_EXPENSE",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 1954,
+      "request_token_usage": {
+        "input_tokens": 1006,
+        "output_tokens": 87,
+        "total_tokens": 1093
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_04",
+      "domain": "workplace_expense",
+      "failure_category": "hallucinated-preference",
+      "trace_id": "trace_fa0692b1e26c4effaf597730db296404",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_DOCUMENTATION",
+      "actual_selected_action": "REQUEST_DOCUMENTATION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2576,
+      "request_token_usage": {
+        "input_tokens": 1007,
+        "output_tokens": 100,
+        "total_tokens": 1107
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_05",
+      "domain": "workplace_expense",
+      "failure_category": "obsolete-policy",
+      "trace_id": "trace_5d1a58400bd24da3b28a1c0e72820d1f",
+      "result_type": "evaluated",
+      "expected_action": "ESCALATE_MANAGER",
+      "actual_selected_action": "ESCALATE_MANAGER",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2253,
+      "request_token_usage": {
+        "input_tokens": 1033,
+        "output_tokens": 91,
+        "total_tokens": 1124
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_06",
+      "domain": "workplace_expense",
+      "failure_category": "missing-expiration",
+      "trace_id": "trace_170b29915802436babac611597ceec71",
+      "result_type": "evaluated",
+      "expected_action": "DENY_EXPENSE",
+      "actual_selected_action": "DENY_EXPENSE",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2380,
+      "request_token_usage": {
+        "input_tokens": 1016,
+        "output_tokens": 84,
+        "total_tokens": 1100
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_07",
+      "domain": "workplace_expense",
+      "failure_category": "incorrect-retrieval-priority",
+      "trace_id": "trace_c6dcaa969b1c4327b25ded91d970c822",
+      "result_type": "evaluated",
+      "expected_action": "ESCALATE_MANAGER",
+      "actual_selected_action": "ESCALATE_MANAGER",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2818,
+      "request_token_usage": {
+        "input_tokens": 1025,
+        "output_tokens": 114,
+        "total_tokens": 1139
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_08",
+      "domain": "workplace_expense",
+      "failure_category": "two-memory-interaction",
+      "trace_id": "trace_36f60c93864c4a399f3e611227487575",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_DOCUMENTATION",
+      "actual_selected_action": "REQUEST_DOCUMENTATION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2430,
+      "request_token_usage": {
+        "input_tokens": 1001,
+        "output_tokens": 96,
+        "total_tokens": 1097
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_09",
+      "domain": "workplace_expense",
+      "failure_category": "wrong-context-valid-memory",
+      "trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "result_type": "evaluated",
+      "expected_action": "DENY_EXPENSE",
+      "actual_selected_action": "REQUEST_DOCUMENTATION",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 4633,
+      "request_token_usage": {
+        "input_tokens": 1024,
+        "output_tokens": 181,
+        "total_tokens": 1205
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_10",
+      "domain": "workplace_expense",
+      "failure_category": "newer-correct-memory-ignored",
+      "trace_id": "trace_08a9fd5cded1495597a79263fd55b43a",
+      "result_type": "evaluated",
+      "expected_action": "AUTO_APPROVE",
+      "actual_selected_action": "AUTO_APPROVE",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "live",
+      "latency_ms": 2398,
+      "request_token_usage": {
+        "input_tokens": 1030,
+        "output_tokens": 92,
+        "total_tokens": 1122
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": true,
+      "error": null
+    }
+  ],
+  "infrastructure_errors": [],
+  "totals": {
+    "total_latency_ms": 106070,
+    "request_token_usage": {
+      "input_tokens": 30336,
+      "output_tokens": 2993,
+      "total_tokens": 33329
+    },
+    "cached_original_token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "billable_api_calls": 30
+  },
+  "deep_dive_candidates": {
+    "contradictory-memories": null,
+    "two-memory-interaction": null,
+    "wrong-context-valid-memory": {
+      "scenario_id": "exp_09",
+      "expected_action": "DENY_EXPENSE",
+      "actual_selected_action": "REQUEST_DOCUMENTATION"
+    }
+  },
+  "expected_action_changes": "none",
+  "cases_loaded": 30
+}

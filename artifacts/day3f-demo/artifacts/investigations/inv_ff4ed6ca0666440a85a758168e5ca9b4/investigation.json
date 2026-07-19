@@ -1,0 +1,341 @@
+{
+  "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+  "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+  "scenario_id": "exp_09",
+  "domain": "workplace_expense",
+  "requested_model": "gpt-5.6",
+  "response_model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "prompt_content_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b",
+  "run_count": 3,
+  "mode": "fast",
+  "cache_policy": "cache disabled during replay to measure repeated live executions",
+  "original_selected_action": "REQUEST_DOCUMENTATION",
+  "expected_action": "DENY_EXPENSE",
+  "original_memory_snapshot": [
+    {
+      "memory_id": "exp_09_mem_1",
+      "entity_id": "employee_09",
+      "content": "Employee is eligible for a temporary relocation meal stipend.",
+      "source": "hr_note",
+      "created_at": "2026-03-15T00:00:00Z",
+      "valid_from": "2026-03-15T00:00:00Z",
+      "valid_until": "2026-08-15T00:00:00Z",
+      "status": "active",
+      "confidence": 0.92,
+      "retrieval_priority": 98,
+      "supersedes": [],
+      "tags": [
+        "wrong-context"
+      ],
+      "operational_metadata": {
+        "memory_role": "customer_status",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    },
+    {
+      "memory_id": "exp_09_mem_2",
+      "entity_id": "policy_meals",
+      "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+      "source": "policy_portal",
+      "created_at": "2026-01-22T00:00:00Z",
+      "valid_from": "2026-01-22T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.98,
+      "retrieval_priority": 91,
+      "supersedes": [],
+      "tags": [
+        "meal-policy"
+      ],
+      "operational_metadata": {
+        "memory_role": "policy",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    },
+    {
+      "memory_id": "exp_09_mem_3",
+      "entity_id": "report_09",
+      "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+      "source": "expense_system",
+      "created_at": "2026-07-14T00:00:00Z",
+      "valid_from": "2026-07-14T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.98,
+      "retrieval_priority": 87,
+      "supersedes": [],
+      "tags": [
+        "receipt"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    }
+  ],
+  "replay_results": [
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_1"
+        ],
+        "replacement_values": {},
+        "reason": "Remove exp_09_mem_1 from the snapshot"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_3472b02cc2664526a5f9a7403d1e01d1",
+        "trace_9b4af15875da4cdda9a79cb6d2355e9b",
+        "trace_0f118637644544ffbe01f1fdd4be2204"
+      ],
+      "intervention_trace_ids": [
+        "trace_4415fcfd6bd64d9db9913c2d2f38f709",
+        "trace_00aa26c101734124bc9cc8ed01427c2c",
+        "trace_e03cd18c1dc24987bc5de57e32af19ad"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_1"
+        ],
+        "replacement_values": {},
+        "reason": "Disable exp_09_mem_1 while preserving the rest of the snapshot"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_ffb3dd17e93549398cfa3fe8b44a5275",
+        "trace_10742bc6f3a344dd93522a72f3a828e5",
+        "trace_17a54d60c7744ce7bca0b8dc1875cd2f"
+      ],
+      "intervention_trace_ids": [
+        "trace_5aaacac797264b91bff15bbedc7c2a6a",
+        "trace_110c59145b6140a1b06cecc6d006b83d",
+        "trace_2ce8b45ea6c54a2fbb1a21916343745f"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_2"
+        ],
+        "replacement_values": {},
+        "reason": "Remove exp_09_mem_2 from the snapshot"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_d75c1c2d5a41429cbfa80b880fcfed55",
+        "trace_524b7e2ad34f429e9437123dd99b6070",
+        "trace_3b28dfdd3dd24581b88abf508b3b8a15"
+      ],
+      "intervention_trace_ids": [
+        "trace_ea19fdb3797b4a80bb584b2cabfe940d",
+        "trace_1ab5c62ae6bd47a48036b61b4e5aad86",
+        "trace_107aad39f557438e9de815630faa4b53"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_2"
+        ],
+        "replacement_values": {},
+        "reason": "Disable exp_09_mem_2 while preserving the rest of the snapshot"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_5aa1a7ef26484aeda40deed92f0be331",
+        "trace_e0aa906771cd42c1a6b8cb8b369ec077",
+        "trace_0cbd70489495483b9ce9c445632e4de7"
+      ],
+      "intervention_trace_ids": [
+        "trace_f84b8fa7b85d4b82978257331bf49970",
+        "trace_c4480d6ac3334d0aa88a1b23863ca141",
+        "trace_b064b7c72898409287f3c3abf67569a8"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "REMOVE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "Remove exp_09_mem_3 from the snapshot"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_4fd92c58e76d413aaa9a0464aea06425",
+        "trace_ba35196f037b43d593e62d4fb90a6118",
+        "trace_9d0fccf90dd14f899c8996a62c0a03ab"
+      ],
+      "intervention_trace_ids": [
+        "trace_6745b438a1cf43bd9fbc837019ce2af4",
+        "trace_bccc4090d9a446629881926f5dab8142",
+        "trace_98f5457655b04898a488420008380ceb"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "intervention": {
+        "intervention_type": "DISABLE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "Disable exp_09_mem_3 while preserving the rest of the snapshot"
+      },
+      "mode": "fast",
+      "total_runs": 3,
+      "successful_runs": 0,
+      "success_rate": 0.0,
+      "confidence_interval_low": 0.0,
+      "confidence_interval_high": 0.5615060804490177,
+      "original_successful_runs": 0,
+      "original_total_runs": 3,
+      "original_success_rate": 0.0,
+      "influence_delta": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "intervention_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "original_replay_stability": 1.0,
+      "intervention_replay_stability": 1.0,
+      "original_errors": [],
+      "intervention_errors": [],
+      "original_trace_ids": [
+        "trace_9a8effa1c81b4a029b8181d445e1cc56",
+        "trace_637ea508bb9a4ed88dda27cc2fd610c6",
+        "trace_ba3c32d77a67482494c5c4c38c24398b"
+      ],
+      "intervention_trace_ids": [
+        "trace_125500eccdcb44b1a37ac15f1a8c34b8",
+        "trace_2d080334aa044a03878b00b2e57fde55",
+        "trace_ab21f6498e374d82a3e18184b74e2abd"
+      ]
+    }
+  ],
+  "created_at": "2026-07-18T06:02:37.577455Z"
+}

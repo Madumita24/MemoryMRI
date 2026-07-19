@@ -12,6 +12,12 @@ from memory_mri.analysis.engine import InvestigationAnalysisEngine
 from memory_mri.benchmark_loader import load_benchmark_cases
 from memory_mri.config import OpenAISettings
 from memory_mri.db.session import create_sqlite_session
+from memory_mri.demo import (
+    load_demo_manifest,
+    reset_demo_state,
+    run_demo_workflow,
+    seed_demo_state,
+)
 from memory_mri.engine.benchmark import BenchmarkService
 from memory_mri.engine.counterfactual_replay import CounterfactualReplayEngine
 from memory_mri.engine.gpt_baseline import GPTBaselineService
@@ -147,6 +153,21 @@ def main() -> None:
     compare_benchmarks.add_argument("--before", required=True)
     compare_benchmarks.add_argument("--after", required=True)
 
+    seed_demo = subparsers.add_parser("seed-demo")
+    seed_demo.add_argument("--demo-root", default="../artifacts/day3f-demo")
+    seed_demo.add_argument("--seed-dir", default="../artifacts/demo-seed")
+    seed_demo.add_argument("--source-artifacts-dir", default="../artifacts")
+
+    reset_demo = subparsers.add_parser("reset-demo")
+    reset_demo.add_argument("--demo-root", default="../artifacts/day3f-demo")
+
+    run_demo = subparsers.add_parser("run-demo-workflow")
+    run_demo.add_argument("--demo-root", default="../artifacts/day3f-demo")
+    run_demo.add_argument("--seed-dir", default="../artifacts/demo-seed")
+    run_demo.add_argument("--source-artifacts-dir", default="../artifacts")
+    run_demo.add_argument("--summary-json-path", default="../artifacts/day3f-demo-summary.json")
+    run_demo.add_argument("--summary-md-path", default="../artifacts/day3f-demo-summary.md")
+
     args = parser.parse_args()
     data_dir = Path(args.data_dir).resolve()
     artifacts_dir = Path(args.artifacts_dir).resolve()
@@ -156,6 +177,52 @@ def main() -> None:
         return
     if args.command == "run-benchmark":
         _run_benchmark(args, data_dir)
+        return
+    if args.command == "seed-demo":
+        manifest = seed_demo_state(
+            demo_root=Path(args.demo_root).resolve(),
+            data_dir=data_dir,
+            source_artifacts_dir=Path(args.source_artifacts_dir).resolve(),
+            seed_dir=Path(args.seed_dir).resolve(),
+        )
+        print(manifest.model_dump_json(indent=2))
+        return
+    if args.command == "reset-demo":
+        demo_root = Path(args.demo_root).resolve()
+        reset_demo_state(demo_root)
+        print(
+            json.dumps(
+                {"reset": True, "demo_root": str(demo_root)},
+                indent=2,
+            )
+        )
+        return
+    if args.command == "run-demo-workflow":
+        demo_root = Path(args.demo_root).resolve()
+        if not (demo_root / "demo-manifest.json").exists():
+            seed_demo_state(
+                demo_root=demo_root,
+                data_dir=data_dir,
+                source_artifacts_dir=Path(args.source_artifacts_dir).resolve(),
+                seed_dir=Path(args.seed_dir).resolve(),
+            )
+        summary = run_demo_workflow(
+            manifest=load_demo_manifest(demo_root),
+            source_artifacts_dir=Path(args.source_artifacts_dir).resolve(),
+            summary_json_path=Path(args.summary_json_path).resolve(),
+            summary_md_path=Path(args.summary_md_path).resolve(),
+        )
+        print(
+            json.dumps(
+                summary,
+                indent=2,
+                default=lambda value: (
+                    value.model_dump(mode="json")
+                    if hasattr(value, "model_dump")
+                    else str(value)
+                ),
+            )
+        )
         return
     if args.command == "inspect-trace":
         trace = BenchmarkRepository(create_sqlite_session(args.database_url)).get_trace(

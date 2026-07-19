@@ -1,0 +1,199 @@
+{
+  "trace_id": "trace_68f7dd69609e48579f1c7c8f8f1793fb",
+  "scenario_id": "exp_09",
+  "run_id": "run_a54a3c405e1e452c8f65a42f63c0aa07",
+  "domain": "workplace_expense",
+  "user_input": "Approve my dinner expense during the customer visit.",
+  "agent_input": {
+    "schema_version": "day2a-v1",
+    "scenario_id": "exp_09",
+    "domain": "workplace_expense",
+    "user_input": "Approve my dinner expense during the customer visit.",
+    "allowed_actions": [
+      "AUTO_APPROVE",
+      "ESCALATE_MANAGER",
+      "ESCALATE_DIRECTOR",
+      "DENY_EXPENSE",
+      "REQUEST_DOCUMENTATION"
+    ],
+    "memories": [
+      {
+        "memory_id": "exp_09_mem_1",
+        "entity_id": "employee_09",
+        "content": "Employee is eligible for a temporary relocation meal stipend.",
+        "source": "hr_note",
+        "created_at": "2026-03-15T00:00:00Z",
+        "valid_from": "2026-03-15T00:00:00Z",
+        "valid_until": "2026-08-15T00:00:00Z",
+        "status": "active",
+        "confidence": 0.92,
+        "retrieval_priority": 98,
+        "supersedes": [],
+        "tags": [
+          "wrong-context"
+        ],
+        "operational_metadata": {
+          "memory_role": "customer_status",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    ]
+  },
+  "requested_model": "gpt-5.6",
+  "response_model": "gpt-5.6-sol",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "prompt_content_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b",
+  "agent_input_schema_version": "day2a-v1",
+  "request_hash": "fbc639b082e3762ce63fff9c026d641a781045f0a20c0939a7aced637402fe66",
+  "retrieved_memory_ids": [
+    "exp_09_mem_1"
+  ],
+  "memory_snapshot": [
+    {
+      "memory_id": "exp_09_mem_1",
+      "entity_id": "employee_09",
+      "content": "Employee is eligible for a temporary relocation meal stipend.",
+      "source": "hr_note",
+      "created_at": "2026-03-15T00:00:00Z",
+      "valid_from": "2026-03-15T00:00:00Z",
+      "valid_until": "2026-08-15T00:00:00Z",
+      "status": "active",
+      "confidence": 0.92,
+      "retrieval_priority": 98,
+      "supersedes": [],
+      "tags": [
+        "wrong-context"
+      ],
+      "operational_metadata": {
+        "memory_role": "customer_status",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    }
+  ],
+  "structured_response": {
+    "selected_action": "REQUEST_DOCUMENTATION",
+    "action_arguments": {},
+    "cited_memory_ids": [],
+    "concise_rationale": "No receipt, customer-visit details, or applicable expense-policy evidence was provided.",
+    "uncertainty": 0.12,
+    "needs_human_review": false
+  },
+  "selected_action": "REQUEST_DOCUMENTATION",
+  "action_arguments": {},
+  "cited_memory_ids": [],
+  "concise_rationale": "No receipt, customer-visit details, or applicable expense-policy evidence was provided.",
+  "uncertainty": 0.12,
+  "needs_human_review": false,
+  "tool_call": {
+    "response_id": "resp_0b3a07e380ae7cde006a5b2b92b5508198b45d3e2316326a67",
+    "cache_hit": false
+  },
+  "evaluation": {
+    "evaluator_result": {
+      "expected_action": "DENY_EXPENSE",
+      "selected_action": "REQUEST_DOCUMENTATION",
+      "passed": false,
+      "reason": "selected action differed"
+    }
+  },
+  "passed": false,
+  "execution_source": "live",
+  "cache_lookup_latency_ms": 0,
+  "original_model_latency_ms": null,
+  "latency_ms": 5071,
+  "token_usage": {
+    "input_tokens": 659,
+    "output_tokens": 118,
+    "total_tokens": 777
+  },
+  "request_token_usage": {
+    "input_tokens": 659,
+    "output_tokens": 118,
+    "total_tokens": 777
+  },
+  "cached_original_token_usage": null,
+  "billable_api_call": true,
+  "cache": {
+    "enabled": false,
+    "request_hash": "fbc639b082e3762ce63fff9c026d641a781045f0a20c0939a7aced637402fe66",
+    "hit": false,
+    "cache_path": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\openai_cache\\fbc639b082e3762ce63fff9c026d641a781045f0a20c0939a7aced637402fe66.json",
+    "cached_at": null
+  },
+  "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+  "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+  "replay_intervention": {
+    "intervention_type": "ISOLATE_MEMORY",
+    "target_memory_ids": [
+      "exp_09_mem_1"
+    ],
+    "replacement_values": {},
+    "reason": "Retain only exp_09_mem_1 in the snapshot",
+    "intervention_id": "intervention_0ef9619e48d3400da9902f3de621393c",
+    "before_states": {
+      "exp_09_mem_1": {
+        "memory_id": "exp_09_mem_1",
+        "entity_id": "employee_09",
+        "content": "Employee is eligible for a temporary relocation meal stipend.",
+        "source": "hr_note",
+        "created_at": "2026-03-15T00:00:00Z",
+        "valid_from": "2026-03-15T00:00:00Z",
+        "valid_until": "2026-08-15T00:00:00Z",
+        "status": "active",
+        "confidence": 0.92,
+        "retrieval_priority": 98,
+        "supersedes": [],
+        "tags": [
+          "wrong-context"
+        ],
+        "operational_metadata": {
+          "memory_role": "customer_status",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    },
+    "after_states": {
+      "exp_09_mem_1": {
+        "memory_id": "exp_09_mem_1",
+        "entity_id": "employee_09",
+        "content": "Employee is eligible for a temporary relocation meal stipend.",
+        "source": "hr_note",
+        "created_at": "2026-03-15T00:00:00Z",
+        "valid_from": "2026-03-15T00:00:00Z",
+        "valid_until": "2026-08-15T00:00:00Z",
+        "status": "active",
+        "confidence": 0.92,
+        "retrieval_priority": 98,
+        "supersedes": [],
+        "tags": [
+          "wrong-context"
+        ],
+        "operational_metadata": {
+          "memory_role": "customer_status",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    },
+    "unchanged_input_hash": "8ebf98887b4aef53072ffeb68594c5d8229a13a931c63bc071451838b51a50a7",
+    "model": "gpt-5.6",
+    "prompt_version": "v1",
+    "inference_configuration": {
+      "model": "gpt-5.6",
+      "timeout_seconds": 30.0,
+      "max_retries": 2,
+      "cache_enabled": false,
+      "prompt_version": "v1",
+      "reasoning_effort": null,
+      "verbosity": "low"
+    },
+    "created_at": "2026-07-18T07:30:22.002660Z"
+  },
+  "replay_role": "isolate-memory_intervention",
+  "error": null,
+  "created_at": "2026-07-18T07:30:31.582380Z"
+}

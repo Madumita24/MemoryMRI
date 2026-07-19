@@ -1,0 +1,77 @@
+{
+  "version_id": "version_exp_09_root",
+  "parent_version_id": null,
+  "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+  "proposal_id": null,
+  "scenario_id": "exp_09",
+  "created_at": "2026-07-18T06:02:37.577455Z",
+  "created_by": "system",
+  "memory_snapshot": [
+    {
+      "memory_id": "exp_09_mem_1",
+      "entity_id": "employee_09",
+      "content": "Employee is eligible for a temporary relocation meal stipend.",
+      "source": "hr_note",
+      "created_at": "2026-03-15T00:00:00Z",
+      "valid_from": "2026-03-15T00:00:00Z",
+      "valid_until": "2026-08-15T00:00:00Z",
+      "status": "active",
+      "confidence": 0.92,
+      "retrieval_priority": 98,
+      "supersedes": [],
+      "tags": [
+        "wrong-context"
+      ],
+      "operational_metadata": {
+        "memory_role": "customer_status",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    },
+    {
+      "memory_id": "exp_09_mem_2",
+      "entity_id": "policy_meals",
+      "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+      "source": "policy_portal",
+      "created_at": "2026-01-22T00:00:00Z",
+      "valid_from": "2026-01-22T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.98,
+      "retrieval_priority": 91,
+      "supersedes": [],
+      "tags": [
+        "meal-policy"
+      ],
+      "operational_metadata": {
+        "memory_role": "policy",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    },
+    {
+      "memory_id": "exp_09_mem_3",
+      "entity_id": "report_09",
+      "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+      "source": "expense_system",
+      "created_at": "2026-07-14T00:00:00Z",
+      "valid_from": "2026-07-14T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.98,
+      "retrieval_priority": 87,
+      "supersedes": [],
+      "tags": [
+        "receipt"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    }
+  ],
+  "snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+  "change_summary": "Immutable original investigation snapshot.",
+  "status": "active"
+}

@@ -1,0 +1,195 @@
+{
+  "trace_id": "trace_e972eeb9b9d4499499e401d3e177ef8e",
+  "scenario_id": "cs_01",
+  "run_id": "run_3d012a16de6a4e00adcb7f1c4cd9ebdc",
+  "domain": "customer_support",
+  "user_input": "I was charged twice for order 8821 and need the duplicate reversed.",
+  "agent_input": {
+    "schema_version": "day2a-v1",
+    "scenario_id": "cs_01",
+    "domain": "customer_support",
+    "user_input": "I was charged twice for order 8821 and need the duplicate reversed.",
+    "allowed_actions": [
+      "ISSUE_REFUND",
+      "REQUEST_MANAGER_APPROVAL",
+      "DENY_REFUND",
+      "ASK_FOR_INFORMATION"
+    ],
+    "memories": [
+      {
+        "memory_id": "cs_01_mem_1",
+        "entity_id": "customer_8821",
+        "content": "Old 2024 pilot note said duplicate-charge refunds required manager approval.",
+        "source": "legacy_policy_sync",
+        "created_at": "2024-02-01T00:00:00Z",
+        "valid_from": "2024-02-01T00:00:00Z",
+        "valid_until": "2024-12-31T00:00:00Z",
+        "status": "stale",
+        "confidence": 0.81,
+        "retrieval_priority": 99,
+        "supersedes": [],
+        "tags": [
+          "refund",
+          "duplicate-charge",
+          "legacy"
+        ],
+        "operational_metadata": {
+          "memory_role": "legacy_policy",
+          "entity_match": true,
+          "temporal_scope": "outdated"
+        }
+      },
+      {
+        "memory_id": "cs_01_mem_3",
+        "entity_id": "order_8821",
+        "content": "Billing ledger shows two settled charges within one minute for the same order.",
+        "source": "billing_ledger",
+        "created_at": "2026-07-01T09:00:00Z",
+        "valid_from": "2026-07-01T09:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.99,
+        "retrieval_priority": 70,
+        "supersedes": [],
+        "tags": [
+          "evidence"
+        ],
+        "operational_metadata": {
+          "memory_role": "evidence",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    ]
+  },
+  "requested_model": "gpt-5.6",
+  "response_model": "gpt-5.6-sol",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "prompt_content_hash": "146b6c39f0df027da7f2294ba51e23f87835ecb8b59c2681c315fed51d2a8d11",
+  "agent_input_schema_version": "day2a-v1",
+  "request_hash": "2d449f97d1523058bf4b69c9c99adc38cf92039bcdfd12d4c8bef025f0c5eb39",
+  "retrieved_memory_ids": [
+    "cs_01_mem_1",
+    "cs_01_mem_3"
+  ],
+  "memory_snapshot": [
+    {
+      "memory_id": "cs_01_mem_1",
+      "entity_id": "customer_8821",
+      "content": "Old 2024 pilot note said duplicate-charge refunds required manager approval.",
+      "source": "legacy_policy_sync",
+      "created_at": "2024-02-01T00:00:00Z",
+      "valid_from": "2024-02-01T00:00:00Z",
+      "valid_until": "2024-12-31T00:00:00Z",
+      "status": "stale",
+      "confidence": 0.81,
+      "retrieval_priority": 99,
+      "supersedes": [],
+      "tags": [
+        "refund",
+        "duplicate-charge",
+        "legacy"
+      ],
+      "operational_metadata": {
+        "memory_role": "legacy_policy",
+        "entity_match": true,
+        "temporal_scope": "outdated"
+      }
+    },
+    {
+      "memory_id": "cs_01_mem_3",
+      "entity_id": "order_8821",
+      "content": "Billing ledger shows two settled charges within one minute for the same order.",
+      "source": "billing_ledger",
+      "created_at": "2026-07-01T09:00:00Z",
+      "valid_from": "2026-07-01T09:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.99,
+      "retrieval_priority": 70,
+      "supersedes": [],
+      "tags": [
+        "evidence"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    }
+  ],
+  "structured_response": {
+    "selected_action": "ISSUE_REFUND",
+    "action_arguments": {
+      "order_id": "8821",
+      "refund_reason": "duplicate settled charge"
+    },
+    "cited_memory_ids": [
+      "cs_01_mem_3"
+    ],
+    "concise_rationale": "Current billing evidence confirms two settled charges for the same order; the approval requirement is stale and expired.",
+    "uncertainty": 0.02,
+    "needs_human_review": false
+  },
+  "selected_action": "ISSUE_REFUND",
+  "action_arguments": {
+    "order_id": "8821",
+    "refund_reason": "duplicate settled charge"
+  },
+  "cited_memory_ids": [
+    "cs_01_mem_3"
+  ],
+  "concise_rationale": "Current billing evidence confirms two settled charges for the same order; the approval requirement is stale and expired.",
+  "uncertainty": 0.02,
+  "needs_human_review": false,
+  "tool_call": {
+    "response_id": "resp_01fb7fee6d10e44a006a5b1e59babc8198890b759f65dfcdfb",
+    "cache_hit": false
+  },
+  "evaluation": {
+    "evaluator_result": {
+      "expected_action": "ISSUE_REFUND",
+      "selected_action": "ISSUE_REFUND",
+      "passed": true,
+      "reason": "selected action matched expected action"
+    }
+  },
+  "passed": true,
+  "execution_source": "live",
+  "cache_lookup_latency_ms": 0,
+  "original_model_latency_ms": null,
+  "latency_ms": 4989,
+  "token_usage": {
+    "input_tokens": 836,
+    "output_tokens": 162,
+    "total_tokens": 998
+  },
+  "request_token_usage": {
+    "input_tokens": 836,
+    "output_tokens": 162,
+    "total_tokens": 998
+  },
+  "cached_original_token_usage": null,
+  "billable_api_call": true,
+  "cache": {
+    "enabled": false,
+    "request_hash": "2d449f97d1523058bf4b69c9c99adc38cf92039bcdfd12d4c8bef025f0c5eb39",
+    "hit": false,
+    "cache_path": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\openai_cache\\2d449f97d1523058bf4b69c9c99adc38cf92039bcdfd12d4c8bef025f0c5eb39.json",
+    "cached_at": null
+  },
+  "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+  "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+  "replay_intervention": {
+    "intervention_type": "REMOVE_MEMORY",
+    "target_memory_ids": [
+      "cs_01_mem_2"
+    ],
+    "replacement_values": {},
+    "reason": "Remove cs_01_mem_2 from the snapshot"
+  },
+  "replay_role": "replay_intervention",
+  "error": null,
+  "created_at": "2026-07-18T06:34:06.736641Z"
+}

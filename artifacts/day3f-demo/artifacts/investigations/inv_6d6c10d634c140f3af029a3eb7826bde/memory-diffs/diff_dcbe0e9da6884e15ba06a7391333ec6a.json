@@ -1,0 +1,108 @@
+{
+  "diff_id": "diff_dcbe0e9da6884e15ba06a7391333ec6a",
+  "mode": "proposal_preview",
+  "proposal_id": "proposal_bf551979f6ea4313893c45a505967b91",
+  "from_version_id": "version_cs_01_root",
+  "to_version_id": null,
+  "target_memory_ids": [
+    "cs_01_mem_2"
+  ],
+  "added_fields": [
+    {
+      "memory_id": "cs_01_mem_2",
+      "field_path": "operational_metadata.human_confirmation_note",
+      "before": {
+        "__memory_mri_absent__": true
+      },
+      "after": "Human confirmation required before modifying or removing this memory.",
+      "change_type": "added",
+      "risk_level": "low",
+      "concise_explanation": "Adds `operational_metadata.human_confirmation_note` to the operational snapshot."
+    },
+    {
+      "memory_id": "cs_01_mem_2",
+      "field_path": "operational_metadata.requires_human_confirmation",
+      "before": {
+        "__memory_mri_absent__": true
+      },
+      "after": true,
+      "change_type": "added",
+      "risk_level": "low",
+      "concise_explanation": "Adds `operational_metadata.requires_human_confirmation` to the operational snapshot."
+    }
+  ],
+  "removed_fields": [],
+  "changed_fields": [],
+  "unchanged_fields": [
+    "cs_01_mem_1",
+    "cs_01_mem_3"
+  ],
+  "status_changes": [],
+  "validity_changes": [],
+  "entity_changes": [],
+  "priority_changes": [],
+  "superseding_relationship_changes": [],
+  "context_constraint_changes": [
+    {
+      "memory_id": "cs_01_mem_2",
+      "field_path": "operational_metadata.human_confirmation_note",
+      "before": {
+        "__memory_mri_absent__": true
+      },
+      "after": "Human confirmation required before modifying or removing this memory.",
+      "change_type": "added",
+      "risk_level": "low",
+      "concise_explanation": "Adds `operational_metadata.human_confirmation_note` to the operational snapshot."
+    },
+    {
+      "memory_id": "cs_01_mem_2",
+      "field_path": "operational_metadata.requires_human_confirmation",
+      "before": {
+        "__memory_mri_absent__": true
+      },
+      "after": true,
+      "change_type": "added",
+      "risk_level": "low",
+      "concise_explanation": "Adds `operational_metadata.requires_human_confirmation` to the operational snapshot."
+    }
+  ],
+  "generated_at": "2026-07-19T01:48:02.383384Z",
+  "snapshot_hash_before": "a1bff8657db2c84231cf5e68ff288acc19ebc2c6269587c5ef532fc609aa8a4d",
+  "snapshot_hash_after": "953935da8588a62aeda3b7b7ef6e99c4085912d82fc2a4bda8e16a5228a2a506",
+  "evidence_references": [
+    "proposal_bf551979f6ea4313893c45a505967b91",
+    "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c"
+  ],
+  "frontend_sections": [
+    {
+      "memory_id": "cs_01_mem_2",
+      "summary": "2 structured field change(s) detected.",
+      "changed_fields": [],
+      "added_fields": [
+        {
+          "memory_id": "cs_01_mem_2",
+          "field_path": "operational_metadata.human_confirmation_note",
+          "before": {
+            "__memory_mri_absent__": true
+          },
+          "after": "Human confirmation required before modifying or removing this memory.",
+          "change_type": "added",
+          "risk_level": "low",
+          "concise_explanation": "Adds `operational_metadata.human_confirmation_note` to the operational snapshot."
+        },
+        {
+          "memory_id": "cs_01_mem_2",
+          "field_path": "operational_metadata.requires_human_confirmation",
+          "before": {
+            "__memory_mri_absent__": true
+          },
+          "after": true,
+          "change_type": "added",
+          "risk_level": "low",
+          "concise_explanation": "Adds `operational_metadata.requires_human_confirmation` to the operational snapshot."
+        }
+      ],
+      "removed_fields": []
+    }
+  ]
+}

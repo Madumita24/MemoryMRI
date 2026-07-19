@@ -1,0 +1,128 @@
+{
+  "verification_id": "verification_f0d43ded66f044bc83ee518f52618bbd",
+  "proposal_id": "proposal_ed823b08504b469196a0281159162451",
+  "applied_version_id": null,
+  "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+  "scenario_id": "exp_09",
+  "domain": "workplace_expense",
+  "model": "fake-deterministic",
+  "prompt_version": "day1-5-v1",
+  "before_benchmark_id": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\day3f-demo\\artifacts\\day1-mixed-baseline-summary.json",
+  "after_benchmark_id": "not-applicable",
+  "original_case_before": {
+    "scenario_id": "exp_09",
+    "selected_action": "AUTO_APPROVE",
+    "expected_action": "DENY_EXPENSE",
+    "passed": false,
+    "repaired": false,
+    "action_distribution": {
+      "AUTO_APPROVE": 1
+    },
+    "replay_stability": 1.0,
+    "supported_decision": false,
+    "infrastructure_errors": [],
+    "trace_id": "trace_f730094f2d624fdf803d78f9155c3afe",
+    "needs_human_review": false,
+    "action_changed": false
+  },
+  "original_case_after": {
+    "scenario_id": "exp_09",
+    "selected_action": "AUTO_APPROVE",
+    "expected_action": "DENY_EXPENSE",
+    "passed": false,
+    "repaired": false,
+    "action_distribution": {
+      "AUTO_APPROVE": 1
+    },
+    "replay_stability": 1.0,
+    "supported_decision": false,
+    "infrastructure_errors": [],
+    "trace_id": "trace_f730094f2d624fdf803d78f9155c3afe",
+    "needs_human_review": false,
+    "action_changed": false
+  },
+  "domain_before": {
+    "domain": "workplace_expense",
+    "attempted": 10,
+    "evaluated": 10,
+    "passed": 7,
+    "failed": 3,
+    "infrastructure_errors": 0,
+    "changed_scenarios": [
+      "exp_01",
+      "exp_02",
+      "exp_03",
+      "exp_04",
+      "exp_05",
+      "exp_06",
+      "exp_07",
+      "exp_08",
+      "exp_09",
+      "exp_10"
+    ]
+  },
+  "domain_after": {
+    "domain": "workplace_expense",
+    "attempted": 10,
+    "evaluated": 10,
+    "passed": 7,
+    "failed": 3,
+    "infrastructure_errors": 0,
+    "changed_scenarios": [
+      "exp_01",
+      "exp_02",
+      "exp_03",
+      "exp_04",
+      "exp_05",
+      "exp_06",
+      "exp_07",
+      "exp_08",
+      "exp_09",
+      "exp_10"
+    ]
+  },
+  "full_before": {
+    "attempted_scenarios": 30,
+    "evaluated_scenarios": 30,
+    "passed_scenarios": 22,
+    "failed_scenarios": 8,
+    "infrastructure_errors": 0,
+    "pass_rate": 0.7333333333333333
+  },
+  "full_after": {
+    "attempted_scenarios": 30,
+    "evaluated_scenarios": 30,
+    "passed_scenarios": 22,
+    "failed_scenarios": 8,
+    "infrastructure_errors": 0,
+    "pass_rate": 0.7333333333333333
+  },
+  "repaired_failures": [],
+  "persistent_failures": [
+    "exp_09"
+  ],
+  "new_regressions": [],
+  "unchanged_passes": [],
+  "unchanged_failures": [
+    "exp_09"
+  ],
+  "action_changes": [],
+  "tool_call_changes": [],
+  "support_validity_result": {
+    "decision_still_supported": false,
+    "outcome_correct": false,
+    "requires_human_review": true,
+    "support_explanation": "Memory repair is not applicable for prompt or policy escalation proposals."
+  },
+  "infrastructure_errors": [],
+  "token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  },
+  "latency": {
+    "total_latency_ms": 0
+  },
+  "verdict": "MEMORY_REPAIR_NOT_APPLICABLE",
+  "created_at": "2026-07-19T02:45:32.341829Z"
+}

@@ -1,0 +1,14 @@
+{
+  "demo_root": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\day3f-demo",
+  "database_url": "sqlite:///C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\day3f-demo\\memory_mri_demo.db",
+  "data_dir": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\benchmark\\data",
+  "artifacts_dir": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\day3f-demo\\artifacts",
+  "seed_dir": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\demo-seed",
+  "cs_01_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+  "cs_01_investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+  "cs_01_proposal_id": "proposal_bf551979f6ea4313893c45a505967b91",
+  "cs_01_artifact_id": "artifact_2eeca7add7ca4e0194280e37c0835b43",
+  "exp_09_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+  "exp_09_investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+  "exp_09_artifact_id": "artifact_d70a75d09c59496fbf98f85a039b8f8d"
+}

@@ -1,0 +1,484 @@
+{
+  "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+  "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+  "scenario_id": "exp_09",
+  "original_snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+  "no_memory_control": {
+    "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+    "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+    "scenario_id": "exp_09",
+    "control_type": "no-memory",
+    "target_memory_id": null,
+    "intervention": {
+      "intervention_type": "REMOVE_ALL_MEMORIES",
+      "target_memory_ids": [
+        "exp_09_mem_1",
+        "exp_09_mem_2",
+        "exp_09_mem_3"
+      ],
+      "replacement_values": {},
+      "reason": "Remove all memories from the snapshot",
+      "intervention_id": "intervention_ada179903d2b4af686d4858cfa3890c6",
+      "before_states": {
+        "exp_09_mem_1": {
+          "memory_id": "exp_09_mem_1",
+          "entity_id": "employee_09",
+          "content": "Employee is eligible for a temporary relocation meal stipend.",
+          "source": "hr_note",
+          "created_at": "2026-03-15T00:00:00Z",
+          "valid_from": "2026-03-15T00:00:00Z",
+          "valid_until": "2026-08-15T00:00:00Z",
+          "status": "active",
+          "confidence": 0.92,
+          "retrieval_priority": 98,
+          "supersedes": [],
+          "tags": [
+            "wrong-context"
+          ],
+          "operational_metadata": {
+            "memory_role": "customer_status",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        "exp_09_mem_2": {
+          "memory_id": "exp_09_mem_2",
+          "entity_id": "policy_meals",
+          "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+          "source": "policy_portal",
+          "created_at": "2026-01-22T00:00:00Z",
+          "valid_from": "2026-01-22T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "confidence": 0.98,
+          "retrieval_priority": 91,
+          "supersedes": [],
+          "tags": [
+            "meal-policy"
+          ],
+          "operational_metadata": {
+            "memory_role": "policy",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        },
+        "exp_09_mem_3": {
+          "memory_id": "exp_09_mem_3",
+          "entity_id": "report_09",
+          "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+          "source": "expense_system",
+          "created_at": "2026-07-14T00:00:00Z",
+          "valid_from": "2026-07-14T00:00:00Z",
+          "valid_until": null,
+          "status": "active",
+          "confidence": 0.98,
+          "retrieval_priority": 87,
+          "supersedes": [],
+          "tags": [
+            "receipt"
+          ],
+          "operational_metadata": {
+            "memory_role": "evidence",
+            "entity_match": true,
+            "temporal_scope": "current"
+          }
+        }
+      },
+      "after_states": {},
+      "unchanged_input_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "model": "gpt-5.6",
+      "prompt_version": "v1",
+      "inference_configuration": {
+        "model": "gpt-5.6",
+        "timeout_seconds": 30.0,
+        "max_retries": 2,
+        "cache_enabled": false,
+        "prompt_version": "v1",
+        "reasoning_effort": null,
+        "verbosity": "low"
+      },
+      "created_at": "2026-07-18T07:29:56.096363Z"
+    },
+    "original_successful_runs": 0,
+    "original_total_evaluated_runs": 3,
+    "original_success_rate": 0.0,
+    "original_action_distribution": {
+      "REQUEST_DOCUMENTATION": 3
+    },
+    "control_successful_runs": 0,
+    "control_total_evaluated_runs": 3,
+    "control_success_rate": 0.0,
+    "control_action_distribution": {
+      "REQUEST_DOCUMENTATION": 3
+    },
+    "replay_stability": 1.0,
+    "infrastructure_error_count": 0,
+    "token_usage": {
+      "input_tokens": 1407,
+      "output_tokens": 259,
+      "total_tokens": 1666
+    },
+    "latency_ms": 12084,
+    "support_validity": {
+      "outcome_correct": false,
+      "decision_still_supported": false,
+      "support_explanation": "The intervention removed all memories, so the resulting decision is unsupported by memory evidence.",
+      "requires_human_review": true
+    },
+    "original_trace_ids": [
+      "trace_d191fe57def34cfb85b5411279d31846",
+      "trace_e8ea8615b7c4475986b83b3c940abdc5",
+      "trace_6a10761076494d4f8d3fee8ad9798474"
+    ],
+    "control_trace_ids": [
+      "trace_f9b82f55262c48698e7db39e1c2f01fd",
+      "trace_cb71aac9fc954f1c8cfe0d56d73306c5",
+      "trace_8b002a2a12f84bddbfdcdb2392c569f2"
+    ]
+  },
+  "isolation_controls": [
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "control_type": "isolate-memory",
+      "target_memory_id": "exp_09_mem_1",
+      "intervention": {
+        "intervention_type": "ISOLATE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_1"
+        ],
+        "replacement_values": {},
+        "reason": "Retain only exp_09_mem_1 in the snapshot",
+        "intervention_id": "intervention_0ef9619e48d3400da9902f3de621393c",
+        "before_states": {
+          "exp_09_mem_1": {
+            "memory_id": "exp_09_mem_1",
+            "entity_id": "employee_09",
+            "content": "Employee is eligible for a temporary relocation meal stipend.",
+            "source": "hr_note",
+            "created_at": "2026-03-15T00:00:00Z",
+            "valid_from": "2026-03-15T00:00:00Z",
+            "valid_until": "2026-08-15T00:00:00Z",
+            "status": "active",
+            "confidence": 0.92,
+            "retrieval_priority": 98,
+            "supersedes": [],
+            "tags": [
+              "wrong-context"
+            ],
+            "operational_metadata": {
+              "memory_role": "customer_status",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {
+          "exp_09_mem_1": {
+            "memory_id": "exp_09_mem_1",
+            "entity_id": "employee_09",
+            "content": "Employee is eligible for a temporary relocation meal stipend.",
+            "source": "hr_note",
+            "created_at": "2026-03-15T00:00:00Z",
+            "valid_from": "2026-03-15T00:00:00Z",
+            "valid_until": "2026-08-15T00:00:00Z",
+            "status": "active",
+            "confidence": 0.92,
+            "retrieval_priority": 98,
+            "supersedes": [],
+            "tags": [
+              "wrong-context"
+            ],
+            "operational_metadata": {
+              "memory_role": "customer_status",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "unchanged_input_hash": "8ebf98887b4aef53072ffeb68594c5d8229a13a931c63bc071451838b51a50a7",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:30:22.002660Z"
+      },
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "control_successful_runs": 0,
+      "control_total_evaluated_runs": 3,
+      "control_success_rate": 0.0,
+      "control_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 1977,
+        "output_tokens": 409,
+        "total_tokens": 2386
+      },
+      "latency_ms": 15312,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "original_trace_ids": [
+        "trace_76cc84a66282468184d6611c801f0c77",
+        "trace_7b4ca1a44b3340058591c199313d6222",
+        "trace_4eec130882ad4b5a82a4d4233a416990"
+      ],
+      "control_trace_ids": [
+        "trace_7fccb07f5b8c4c7f8938eb4800adb1d5",
+        "trace_68f7dd69609e48579f1c7c8f8f1793fb",
+        "trace_e918c5f2f9984b5d972216c767d8afcd"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "control_type": "isolate-memory",
+      "target_memory_id": "exp_09_mem_2",
+      "intervention": {
+        "intervention_type": "ISOLATE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_2"
+        ],
+        "replacement_values": {},
+        "reason": "Retain only exp_09_mem_2 in the snapshot",
+        "intervention_id": "intervention_aad69c7b18bc429baeb9de714e31cf51",
+        "before_states": {
+          "exp_09_mem_2": {
+            "memory_id": "exp_09_mem_2",
+            "entity_id": "policy_meals",
+            "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+            "source": "policy_portal",
+            "created_at": "2026-01-22T00:00:00Z",
+            "valid_from": "2026-01-22T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.98,
+            "retrieval_priority": 91,
+            "supersedes": [],
+            "tags": [
+              "meal-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {
+          "exp_09_mem_2": {
+            "memory_id": "exp_09_mem_2",
+            "entity_id": "policy_meals",
+            "content": "Employee-only dinners during customer travel are not reimbursable unless within per-diem rules and documented.",
+            "source": "policy_portal",
+            "created_at": "2026-01-22T00:00:00Z",
+            "valid_from": "2026-01-22T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.98,
+            "retrieval_priority": 91,
+            "supersedes": [],
+            "tags": [
+              "meal-policy"
+            ],
+            "operational_metadata": {
+              "memory_role": "policy",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "unchanged_input_hash": "2a29e2eb5ae4f989943cf83b0ccac136544550055ce1ec5b3e4e20e6a9010668",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:30:54.509590Z"
+      },
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "control_successful_runs": 0,
+      "control_total_evaluated_runs": 3,
+      "control_success_rate": 0.0,
+      "control_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 1968,
+        "output_tokens": 405,
+        "total_tokens": 2373
+      },
+      "latency_ms": 14961,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "original_trace_ids": [
+        "trace_2cb02e81d59a4e88b404a8676543c733",
+        "trace_f97c64af04b14aada94e5030a63fa66c",
+        "trace_545fc29a46b845e8bb597380a1067d62"
+      ],
+      "control_trace_ids": [
+        "trace_d4e3d56b8f3b4287a8494b860b635cd0",
+        "trace_a22f9b601dcd44998e73c00056e1634c",
+        "trace_d201c5e898b44135923f527371ec6c04"
+      ]
+    },
+    {
+      "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "scenario_id": "exp_09",
+      "control_type": "isolate-memory",
+      "target_memory_id": "exp_09_mem_3",
+      "intervention": {
+        "intervention_type": "ISOLATE_MEMORY",
+        "target_memory_ids": [
+          "exp_09_mem_3"
+        ],
+        "replacement_values": {},
+        "reason": "Retain only exp_09_mem_3 in the snapshot",
+        "intervention_id": "intervention_0544c229016744eab09b2b8e1b3f8bfa",
+        "before_states": {
+          "exp_09_mem_3": {
+            "memory_id": "exp_09_mem_3",
+            "entity_id": "report_09",
+            "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+            "source": "expense_system",
+            "created_at": "2026-07-14T00:00:00Z",
+            "valid_from": "2026-07-14T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.98,
+            "retrieval_priority": 87,
+            "supersedes": [],
+            "tags": [
+              "receipt"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "after_states": {
+          "exp_09_mem_3": {
+            "memory_id": "exp_09_mem_3",
+            "entity_id": "report_09",
+            "content": "Receipt is for a solo dinner costing $96 with no client attendee names listed.",
+            "source": "expense_system",
+            "created_at": "2026-07-14T00:00:00Z",
+            "valid_from": "2026-07-14T00:00:00Z",
+            "valid_until": null,
+            "status": "active",
+            "confidence": 0.98,
+            "retrieval_priority": 87,
+            "supersedes": [],
+            "tags": [
+              "receipt"
+            ],
+            "operational_metadata": {
+              "memory_role": "evidence",
+              "entity_match": true,
+              "temporal_scope": "current"
+            }
+          }
+        },
+        "unchanged_input_hash": "a515f49b6a56c98d6d242c992e0c8deb71267ae4b4b63640a528b14edfc3fbe8",
+        "model": "gpt-5.6",
+        "prompt_version": "v1",
+        "inference_configuration": {
+          "model": "gpt-5.6",
+          "timeout_seconds": 30.0,
+          "max_retries": 2,
+          "cache_enabled": false,
+          "prompt_version": "v1",
+          "reasoning_effort": null,
+          "verbosity": "low"
+        },
+        "created_at": "2026-07-18T07:31:25.495324Z"
+      },
+      "original_successful_runs": 0,
+      "original_total_evaluated_runs": 3,
+      "original_success_rate": 0.0,
+      "original_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "control_successful_runs": 0,
+      "control_total_evaluated_runs": 3,
+      "control_success_rate": 0.0,
+      "control_action_distribution": {
+        "REQUEST_DOCUMENTATION": 3
+      },
+      "replay_stability": 1.0,
+      "infrastructure_error_count": 0,
+      "token_usage": {
+        "input_tokens": 1953,
+        "output_tokens": 465,
+        "total_tokens": 2418
+      },
+      "latency_ms": 14813,
+      "support_validity": {
+        "outcome_correct": false,
+        "decision_still_supported": false,
+        "support_explanation": "The intervention did not reach the expected action.",
+        "requires_human_review": false
+      },
+      "original_trace_ids": [
+        "trace_6a673c7279ff4a9ca826e6b76d9b44a2",
+        "trace_8baf7819894b44c9b353bf264a726c9f",
+        "trace_a6745a6eb42c4102957d7db856855d6c"
+      ],
+      "control_trace_ids": [
+        "trace_52c67ce70c6d460cacad20f055cf8ec7",
+        "trace_e129f918596440019714d5a5bff25be3",
+        "trace_be37fa3bf7c849759be1e81257eab267"
+      ]
+    }
+  ],
+  "memory_dependence_classification": "likely memory-independent",
+  "model": "gpt-5.6",
+  "prompt_version": "v1",
+  "api_usage": {
+    "input_tokens": 7305,
+    "output_tokens": 1538,
+    "total_tokens": 8843
+  },
+  "git_commit_hash": "016a9b5f3e10457c60c4424dc1108c325db7b626",
+  "created_at": "2026-07-18T07:31:40.451196Z"
+}

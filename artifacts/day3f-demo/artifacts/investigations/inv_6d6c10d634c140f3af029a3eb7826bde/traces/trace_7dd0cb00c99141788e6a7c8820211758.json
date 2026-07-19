@@ -1,0 +1,248 @@
+{
+  "trace_id": "trace_7dd0cb00c99141788e6a7c8820211758",
+  "scenario_id": "cs_01",
+  "run_id": "run_55cb224b695747809316b2683dd73801",
+  "domain": "customer_support",
+  "user_input": "I was charged twice for order 8821 and need the duplicate reversed.",
+  "agent_input": {
+    "schema_version": "day2a-v1",
+    "scenario_id": "cs_01",
+    "domain": "customer_support",
+    "user_input": "I was charged twice for order 8821 and need the duplicate reversed.",
+    "allowed_actions": [
+      "ISSUE_REFUND",
+      "REQUEST_MANAGER_APPROVAL",
+      "DENY_REFUND",
+      "ASK_FOR_INFORMATION"
+    ],
+    "memories": [
+      {
+        "memory_id": "cs_01_mem_1",
+        "entity_id": "customer_8821",
+        "content": "Old 2024 pilot note said duplicate-charge refunds required manager approval.",
+        "source": "legacy_policy_sync",
+        "created_at": "2024-02-01T00:00:00Z",
+        "valid_from": "2024-02-01T00:00:00Z",
+        "valid_until": "2024-12-31T00:00:00Z",
+        "status": "stale",
+        "confidence": 0.81,
+        "retrieval_priority": 99,
+        "supersedes": [],
+        "tags": [
+          "refund",
+          "duplicate-charge",
+          "legacy"
+        ],
+        "operational_metadata": {
+          "memory_role": "legacy_policy",
+          "entity_match": true,
+          "temporal_scope": "outdated"
+        }
+      },
+      {
+        "memory_id": "cs_01_mem_2",
+        "entity_id": "customer_8821",
+        "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+        "source": "policy_portal",
+        "created_at": "2026-01-15T00:00:00Z",
+        "valid_from": "2026-01-15T00:00:00Z",
+        "valid_until": null,
+        "status": "invalid",
+        "confidence": 0.97,
+        "retrieval_priority": 80,
+        "supersedes": [
+          "cs_01_mem_1"
+        ],
+        "tags": [
+          "refund",
+          "current-policy"
+        ],
+        "operational_metadata": {
+          "memory_role": "policy",
+          "entity_match": true,
+          "temporal_scope": "current",
+          "disabled_for_replay": true
+        }
+      },
+      {
+        "memory_id": "cs_01_mem_3",
+        "entity_id": "order_8821",
+        "content": "Billing ledger shows two settled charges within one minute for the same order.",
+        "source": "billing_ledger",
+        "created_at": "2026-07-01T09:00:00Z",
+        "valid_from": "2026-07-01T09:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.99,
+        "retrieval_priority": 70,
+        "supersedes": [],
+        "tags": [
+          "evidence"
+        ],
+        "operational_metadata": {
+          "memory_role": "evidence",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    ]
+  },
+  "requested_model": "gpt-5.6",
+  "response_model": "gpt-5.6-sol",
+  "model": "gpt-5.6-sol",
+  "prompt_version": "v1",
+  "prompt_content_hash": "146b6c39f0df027da7f2294ba51e23f87835ecb8b59c2681c315fed51d2a8d11",
+  "agent_input_schema_version": "day2a-v1",
+  "request_hash": "a18626ddbbe621ea9b26dd60ec71e3b94e004346a6fa0d7008722e84f8e73957",
+  "retrieved_memory_ids": [
+    "cs_01_mem_1",
+    "cs_01_mem_2",
+    "cs_01_mem_3"
+  ],
+  "memory_snapshot": [
+    {
+      "memory_id": "cs_01_mem_1",
+      "entity_id": "customer_8821",
+      "content": "Old 2024 pilot note said duplicate-charge refunds required manager approval.",
+      "source": "legacy_policy_sync",
+      "created_at": "2024-02-01T00:00:00Z",
+      "valid_from": "2024-02-01T00:00:00Z",
+      "valid_until": "2024-12-31T00:00:00Z",
+      "status": "stale",
+      "confidence": 0.81,
+      "retrieval_priority": 99,
+      "supersedes": [],
+      "tags": [
+        "refund",
+        "duplicate-charge",
+        "legacy"
+      ],
+      "operational_metadata": {
+        "memory_role": "legacy_policy",
+        "entity_match": true,
+        "temporal_scope": "outdated"
+      }
+    },
+    {
+      "memory_id": "cs_01_mem_2",
+      "entity_id": "customer_8821",
+      "content": "Current refund playbook allows direct refund for verified duplicate charges under $500.",
+      "source": "policy_portal",
+      "created_at": "2026-01-15T00:00:00Z",
+      "valid_from": "2026-01-15T00:00:00Z",
+      "valid_until": null,
+      "status": "invalid",
+      "confidence": 0.97,
+      "retrieval_priority": 80,
+      "supersedes": [
+        "cs_01_mem_1"
+      ],
+      "tags": [
+        "refund",
+        "current-policy"
+      ],
+      "operational_metadata": {
+        "memory_role": "policy",
+        "entity_match": true,
+        "temporal_scope": "current",
+        "disabled_for_replay": true
+      }
+    },
+    {
+      "memory_id": "cs_01_mem_3",
+      "entity_id": "order_8821",
+      "content": "Billing ledger shows two settled charges within one minute for the same order.",
+      "source": "billing_ledger",
+      "created_at": "2026-07-01T09:00:00Z",
+      "valid_from": "2026-07-01T09:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.99,
+      "retrieval_priority": 70,
+      "supersedes": [],
+      "tags": [
+        "evidence"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    }
+  ],
+  "structured_response": {
+    "selected_action": "REQUEST_MANAGER_APPROVAL",
+    "action_arguments": {
+      "order_id": "8821",
+      "reason": "Verified duplicate charge; no valid current direct-refund policy"
+    },
+    "cited_memory_ids": [
+      "cs_01_mem_2",
+      "cs_01_mem_3"
+    ],
+    "concise_rationale": "The duplicate charge is verified, but the direct-refund policy memory is invalid, so approval is required.",
+    "uncertainty": 0.12,
+    "needs_human_review": true
+  },
+  "selected_action": "REQUEST_MANAGER_APPROVAL",
+  "action_arguments": {
+    "order_id": "8821",
+    "reason": "Verified duplicate charge; no valid current direct-refund policy"
+  },
+  "cited_memory_ids": [
+    "cs_01_mem_2",
+    "cs_01_mem_3"
+  ],
+  "concise_rationale": "The duplicate charge is verified, but the direct-refund policy memory is invalid, so approval is required.",
+  "uncertainty": 0.12,
+  "needs_human_review": true,
+  "tool_call": {
+    "response_id": "resp_0a1b44475c248ebd006a5b1e79dcdc819a90194e4f03386742",
+    "cache_hit": false
+  },
+  "evaluation": {
+    "evaluator_result": {
+      "expected_action": "ISSUE_REFUND",
+      "selected_action": "REQUEST_MANAGER_APPROVAL",
+      "passed": false,
+      "reason": "selected action differed"
+    }
+  },
+  "passed": false,
+  "execution_source": "live",
+  "cache_lookup_latency_ms": 0,
+  "original_model_latency_ms": null,
+  "latency_ms": 7349,
+  "token_usage": {
+    "input_tokens": 1041,
+    "output_tokens": 223,
+    "total_tokens": 1264
+  },
+  "request_token_usage": {
+    "input_tokens": 1041,
+    "output_tokens": 223,
+    "total_tokens": 1264
+  },
+  "cached_original_token_usage": null,
+  "billable_api_call": true,
+  "cache": {
+    "enabled": false,
+    "request_hash": "a18626ddbbe621ea9b26dd60ec71e3b94e004346a6fa0d7008722e84f8e73957",
+    "hit": false,
+    "cache_path": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\openai_cache\\a18626ddbbe621ea9b26dd60ec71e3b94e004346a6fa0d7008722e84f8e73957.json",
+    "cached_at": null
+  },
+  "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+  "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+  "replay_intervention": {
+    "intervention_type": "DISABLE_MEMORY",
+    "target_memory_ids": [
+      "cs_01_mem_2"
+    ],
+    "replacement_values": {},
+    "reason": "Disable cs_01_mem_2 while preserving the rest of the snapshot"
+  },
+  "replay_role": "replay_intervention",
+  "error": null,
+  "created_at": "2026-07-18T06:34:40.941617Z"
+}

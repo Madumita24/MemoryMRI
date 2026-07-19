@@ -1,0 +1,92 @@
+[
+  {
+    "audit_id": "audit_5293089de73d4a8695386b12197ea3c6",
+    "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+    "proposal_id": "proposal_ed823b08504b469196a0281159162451",
+    "scenario_id": "exp_09",
+    "event_type": "proposal_created",
+    "actor": "system",
+    "timestamp": "2026-07-19T02:45:31.964179Z",
+    "status_from": null,
+    "status_to": "proposed",
+    "snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+    "details": {
+      "repair_type": "ESCALATE_PROMPT_OR_POLICY_REVIEW"
+    }
+  },
+  {
+    "audit_id": "audit_ac1c386c24964968a96ab005f8942917",
+    "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+    "proposal_id": "proposal_ed823b08504b469196a0281159162451",
+    "scenario_id": "exp_09",
+    "event_type": "proposal_approved",
+    "actor": "local_user",
+    "timestamp": "2026-07-19T02:45:32.026236Z",
+    "status_from": "proposed",
+    "status_to": "approved",
+    "snapshot_hash": null,
+    "details": {
+      "approval_reason": "Approved to document the prompt/policy escalation path."
+    }
+  },
+  {
+    "audit_id": "audit_2cc6a0f7c04f44b0ab82289c0012291c",
+    "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+    "proposal_id": "proposal_ed823b08504b469196a0281159162451",
+    "scenario_id": "exp_09",
+    "event_type": "failed_transition",
+    "actor": "local_user",
+    "timestamp": "2026-07-19T02:45:32.116659Z",
+    "status_from": "approved",
+    "status_to": "approved",
+    "snapshot_hash": null,
+    "details": {
+      "message": "This proposal type must not modify memory or create a version."
+    }
+  },
+  {
+    "audit_id": "audit_d4f63d1dea98411a938f79d4a74a9e01",
+    "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+    "proposal_id": "proposal_e70b5e3300e945c3a06cbd9bda8cf49f",
+    "scenario_id": "exp_09",
+    "event_type": "proposal_created",
+    "actor": "system",
+    "timestamp": "2026-07-19T02:46:14.463648Z",
+    "status_from": null,
+    "status_to": "proposed",
+    "snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+    "details": {
+      "repair_type": "ESCALATE_PROMPT_OR_POLICY_REVIEW"
+    }
+  },
+  {
+    "audit_id": "audit_cbcc2f52afc14e2aa545c9ce65847e27",
+    "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+    "proposal_id": "proposal_e70b5e3300e945c3a06cbd9bda8cf49f",
+    "scenario_id": "exp_09",
+    "event_type": "proposal_approved",
+    "actor": "local_user",
+    "timestamp": "2026-07-19T02:46:14.534373Z",
+    "status_from": "proposed",
+    "status_to": "approved",
+    "snapshot_hash": null,
+    "details": {
+      "approval_reason": "Approved to document the prompt/policy escalation path."
+    }
+  },
+  {
+    "audit_id": "audit_24e0b16c093148c0a87699974376d226",
+    "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+    "proposal_id": "proposal_e70b5e3300e945c3a06cbd9bda8cf49f",
+    "scenario_id": "exp_09",
+    "event_type": "failed_transition",
+    "actor": "local_user",
+    "timestamp": "2026-07-19T02:46:14.590091Z",
+    "status_from": "approved",
+    "status_to": "approved",
+    "snapshot_hash": null,
+    "details": {
+      "message": "This proposal type must not modify memory or create a version."
+    }
+  }
+]

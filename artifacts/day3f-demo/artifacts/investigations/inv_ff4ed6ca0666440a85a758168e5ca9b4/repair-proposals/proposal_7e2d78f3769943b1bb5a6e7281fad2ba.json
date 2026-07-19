@@ -1,0 +1,140 @@
+{
+  "proposal_id": "proposal_7e2d78f3769943b1bb5a6e7281fad2ba",
+  "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4",
+  "scenario_id": "exp_09",
+  "domain": "workplace_expense",
+  "repair_type": "ESCALATE_PROMPT_OR_POLICY_REVIEW",
+  "target_memory_ids": [],
+  "before_state": {
+    "original_selected_action": "REQUEST_DOCUMENTATION",
+    "expected_action": "DENY_EXPENSE",
+    "memory_ids": [
+      "exp_09_mem_1",
+      "exp_09_mem_2",
+      "exp_09_mem_3"
+    ],
+    "memory_dependence_classification": "likely memory-independent",
+    "pairwise_memory_dependence_classification": "inconclusive",
+    "evidence_gate_passed": false
+  },
+  "proposed_after_state": {
+    "action": "none"
+  },
+  "replay_evidence": {
+    "replay_evidence_exists": true,
+    "behavior_change_observed": false,
+    "memory_dependent_failure": false,
+    "no_memory_control_preserved_wrong_action": true,
+    "strongest_intervention_type": null,
+    "strongest_target_memory_ids": [],
+    "strongest_influence_delta": null,
+    "strongest_action_distribution": {},
+    "support_explanation": "No behavior-changing replay evidence was observed.",
+    "evidence_references": {
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "replay_artifact_ids": [
+        "investigation.json",
+        "memory-controls.json",
+        "pairwise-replay.json",
+        "suspicion-ranking.json"
+      ],
+      "contradiction_artifact_ids": [
+        "contradictions.json"
+      ],
+      "memory_snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+      "git_commit_hash": "fad35a2f9c54cc45b5499e02523cba5af8a84645",
+      "prompt_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b"
+    }
+  },
+  "suspicion_evidence": {
+    "top_ranked_memory_ids": [
+      "exp_09_mem_1",
+      "exp_09_mem_2",
+      "exp_09_mem_3"
+    ],
+    "replay_supported_memory_ids": [],
+    "suspicious_without_observed_influence": [
+      "exp_09_mem_1"
+    ],
+    "semantic_hypotheses": [
+      "exp_09_mem_1: Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet has highest retrieval priority.",
+      "exp_09_mem_2: Current meal policy directly addresses documented per-diem requirements for solo dinners during customer travel.",
+      "exp_09_mem_3: Current receipt evidence directly supports that the dinner was employee-only."
+    ],
+    "evidence_references": {
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "replay_artifact_ids": [
+        "investigation.json",
+        "memory-controls.json",
+        "pairwise-replay.json",
+        "suspicion-ranking.json"
+      ],
+      "contradiction_artifact_ids": [
+        "contradictions.json"
+      ],
+      "memory_snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+      "git_commit_hash": "fad35a2f9c54cc45b5499e02523cba5af8a84645",
+      "prompt_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b"
+    }
+  },
+  "contradiction_evidence": {
+    "contradiction_pairs": [],
+    "contradictory_target_memory_ids": [],
+    "semantic_findings": [
+      "exp_09_mem_1/exp_09_mem_2: Relocation stipend eligibility does not address customer-travel meal policy.",
+      "exp_09_mem_1/exp_09_mem_3: The relocation stipend does not establish eligibility for this customer-visit dinner.",
+      "exp_09_mem_2/exp_09_mem_3: The solo-dinner receipt fits the policy condition requiring documented per-diem eligibility."
+    ],
+    "evidence_references": {
+      "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+      "replay_artifact_ids": [
+        "investigation.json",
+        "memory-controls.json",
+        "pairwise-replay.json",
+        "suspicion-ranking.json"
+      ],
+      "contradiction_artifact_ids": [
+        "contradictions.json"
+      ],
+      "memory_snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+      "git_commit_hash": "fad35a2f9c54cc45b5499e02523cba5af8a84645",
+      "prompt_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b"
+    }
+  },
+  "support_validity_result": {
+    "decision_still_supported": false,
+    "outcome_correct": false,
+    "requires_human_review": true,
+    "support_explanation": "Replay evidence does not justify a memory edit. The failure appears memory-independent or remains unchanged without memory."
+  },
+  "expected_affected_scenarios": [],
+  "expected_behavior_change": "Escalate review of prompt or policy interpretation instead of editing memory.",
+  "risks": [
+    "Prompt-level problem mistaken for a memory problem.",
+    "Broader behavior changes could be hidden outside the memory layer.",
+    "Editing memories here could erase valid historical information without fixing the failure."
+  ],
+  "rollback_plan": "No memory change is applied. Re-run investigation after prompt or policy review.",
+  "concise_explanation": "Replay evidence does not justify a memory edit. The failure appears memory-independent or remains unchanged without memory.",
+  "confidence": 0.95,
+  "requires_human_approval": true,
+  "proposal_status": "proposed",
+  "model": "deterministic-evidence-gate",
+  "prompt_version": "v1",
+  "created_at": "2026-07-19T00:36:45.936524Z",
+  "evidence_references": {
+    "parent_trace_id": "trace_0f0477f7cb5c497cb209414fce5e1016",
+    "replay_artifact_ids": [
+      "investigation.json",
+      "memory-controls.json",
+      "pairwise-replay.json",
+      "suspicion-ranking.json"
+    ],
+    "contradiction_artifact_ids": [
+      "contradictions.json"
+    ],
+    "memory_snapshot_hash": "e1b38fec942f412273ab82b1c49e40ccf5e7fdbbe8e7decddd4a64a471e99eb2",
+    "git_commit_hash": "fad35a2f9c54cc45b5499e02523cba5af8a84645",
+    "prompt_hash": "9f3798931265401f88c0da01fc476ff1ca06addc28021aaff28824ed41784d5b"
+  }
+}
