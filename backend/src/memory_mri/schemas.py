@@ -77,6 +77,16 @@ class RepairType(StrEnum):
     ESCALATE_PROMPT_OR_POLICY_REVIEW = "ESCALATE_PROMPT_OR_POLICY_REVIEW"
 
 
+class VerificationVerdict(StrEnum):
+    VERIFIED_IMPROVEMENT = "VERIFIED_IMPROVEMENT"
+    IMPROVEMENT_WITH_REGRESSIONS = "IMPROVEMENT_WITH_REGRESSIONS"
+    NO_MEASURABLE_CHANGE = "NO_MEASURABLE_CHANGE"
+    FAILED_TO_REPAIR = "FAILED_TO_REPAIR"
+    UNSUPPORTED_BEHAVIOR_CHANGE = "UNSUPPORTED_BEHAVIOR_CHANGE"
+    VERIFICATION_INCONCLUSIVE = "VERIFICATION_INCONCLUSIVE"
+    MEMORY_REPAIR_NOT_APPLICABLE = "MEMORY_REPAIR_NOT_APPLICABLE"
+
+
 class InterventionType(StrEnum):
     REMOVE_MEMORY = "REMOVE_MEMORY"
     DISABLE_MEMORY = "DISABLE_MEMORY"
@@ -712,6 +722,40 @@ class RepairProposal(BaseModel):
         if len(value) != len(set(value)):
             raise ValueError("list values must be unique")
         return value
+
+
+class VerificationRun(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    verification_id: str
+    proposal_id: str
+    applied_version_id: str | None = None
+    investigation_id: str
+    scenario_id: str
+    domain: DomainName
+    model: str
+    prompt_version: str
+    before_benchmark_id: str
+    after_benchmark_id: str
+    original_case_before: dict[str, Any]
+    original_case_after: dict[str, Any]
+    domain_before: dict[str, Any]
+    domain_after: dict[str, Any]
+    full_before: dict[str, Any]
+    full_after: dict[str, Any]
+    repaired_failures: list[str] = Field(default_factory=list)
+    persistent_failures: list[str] = Field(default_factory=list)
+    new_regressions: list[str] = Field(default_factory=list)
+    unchanged_passes: list[str] = Field(default_factory=list)
+    unchanged_failures: list[str] = Field(default_factory=list)
+    action_changes: list[dict[str, Any]] = Field(default_factory=list)
+    tool_call_changes: list[dict[str, Any]] = Field(default_factory=list)
+    support_validity_result: SupportValidityResult
+    infrastructure_errors: list[dict[str, Any]] = Field(default_factory=list)
+    token_usage: dict[str, int] = Field(default_factory=dict)
+    latency: dict[str, int] = Field(default_factory=dict)
+    verdict: VerificationVerdict
+    created_at: datetime
 
 
 class VerificationArtifact(BaseModel):

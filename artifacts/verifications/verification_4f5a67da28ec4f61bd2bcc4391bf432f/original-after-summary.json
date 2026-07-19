@@ -1,0 +1,62 @@
+{
+  "overall": {
+    "attempted_scenarios": 1,
+    "evaluated_scenarios": 1,
+    "passed_scenarios": 1,
+    "failed_scenarios": 0,
+    "infrastructure_errors": 0,
+    "pass_rate": 1.0
+  },
+  "results_by_domain": {
+    "customer_support": {
+      "attempted": 1,
+      "evaluated": 1,
+      "passed": 1,
+      "failed": 0,
+      "infrastructure_errors": 0
+    }
+  },
+  "results_by_failure_category": {
+    "stale-memory": {
+      "attempted": 1,
+      "evaluated": 1,
+      "passed": 1,
+      "failed": 0,
+      "infrastructure_errors": 0
+    }
+  },
+  "scenario_results": [
+    {
+      "scenario_id": "cs_01",
+      "domain": "customer_support",
+      "failure_category": "stale-memory",
+      "trace_id": "trace_ab2baca3a5f845b49671c7c9615053a4",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    }
+  ],
+  "infrastructure_errors": [],
+  "totals": {
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "latency": {
+      "total_latency_ms": 1
+    }
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "verification_id": "verification_4f5a67da28ec4f61bd2bcc4391bf432f",
+  "proposal_id": "proposal_bf551979f6ea4313893c45a505967b91",
+  "applied_version_id": "version_e5d391ef6ffe4d8396dc91ac84c1bf02",
+  "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+  "scenario_id": "cs_01",
+  "domain": "customer_support",
+  "model": "fake-deterministic",
+  "prompt_version": "day1-5-v1",
+  "before_benchmark_id": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\day1-mixed-baseline-summary.json",
+  "after_benchmark_id": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\verifications\\verification_4f5a67da28ec4f61bd2bcc4391bf432f\\original-after-summary.json",
+  "original_case_before": {
+    "scenario_id": "cs_01",
+    "selected_action": "ISSUE_REFUND",
+    "expected_action": "ISSUE_REFUND",
+    "passed": true,
+    "repaired": true,
+    "action_distribution": {
+      "ISSUE_REFUND": 1
+    },
+    "replay_stability": 1.0,
+    "supported_decision": true,
+    "infrastructure_errors": [],
+    "trace_id": "trace_fbc7975a808e49be989d94e773302059",
+    "needs_human_review": false,
+    "action_changed": false
+  },
+  "original_case_after": {
+    "scenario_id": "cs_01",
+    "selected_action": "ISSUE_REFUND",
+    "expected_action": "ISSUE_REFUND",
+    "passed": true,
+    "repaired": true,
+    "action_distribution": {
+      "ISSUE_REFUND": 1
+    },
+    "replay_stability": 1.0,
+    "supported_decision": true,
+    "infrastructure_errors": [],
+    "trace_id": "trace_ab2baca3a5f845b49671c7c9615053a4",
+    "needs_human_review": false,
+    "action_changed": false
+  },
+  "domain_before": {
+    "domain": "customer_support",
+    "attempted": 10,
+    "evaluated": 10,
+    "passed": 7,
+    "failed": 3,
+    "infrastructure_errors": 0,
+    "changed_scenarios": [
+      "cs_01",
+      "cs_02",
+      "cs_03",
+      "cs_04",
+      "cs_05",
+      "cs_06",
+      "cs_07",
+      "cs_08",
+      "cs_09",
+      "cs_10"
+    ]
+  },
+  "domain_after": {
+    "domain": "customer_support",
+    "attempted": 1,
+    "evaluated": 1,
+    "passed": 1,
+    "failed": 0,
+    "infrastructure_errors": 0,
+    "changed_scenarios": [
+      "cs_01"
+    ]
+  },
+  "full_before": {
+    "attempted_scenarios": 30,
+    "evaluated_scenarios": 30,
+    "passed_scenarios": 22,
+    "failed_scenarios": 8,
+    "infrastructure_errors": 0,
+    "pass_rate": 0.7333333333333333
+  },
+  "full_after": {
+    "attempted_scenarios": 1,
+    "evaluated_scenarios": 1,
+    "passed_scenarios": 1,
+    "failed_scenarios": 0,
+    "infrastructure_errors": 0,
+    "pass_rate": 1.0
+  },
+  "repaired_failures": [],
+  "persistent_failures": [],
+  "new_regressions": [],
+  "unchanged_passes": [
+    "cs_01"
+  ],
+  "unchanged_failures": [],
+  "action_changes": [],
+  "tool_call_changes": [
+    {
+      "scenario_id": "cs_01",
+      "before_trace_id": "trace_fbc7975a808e49be989d94e773302059",
+      "after_trace_id": "trace_ab2baca3a5f845b49671c7c9615053a4"
+    }
+  ],
+  "support_validity_result": {
+    "decision_still_supported": false,
+    "outcome_correct": true,
+    "requires_human_review": true,
+    "support_explanation": "The expected action was produced after repair, but the proposal evidence does not support treating that action as a safe automated decision."
+  },
+  "infrastructure_errors": [],
+  "token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  },
+  "latency": {
+    "total_latency_ms": 1
+  },
+  "verdict": "UNSUPPORTED_BEHAVIOR_CHANGE",
+  "created_at": "2026-07-19T02:02:16.321830Z"
+}

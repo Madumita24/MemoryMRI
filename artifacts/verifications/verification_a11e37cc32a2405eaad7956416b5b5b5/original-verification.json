@@ -1,0 +1,144 @@
+{
+  "verification_id": "verification_a11e37cc32a2405eaad7956416b5b5b5",
+  "proposal_id": "proposal_bf551979f6ea4313893c45a505967b91",
+  "applied_version_id": "version_e5d391ef6ffe4d8396dc91ac84c1bf02",
+  "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+  "scenario_id": "cs_01",
+  "domain": "customer_support",
+  "model": "gpt-5.6",
+  "prompt_version": "v1",
+  "before_benchmark_id": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\gpt-baseline-summary.json",
+  "after_benchmark_id": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\verifications\\verification_a11e37cc32a2405eaad7956416b5b5b5\\original-after-summary.json",
+  "original_case_before": {
+    "scenario_id": "cs_01",
+    "selected_action": "ASK_FOR_INFORMATION",
+    "expected_action": "ISSUE_REFUND",
+    "passed": false,
+    "repaired": false,
+    "action_distribution": {
+      "ASK_FOR_INFORMATION": 1
+    },
+    "replay_stability": 1.0,
+    "supported_decision": false,
+    "infrastructure_errors": [],
+    "trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+    "needs_human_review": false,
+    "action_changed": false
+  },
+  "original_case_after": {
+    "scenario_id": "cs_01",
+    "selected_action": null,
+    "expected_action": "ISSUE_REFUND",
+    "passed": null,
+    "repaired": false,
+    "action_distribution": {},
+    "replay_stability": 0.0,
+    "supported_decision": false,
+    "infrastructure_errors": [
+      {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    ],
+    "trace_id": "trace_aa9c244521ef4b5e84fe055d3430c35e",
+    "needs_human_review": false,
+    "action_changed": false
+  },
+  "domain_before": {
+    "domain": "customer_support",
+    "attempted": 10,
+    "evaluated": 10,
+    "passed": 9,
+    "failed": 1,
+    "infrastructure_errors": 0,
+    "changed_scenarios": [
+      "cs_01",
+      "cs_02",
+      "cs_03",
+      "cs_04",
+      "cs_05",
+      "cs_06",
+      "cs_07",
+      "cs_08",
+      "cs_09",
+      "cs_10"
+    ]
+  },
+  "domain_after": {
+    "domain": "customer_support",
+    "attempted": 1,
+    "evaluated": 0,
+    "passed": 0,
+    "failed": 0,
+    "infrastructure_errors": 1,
+    "changed_scenarios": [
+      "cs_01"
+    ]
+  },
+  "full_before": {
+    "attempted_scenarios": 30,
+    "evaluated_scenarios": 30,
+    "passed_scenarios": 28,
+    "failed_scenarios": 2,
+    "infrastructure_errors": 0,
+    "pass_rate": 0.9333333333333333
+  },
+  "full_after": {
+    "attempted_scenarios": 1,
+    "evaluated_scenarios": 0,
+    "passed_scenarios": 0,
+    "failed_scenarios": 0,
+    "infrastructure_errors": 1,
+    "pass_rate": null
+  },
+  "repaired_failures": [],
+  "persistent_failures": [],
+  "new_regressions": [],
+  "unchanged_passes": [],
+  "unchanged_failures": [],
+  "action_changes": [
+    {
+      "scenario_id": "cs_01",
+      "before_action": "ASK_FOR_INFORMATION",
+      "after_action": null,
+      "before_passed": false,
+      "after_passed": null
+    }
+  ],
+  "tool_call_changes": [
+    {
+      "scenario_id": "cs_01",
+      "before_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "after_trace_id": "trace_aa9c244521ef4b5e84fe055d3430c35e"
+    }
+  ],
+  "support_validity_result": {
+    "decision_still_supported": false,
+    "outcome_correct": false,
+    "requires_human_review": true,
+    "support_explanation": "The repaired version did not produce a supported correction."
+  },
+  "infrastructure_errors": [
+    {
+      "scenario_id": "cs_01",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  },
+  "latency": {
+    "total_latency_ms": 0
+  },
+  "verdict": "VERIFICATION_INCONCLUSIVE",
+  "created_at": "2026-07-19T02:03:29.334299Z"
+}

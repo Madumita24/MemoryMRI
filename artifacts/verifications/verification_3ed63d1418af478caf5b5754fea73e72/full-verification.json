@@ -1,0 +1,316 @@
+{
+  "verification_id": "verification_3ed63d1418af478caf5b5754fea73e72",
+  "proposal_id": "proposal_bf551979f6ea4313893c45a505967b91",
+  "applied_version_id": "version_e5d391ef6ffe4d8396dc91ac84c1bf02",
+  "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+  "scenario_id": "cs_01",
+  "domain": "customer_support",
+  "model": "fake-deterministic",
+  "prompt_version": "day1-5-v1",
+  "before_benchmark_id": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\day1-mixed-baseline-summary.json",
+  "after_benchmark_id": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\verifications\\verification_3ed63d1418af478caf5b5754fea73e72\\full-after-summary.json",
+  "original_case_before": {
+    "scenario_id": "cs_01",
+    "selected_action": "ISSUE_REFUND",
+    "expected_action": "ISSUE_REFUND",
+    "passed": true,
+    "repaired": true,
+    "action_distribution": {
+      "ISSUE_REFUND": 1
+    },
+    "replay_stability": 1.0,
+    "supported_decision": true,
+    "infrastructure_errors": [],
+    "trace_id": "trace_fbc7975a808e49be989d94e773302059",
+    "needs_human_review": false,
+    "action_changed": false
+  },
+  "original_case_after": {
+    "scenario_id": "cs_01",
+    "selected_action": "ISSUE_REFUND",
+    "expected_action": "ISSUE_REFUND",
+    "passed": true,
+    "repaired": true,
+    "action_distribution": {
+      "ISSUE_REFUND": 1
+    },
+    "replay_stability": 1.0,
+    "supported_decision": true,
+    "infrastructure_errors": [],
+    "trace_id": "trace_7fc2373a18394a14a27e82c35a093161",
+    "needs_human_review": false,
+    "action_changed": false
+  },
+  "domain_before": {
+    "domain": "customer_support",
+    "attempted": 10,
+    "evaluated": 10,
+    "passed": 7,
+    "failed": 3,
+    "infrastructure_errors": 0,
+    "changed_scenarios": [
+      "cs_01",
+      "cs_02",
+      "cs_03",
+      "cs_04",
+      "cs_05",
+      "cs_06",
+      "cs_07",
+      "cs_08",
+      "cs_09",
+      "cs_10"
+    ]
+  },
+  "domain_after": {
+    "domain": "customer_support",
+    "attempted": 10,
+    "evaluated": 10,
+    "passed": 7,
+    "failed": 3,
+    "infrastructure_errors": 0,
+    "changed_scenarios": [
+      "cs_01",
+      "cs_02",
+      "cs_03",
+      "cs_04",
+      "cs_05",
+      "cs_06",
+      "cs_07",
+      "cs_08",
+      "cs_09",
+      "cs_10"
+    ]
+  },
+  "full_before": {
+    "attempted_scenarios": 30,
+    "evaluated_scenarios": 30,
+    "passed_scenarios": 22,
+    "failed_scenarios": 8,
+    "infrastructure_errors": 0,
+    "pass_rate": 0.7333333333333333
+  },
+  "full_after": {
+    "attempted_scenarios": 30,
+    "evaluated_scenarios": 30,
+    "passed_scenarios": 22,
+    "failed_scenarios": 8,
+    "infrastructure_errors": 0,
+    "pass_rate": 0.7333333333333333
+  },
+  "repaired_failures": [],
+  "persistent_failures": [
+    "cs_02",
+    "cs_08",
+    "cs_09",
+    "dev_08",
+    "dev_09",
+    "exp_02",
+    "exp_08",
+    "exp_09"
+  ],
+  "new_regressions": [],
+  "unchanged_passes": [
+    "cs_01",
+    "cs_03",
+    "cs_04",
+    "cs_05",
+    "cs_06",
+    "cs_07",
+    "cs_10",
+    "dev_01",
+    "dev_02",
+    "dev_03",
+    "dev_04",
+    "dev_05",
+    "dev_06",
+    "dev_07",
+    "dev_10",
+    "exp_01",
+    "exp_03",
+    "exp_04",
+    "exp_05",
+    "exp_06",
+    "exp_07",
+    "exp_10"
+  ],
+  "unchanged_failures": [
+    "cs_02",
+    "cs_08",
+    "cs_09",
+    "dev_08",
+    "dev_09",
+    "exp_02",
+    "exp_08",
+    "exp_09"
+  ],
+  "action_changes": [],
+  "tool_call_changes": [
+    {
+      "scenario_id": "cs_01",
+      "before_trace_id": "trace_fbc7975a808e49be989d94e773302059",
+      "after_trace_id": "trace_7fc2373a18394a14a27e82c35a093161"
+    },
+    {
+      "scenario_id": "cs_02",
+      "before_trace_id": "trace_5411628614714e5da6ca8077990c3a72",
+      "after_trace_id": "trace_bb954824521e4d498ae05eb18c2175db"
+    },
+    {
+      "scenario_id": "cs_03",
+      "before_trace_id": "trace_0a65a68928c74543baf27a50ebd380b5",
+      "after_trace_id": "trace_2d9f1af802d042f9b72e347af425f7e7"
+    },
+    {
+      "scenario_id": "cs_04",
+      "before_trace_id": "trace_2cbe0d6bbfa04a9091456548102d08c8",
+      "after_trace_id": "trace_d8db057b943d4e02a11e615b54941e0e"
+    },
+    {
+      "scenario_id": "cs_05",
+      "before_trace_id": "trace_4dba63c176014e599f2548ca690bc8bc",
+      "after_trace_id": "trace_947c23ca43f1418fba84b605ef11ee17"
+    },
+    {
+      "scenario_id": "cs_06",
+      "before_trace_id": "trace_1971bbeab6084e3db292168a2c34b4fb",
+      "after_trace_id": "trace_5e28773a56c7472594a67d9c24223d5c"
+    },
+    {
+      "scenario_id": "cs_07",
+      "before_trace_id": "trace_f2701e269fbc4a41b10ef7af2a89b386",
+      "after_trace_id": "trace_f87a0180bab94ca3a5c93a2ffd2a4057"
+    },
+    {
+      "scenario_id": "cs_08",
+      "before_trace_id": "trace_6b3dbe9476db46ed8d364aea0ca186f5",
+      "after_trace_id": "trace_438630e0da2d4db9a2314c4a65eeea7f"
+    },
+    {
+      "scenario_id": "cs_09",
+      "before_trace_id": "trace_1af4b45721b64778bec09bff755ea317",
+      "after_trace_id": "trace_4112087f6e4741cd9d3402e14817a0ae"
+    },
+    {
+      "scenario_id": "cs_10",
+      "before_trace_id": "trace_1c8048d891ab495cac812db294f90796",
+      "after_trace_id": "trace_bc3ac817944f4b4490b261a93ac554d6"
+    },
+    {
+      "scenario_id": "dev_01",
+      "before_trace_id": "trace_afddeacdb3974c2c8188b70b2efe38a4",
+      "after_trace_id": "trace_cda2d9a416554c06828ed2205cbf3a50"
+    },
+    {
+      "scenario_id": "dev_02",
+      "before_trace_id": "trace_0ccbfb32da794327ac15fa123f457fce",
+      "after_trace_id": "trace_dad04ff93d654fcaa93211706d31bdeb"
+    },
+    {
+      "scenario_id": "dev_03",
+      "before_trace_id": "trace_2a27bb88359544dbb7b6d35d2f01c678",
+      "after_trace_id": "trace_4fcc801a498b45eea58c738dc0486fa8"
+    },
+    {
+      "scenario_id": "dev_04",
+      "before_trace_id": "trace_7fad598fee614ea5900c95318d863876",
+      "after_trace_id": "trace_cb4871338f6848dd9ef076f2588f22fe"
+    },
+    {
+      "scenario_id": "dev_05",
+      "before_trace_id": "trace_f7aa3933ecd24dbcb121a7d460a49fa2",
+      "after_trace_id": "trace_e824812395114607a70ec64b3fbc512b"
+    },
+    {
+      "scenario_id": "dev_06",
+      "before_trace_id": "trace_6340c7af87d2401c82d8c1d760096550",
+      "after_trace_id": "trace_01b58c23078440178d6ab600f5cd8f1c"
+    },
+    {
+      "scenario_id": "dev_07",
+      "before_trace_id": "trace_8e4ecfae6a59430fb2b6d2bda51b36c4",
+      "after_trace_id": "trace_b45d23c3830748cc8b6bc5ac1c2e5d92"
+    },
+    {
+      "scenario_id": "dev_08",
+      "before_trace_id": "trace_6c09bea864c54a59833c3a8d5ab2490b",
+      "after_trace_id": "trace_4f0ad0e3dfa24b73bcfdf8204418a1f2"
+    },
+    {
+      "scenario_id": "dev_09",
+      "before_trace_id": "trace_74c1782cf09b436bb00480e70a04eb6d",
+      "after_trace_id": "trace_808e76c801854c8db3105a060079633a"
+    },
+    {
+      "scenario_id": "dev_10",
+      "before_trace_id": "trace_6cc2eed7fd454e968da9a35da29e5477",
+      "after_trace_id": "trace_1ef70886f9ff4837a29545d325001b22"
+    },
+    {
+      "scenario_id": "exp_01",
+      "before_trace_id": "trace_10f34c36efd04b8588b571d04044057f",
+      "after_trace_id": "trace_c5c182fe95a449e581fb6aa0d1d3c157"
+    },
+    {
+      "scenario_id": "exp_02",
+      "before_trace_id": "trace_416f6e0195f746409f5dfa25dffa3366",
+      "after_trace_id": "trace_8b644dbb729a4340be1ba1fde43f270f"
+    },
+    {
+      "scenario_id": "exp_03",
+      "before_trace_id": "trace_c3452eda97ae4c59b7f46f003735a4b9",
+      "after_trace_id": "trace_8551cf14919d4d89bebcdf9b8ee2b33e"
+    },
+    {
+      "scenario_id": "exp_04",
+      "before_trace_id": "trace_c7f6fc8194f4427ab55b898126d7b52f",
+      "after_trace_id": "trace_927ba78c1cce47a893cfd4edfd239450"
+    },
+    {
+      "scenario_id": "exp_05",
+      "before_trace_id": "trace_71ea358ce4bf48d190a9ecd4e799af5b",
+      "after_trace_id": "trace_630ede7bcd434c9087edce088d152211"
+    },
+    {
+      "scenario_id": "exp_06",
+      "before_trace_id": "trace_7f10db6d48fb434b892c29d8b615f495",
+      "after_trace_id": "trace_47a82087363e4874b536a2807b3c4e92"
+    },
+    {
+      "scenario_id": "exp_07",
+      "before_trace_id": "trace_91b3c4f6d1784e8f9cc4f91c0810c6db",
+      "after_trace_id": "trace_09bc871a007944a2a541c331ddc5868c"
+    },
+    {
+      "scenario_id": "exp_08",
+      "before_trace_id": "trace_e1d8ca70ca6e498296f01d0dfa94573a",
+      "after_trace_id": "trace_05ece9afe3894f898bc85e89ff8f2e44"
+    },
+    {
+      "scenario_id": "exp_09",
+      "before_trace_id": "trace_f730094f2d624fdf803d78f9155c3afe",
+      "after_trace_id": "trace_9f3e8183664647e1938544d1699457d2"
+    },
+    {
+      "scenario_id": "exp_10",
+      "before_trace_id": "trace_d52ae47f5724408c8866d02714bce5a1",
+      "after_trace_id": "trace_a2bed3f0549142dbb682d35f8e85f645"
+    }
+  ],
+  "support_validity_result": {
+    "decision_still_supported": false,
+    "outcome_correct": true,
+    "requires_human_review": true,
+    "support_explanation": "The expected action was produced after repair, but the proposal evidence does not support treating that action as a safe automated decision."
+  },
+  "infrastructure_errors": [],
+  "token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  },
+  "latency": {
+    "total_latency_ms": 30
+  },
+  "verdict": "UNSUPPORTED_BEHAVIOR_CHANGE",
+  "created_at": "2026-07-19T02:02:32.162225Z"
+}

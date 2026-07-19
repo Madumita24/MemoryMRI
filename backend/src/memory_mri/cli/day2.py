@@ -16,6 +16,7 @@ from memory_mri.engine.benchmark import BenchmarkService
 from memory_mri.engine.counterfactual_replay import CounterfactualReplayEngine
 from memory_mri.engine.gpt_baseline import GPTBaselineService
 from memory_mri.engine.repair_proposals import RepairProposalEngine
+from memory_mri.engine.verification import VerificationEngine
 from memory_mri.repositories.store import BenchmarkRepository
 from memory_mri.schemas import ReplayMode
 
@@ -127,6 +128,25 @@ def main() -> None:
     export_diff.add_argument("--diff-id", required=True)
     export_diff.add_argument("--format", choices=["json", "markdown"], required=True)
 
+    verify_original = subparsers.add_parser("verify-original")
+    verify_original.add_argument("--proposal-id", required=True)
+    verify_original.add_argument("--runner", choices=["fake", "openai"], default="fake")
+
+    verify_domain = subparsers.add_parser("verify-domain")
+    verify_domain.add_argument("--proposal-id", required=True)
+    verify_domain.add_argument("--runner", choices=["fake", "openai"], default="fake")
+
+    verify_full = subparsers.add_parser("verify-full-benchmark")
+    verify_full.add_argument("--proposal-id", required=True)
+    verify_full.add_argument("--runner", choices=["fake", "openai"], default="fake")
+
+    show_verification = subparsers.add_parser("show-verification")
+    show_verification.add_argument("--verification-id", required=True)
+
+    compare_benchmarks = subparsers.add_parser("compare-benchmarks")
+    compare_benchmarks.add_argument("--before", required=True)
+    compare_benchmarks.add_argument("--after", required=True)
+
     args = parser.parse_args()
     data_dir = Path(args.data_dir).resolve()
     artifacts_dir = Path(args.artifacts_dir).resolve()
@@ -156,6 +176,11 @@ def main() -> None:
         artifacts_dir=artifacts_dir,
     )
     proposal_engine = RepairProposalEngine(
+        database_url=args.database_url,
+        data_dir=data_dir,
+        artifacts_dir=artifacts_dir,
+    )
+    verification_engine = VerificationEngine(
         database_url=args.database_url,
         data_dir=data_dir,
         artifacts_dir=artifacts_dir,
@@ -283,6 +308,44 @@ def main() -> None:
         return
     if args.command == "export-memory-diff":
         print(proposal_engine.export_memory_diff(args.diff_id, args.format))
+        return
+    if args.command == "verify-original":
+        print(
+            verification_engine.verify_original(
+                args.proposal_id,
+                runner_name=args.runner,
+            ).model_dump_json(indent=2)
+        )
+        return
+    if args.command == "verify-domain":
+        print(
+            verification_engine.verify_domain(
+                args.proposal_id,
+                runner_name=args.runner,
+            ).model_dump_json(indent=2)
+        )
+        return
+    if args.command == "verify-full-benchmark":
+        print(
+            verification_engine.verify_full_benchmark(
+                args.proposal_id,
+                runner_name=args.runner,
+            ).model_dump_json(indent=2)
+        )
+        return
+    if args.command == "show-verification":
+        print(verification_engine.show_verification(args.verification_id).model_dump_json(indent=2))
+        return
+    if args.command == "compare-benchmarks":
+        print(
+            json.dumps(
+                verification_engine.compare_benchmarks(
+                    Path(args.before).resolve(),
+                    Path(args.after).resolve(),
+                ),
+                indent=2,
+            )
+        )
         return
     raise SystemExit(f"Unsupported command: {args.command}")
 

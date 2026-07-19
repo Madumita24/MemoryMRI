@@ -1,0 +1,415 @@
+{
+  "overall": {
+    "attempted_scenarios": 10,
+    "evaluated_scenarios": 0,
+    "passed_scenarios": 0,
+    "failed_scenarios": 0,
+    "infrastructure_errors": 10,
+    "pass_rate": null
+  },
+  "results_by_domain": {
+    "customer_support": {
+      "attempted": 10,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 10
+    }
+  },
+  "results_by_failure_category": {
+    "stale-memory": {
+      "attempted": 1,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 1
+    },
+    "contradictory-memories": {
+      "attempted": 1,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 1
+    },
+    "wrong-user-memory": {
+      "attempted": 1,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 1
+    },
+    "hallucinated-preference": {
+      "attempted": 1,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 1
+    },
+    "obsolete-policy": {
+      "attempted": 1,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 1
+    },
+    "missing-expiration": {
+      "attempted": 1,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 1
+    },
+    "incorrect-retrieval-priority": {
+      "attempted": 1,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 1
+    },
+    "two-memory-interaction": {
+      "attempted": 1,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 1
+    },
+    "wrong-context-valid-memory": {
+      "attempted": 1,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 1
+    },
+    "newer-correct-memory-ignored": {
+      "attempted": 1,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 1
+    }
+  },
+  "scenario_results": [
+    {
+      "scenario_id": "cs_01",
+      "domain": "customer_support",
+      "failure_category": "stale-memory",
+      "trace_id": "trace_2ee613402a914915a85b9ba976b002a7",
+      "result_type": "infrastructure_error",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": null,
+      "passed": null,
+      "cache_status": false,
+      "execution_source": "error",
+      "latency_ms": 0,
+      "request_token_usage": null,
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_02",
+      "domain": "customer_support",
+      "failure_category": "contradictory-memories",
+      "trace_id": "trace_3749cdf90089422197b5777f9482b3e3",
+      "result_type": "infrastructure_error",
+      "expected_action": "REQUEST_MANAGER_APPROVAL",
+      "actual_selected_action": null,
+      "passed": null,
+      "cache_status": false,
+      "execution_source": "error",
+      "latency_ms": 0,
+      "request_token_usage": null,
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_03",
+      "domain": "customer_support",
+      "failure_category": "wrong-user-memory",
+      "trace_id": "trace_ec9fbd42b22b455a884106afc8f7faee",
+      "result_type": "infrastructure_error",
+      "expected_action": "DENY_REFUND",
+      "actual_selected_action": null,
+      "passed": null,
+      "cache_status": false,
+      "execution_source": "error",
+      "latency_ms": 0,
+      "request_token_usage": null,
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_04",
+      "domain": "customer_support",
+      "failure_category": "hallucinated-preference",
+      "trace_id": "trace_b69329146e674b2b935f1ca9085abba6",
+      "result_type": "infrastructure_error",
+      "expected_action": "ASK_FOR_INFORMATION",
+      "actual_selected_action": null,
+      "passed": null,
+      "cache_status": false,
+      "execution_source": "error",
+      "latency_ms": 0,
+      "request_token_usage": null,
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_05",
+      "domain": "customer_support",
+      "failure_category": "obsolete-policy",
+      "trace_id": "trace_5dfb6dc65907488da26a38cd40c1b330",
+      "result_type": "infrastructure_error",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": null,
+      "passed": null,
+      "cache_status": false,
+      "execution_source": "error",
+      "latency_ms": 0,
+      "request_token_usage": null,
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_06",
+      "domain": "customer_support",
+      "failure_category": "missing-expiration",
+      "trace_id": "trace_8d081cc811324f4facb3fdb6472a2828",
+      "result_type": "infrastructure_error",
+      "expected_action": "DENY_REFUND",
+      "actual_selected_action": null,
+      "passed": null,
+      "cache_status": false,
+      "execution_source": "error",
+      "latency_ms": 0,
+      "request_token_usage": null,
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_07",
+      "domain": "customer_support",
+      "failure_category": "incorrect-retrieval-priority",
+      "trace_id": "trace_95751704b440496c8e9a148045c4cd2d",
+      "result_type": "infrastructure_error",
+      "expected_action": "ASK_FOR_INFORMATION",
+      "actual_selected_action": null,
+      "passed": null,
+      "cache_status": false,
+      "execution_source": "error",
+      "latency_ms": 0,
+      "request_token_usage": null,
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_08",
+      "domain": "customer_support",
+      "failure_category": "two-memory-interaction",
+      "trace_id": "trace_a2f2075a66f64b93994156cd4d5bfbe0",
+      "result_type": "infrastructure_error",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": null,
+      "passed": null,
+      "cache_status": false,
+      "execution_source": "error",
+      "latency_ms": 0,
+      "request_token_usage": null,
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_09",
+      "domain": "customer_support",
+      "failure_category": "wrong-context-valid-memory",
+      "trace_id": "trace_41e9ba28d3e64547a1587719e4ad2c7e",
+      "result_type": "infrastructure_error",
+      "expected_action": "REQUEST_MANAGER_APPROVAL",
+      "actual_selected_action": null,
+      "passed": null,
+      "cache_status": false,
+      "execution_source": "error",
+      "latency_ms": 0,
+      "request_token_usage": null,
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_10",
+      "domain": "customer_support",
+      "failure_category": "newer-correct-memory-ignored",
+      "trace_id": "trace_c74186ec10f643fbadc9f9ec9f7b39ce",
+      "result_type": "infrastructure_error",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": null,
+      "passed": null,
+      "cache_status": false,
+      "execution_source": "error",
+      "latency_ms": 0,
+      "request_token_usage": null,
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    }
+  ],
+  "infrastructure_errors": [
+    {
+      "scenario_id": "cs_01",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_02",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_03",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_04",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_05",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_06",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_07",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_08",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_09",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_10",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    }
+  ],
+  "totals": {
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "latency": {
+      "total_latency_ms": 0
+    }
+  }
+}

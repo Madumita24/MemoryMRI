@@ -1,0 +1,191 @@
+{
+  "verification_id": "verification_4c9fa267b8ae425cb3c34315f1a22da7",
+  "proposal_id": "proposal_bf551979f6ea4313893c45a505967b91",
+  "applied_version_id": "version_e5d391ef6ffe4d8396dc91ac84c1bf02",
+  "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+  "scenario_id": "cs_01",
+  "domain": "customer_support",
+  "model": "fake-deterministic",
+  "prompt_version": "day1-5-v1",
+  "before_benchmark_id": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\day1-mixed-baseline-summary.json",
+  "after_benchmark_id": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\verifications\\verification_4c9fa267b8ae425cb3c34315f1a22da7\\domain-after-summary.json",
+  "original_case_before": {
+    "scenario_id": "cs_01",
+    "selected_action": "ISSUE_REFUND",
+    "expected_action": "ISSUE_REFUND",
+    "passed": true,
+    "repaired": true,
+    "action_distribution": {
+      "ISSUE_REFUND": 1
+    },
+    "replay_stability": 1.0,
+    "supported_decision": true,
+    "infrastructure_errors": [],
+    "trace_id": "trace_fbc7975a808e49be989d94e773302059",
+    "needs_human_review": false,
+    "action_changed": false
+  },
+  "original_case_after": {
+    "scenario_id": "cs_01",
+    "selected_action": "ISSUE_REFUND",
+    "expected_action": "ISSUE_REFUND",
+    "passed": true,
+    "repaired": true,
+    "action_distribution": {
+      "ISSUE_REFUND": 1
+    },
+    "replay_stability": 1.0,
+    "supported_decision": true,
+    "infrastructure_errors": [],
+    "trace_id": "trace_cf954cff36a647b5a0bc100407e0a691",
+    "needs_human_review": false,
+    "action_changed": false
+  },
+  "domain_before": {
+    "domain": "customer_support",
+    "attempted": 10,
+    "evaluated": 10,
+    "passed": 7,
+    "failed": 3,
+    "infrastructure_errors": 0,
+    "changed_scenarios": [
+      "cs_01",
+      "cs_02",
+      "cs_03",
+      "cs_04",
+      "cs_05",
+      "cs_06",
+      "cs_07",
+      "cs_08",
+      "cs_09",
+      "cs_10"
+    ]
+  },
+  "domain_after": {
+    "domain": "customer_support",
+    "attempted": 10,
+    "evaluated": 10,
+    "passed": 7,
+    "failed": 3,
+    "infrastructure_errors": 0,
+    "changed_scenarios": [
+      "cs_01",
+      "cs_02",
+      "cs_03",
+      "cs_04",
+      "cs_05",
+      "cs_06",
+      "cs_07",
+      "cs_08",
+      "cs_09",
+      "cs_10"
+    ]
+  },
+  "full_before": {
+    "attempted_scenarios": 30,
+    "evaluated_scenarios": 30,
+    "passed_scenarios": 22,
+    "failed_scenarios": 8,
+    "infrastructure_errors": 0,
+    "pass_rate": 0.7333333333333333
+  },
+  "full_after": {
+    "attempted_scenarios": 10,
+    "evaluated_scenarios": 10,
+    "passed_scenarios": 7,
+    "failed_scenarios": 3,
+    "infrastructure_errors": 0,
+    "pass_rate": 0.7
+  },
+  "repaired_failures": [],
+  "persistent_failures": [
+    "cs_02",
+    "cs_08",
+    "cs_09"
+  ],
+  "new_regressions": [],
+  "unchanged_passes": [
+    "cs_01",
+    "cs_03",
+    "cs_04",
+    "cs_05",
+    "cs_06",
+    "cs_07",
+    "cs_10"
+  ],
+  "unchanged_failures": [
+    "cs_02",
+    "cs_08",
+    "cs_09"
+  ],
+  "action_changes": [],
+  "tool_call_changes": [
+    {
+      "scenario_id": "cs_01",
+      "before_trace_id": "trace_fbc7975a808e49be989d94e773302059",
+      "after_trace_id": "trace_cf954cff36a647b5a0bc100407e0a691"
+    },
+    {
+      "scenario_id": "cs_02",
+      "before_trace_id": "trace_5411628614714e5da6ca8077990c3a72",
+      "after_trace_id": "trace_1e03f6cd9bbe4e9aa23f0453b3b12865"
+    },
+    {
+      "scenario_id": "cs_03",
+      "before_trace_id": "trace_0a65a68928c74543baf27a50ebd380b5",
+      "after_trace_id": "trace_a985463b68f3493b959d642f70effdae"
+    },
+    {
+      "scenario_id": "cs_04",
+      "before_trace_id": "trace_2cbe0d6bbfa04a9091456548102d08c8",
+      "after_trace_id": "trace_65161353276c43fb8a98a1ac768575fe"
+    },
+    {
+      "scenario_id": "cs_05",
+      "before_trace_id": "trace_4dba63c176014e599f2548ca690bc8bc",
+      "after_trace_id": "trace_ff63b70ed3f54409b6865fcf5e124639"
+    },
+    {
+      "scenario_id": "cs_06",
+      "before_trace_id": "trace_1971bbeab6084e3db292168a2c34b4fb",
+      "after_trace_id": "trace_5c8ae423872d45cda1258b46a4854dd4"
+    },
+    {
+      "scenario_id": "cs_07",
+      "before_trace_id": "trace_f2701e269fbc4a41b10ef7af2a89b386",
+      "after_trace_id": "trace_d700868904014ae99c457d2b50aef6cb"
+    },
+    {
+      "scenario_id": "cs_08",
+      "before_trace_id": "trace_6b3dbe9476db46ed8d364aea0ca186f5",
+      "after_trace_id": "trace_0a6a78df31d348b9a7fa3cf5602c9bb4"
+    },
+    {
+      "scenario_id": "cs_09",
+      "before_trace_id": "trace_1af4b45721b64778bec09bff755ea317",
+      "after_trace_id": "trace_d3493de6edca4925b7fd11d2a890d539"
+    },
+    {
+      "scenario_id": "cs_10",
+      "before_trace_id": "trace_1c8048d891ab495cac812db294f90796",
+      "after_trace_id": "trace_c7f7eb8ce6b24dd689b868d74a1b218f"
+    }
+  ],
+  "support_validity_result": {
+    "decision_still_supported": false,
+    "outcome_correct": true,
+    "requires_human_review": true,
+    "support_explanation": "The expected action was produced after repair, but the proposal evidence does not support treating that action as a safe automated decision."
+  },
+  "infrastructure_errors": [],
+  "token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  },
+  "latency": {
+    "total_latency_ms": 10
+  },
+  "verdict": "UNSUPPORTED_BEHAVIOR_CHANGE",
+  "created_at": "2026-07-19T02:02:24.496416Z"
+}

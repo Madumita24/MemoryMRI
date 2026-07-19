@@ -1,0 +1,314 @@
+{
+  "overall": {
+    "attempted_scenarios": 10,
+    "evaluated_scenarios": 10,
+    "passed_scenarios": 7,
+    "failed_scenarios": 3,
+    "infrastructure_errors": 0,
+    "pass_rate": 0.7
+  },
+  "results_by_domain": {
+    "customer_support": {
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 7,
+      "failed": 3,
+      "infrastructure_errors": 0
+    }
+  },
+  "results_by_failure_category": {
+    "stale-memory": {
+      "attempted": 1,
+      "evaluated": 1,
+      "passed": 1,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "contradictory-memories": {
+      "attempted": 1,
+      "evaluated": 1,
+      "passed": 0,
+      "failed": 1,
+      "infrastructure_errors": 0
+    },
+    "wrong-user-memory": {
+      "attempted": 1,
+      "evaluated": 1,
+      "passed": 1,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "hallucinated-preference": {
+      "attempted": 1,
+      "evaluated": 1,
+      "passed": 1,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "obsolete-policy": {
+      "attempted": 1,
+      "evaluated": 1,
+      "passed": 1,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "missing-expiration": {
+      "attempted": 1,
+      "evaluated": 1,
+      "passed": 1,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "incorrect-retrieval-priority": {
+      "attempted": 1,
+      "evaluated": 1,
+      "passed": 1,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "two-memory-interaction": {
+      "attempted": 1,
+      "evaluated": 1,
+      "passed": 0,
+      "failed": 1,
+      "infrastructure_errors": 0
+    },
+    "wrong-context-valid-memory": {
+      "attempted": 1,
+      "evaluated": 1,
+      "passed": 0,
+      "failed": 1,
+      "infrastructure_errors": 0
+    },
+    "newer-correct-memory-ignored": {
+      "attempted": 1,
+      "evaluated": 1,
+      "passed": 1,
+      "failed": 0,
+      "infrastructure_errors": 0
+    }
+  },
+  "scenario_results": [
+    {
+      "scenario_id": "cs_01",
+      "domain": "customer_support",
+      "failure_category": "stale-memory",
+      "trace_id": "trace_cf954cff36a647b5a0bc100407e0a691",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_02",
+      "domain": "customer_support",
+      "failure_category": "contradictory-memories",
+      "trace_id": "trace_1e03f6cd9bbe4e9aa23f0453b3b12865",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_MANAGER_APPROVAL",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_03",
+      "domain": "customer_support",
+      "failure_category": "wrong-user-memory",
+      "trace_id": "trace_a985463b68f3493b959d642f70effdae",
+      "result_type": "evaluated",
+      "expected_action": "DENY_REFUND",
+      "actual_selected_action": "DENY_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_04",
+      "domain": "customer_support",
+      "failure_category": "hallucinated-preference",
+      "trace_id": "trace_65161353276c43fb8a98a1ac768575fe",
+      "result_type": "evaluated",
+      "expected_action": "ASK_FOR_INFORMATION",
+      "actual_selected_action": "ASK_FOR_INFORMATION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_05",
+      "domain": "customer_support",
+      "failure_category": "obsolete-policy",
+      "trace_id": "trace_ff63b70ed3f54409b6865fcf5e124639",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_06",
+      "domain": "customer_support",
+      "failure_category": "missing-expiration",
+      "trace_id": "trace_5c8ae423872d45cda1258b46a4854dd4",
+      "result_type": "evaluated",
+      "expected_action": "DENY_REFUND",
+      "actual_selected_action": "DENY_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_07",
+      "domain": "customer_support",
+      "failure_category": "incorrect-retrieval-priority",
+      "trace_id": "trace_d700868904014ae99c457d2b50aef6cb",
+      "result_type": "evaluated",
+      "expected_action": "ASK_FOR_INFORMATION",
+      "actual_selected_action": "ASK_FOR_INFORMATION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_08",
+      "domain": "customer_support",
+      "failure_category": "two-memory-interaction",
+      "trace_id": "trace_0a6a78df31d348b9a7fa3cf5602c9bb4",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "DENY_REFUND",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_09",
+      "domain": "customer_support",
+      "failure_category": "wrong-context-valid-memory",
+      "trace_id": "trace_d3493de6edca4925b7fd11d2a890d539",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_MANAGER_APPROVAL",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_10",
+      "domain": "customer_support",
+      "failure_category": "newer-correct-memory-ignored",
+      "trace_id": "trace_c7f7eb8ce6b24dd689b868d74a1b218f",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    }
+  ],
+  "infrastructure_errors": [],
+  "totals": {
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "latency": {
+      "total_latency_ms": 10
+    }
+  }
+}

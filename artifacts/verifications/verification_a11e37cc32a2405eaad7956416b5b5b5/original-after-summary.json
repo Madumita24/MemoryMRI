@@ -1,0 +1,73 @@
+{
+  "overall": {
+    "attempted_scenarios": 1,
+    "evaluated_scenarios": 0,
+    "passed_scenarios": 0,
+    "failed_scenarios": 0,
+    "infrastructure_errors": 1,
+    "pass_rate": null
+  },
+  "results_by_domain": {
+    "customer_support": {
+      "attempted": 1,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 1
+    }
+  },
+  "results_by_failure_category": {
+    "stale-memory": {
+      "attempted": 1,
+      "evaluated": 0,
+      "passed": 0,
+      "failed": 0,
+      "infrastructure_errors": 1
+    }
+  },
+  "scenario_results": [
+    {
+      "scenario_id": "cs_01",
+      "domain": "customer_support",
+      "failure_category": "stale-memory",
+      "trace_id": "trace_aa9c244521ef4b5e84fe055d3430c35e",
+      "result_type": "infrastructure_error",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": null,
+      "passed": null,
+      "cache_status": false,
+      "execution_source": "error",
+      "latency_ms": 0,
+      "request_token_usage": null,
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    }
+  ],
+  "infrastructure_errors": [
+    {
+      "scenario_id": "cs_01",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    }
+  ],
+  "totals": {
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "latency": {
+      "total_latency_ms": 0
+    }
+  }
+}

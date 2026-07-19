@@ -25,6 +25,7 @@ from memory_mri.schemas import (
     MemoryDiff,
     MemoryStoreVersion,
     RepairProposal,
+    VerificationRun,
 )
 
 
@@ -59,7 +60,7 @@ class BenchmarkRepository:
                 scenario_id=trace.scenario_id,
                 run_id=trace.run_id,
                 passed=trace.passed if trace.passed is not None else False,
-                selected_action=trace.selected_action,
+                selected_action=trace.selected_action or "",
                 payload_json=trace.model_dump_json(),
             )
         )
@@ -141,6 +142,15 @@ class BenchmarkRepository:
             )
         )
 
+    def save_verification_run(self, verification: VerificationRun) -> None:
+        self.session.merge(
+            VerificationArtifactRecord(
+                artifact_id=verification.verification_id,
+                scenario_id=verification.scenario_id,
+                payload_json=verification.model_dump_json(),
+            )
+        )
+
     def get_trace(self, trace_id: str) -> ExecutionTrace | None:
         record = self.session.get(TraceRecord, trace_id)
         if record is None:
@@ -164,6 +174,12 @@ class BenchmarkRepository:
         if record is None:
             return None
         return MemoryDiff.model_validate_json(record.payload_json)
+
+    def get_verification_run(self, verification_id: str) -> VerificationRun | None:
+        record = self.session.get(VerificationArtifactRecord, verification_id)
+        if record is None:
+            return None
+        return VerificationRun.model_validate_json(record.payload_json)
 
     def list_traces(self) -> list[ExecutionTrace]:
         return [
@@ -238,6 +254,14 @@ class BenchmarkRepository:
             .order_by(MemoryDiffRecord.created_at)
             .all()
         ]
+
+    def list_verification_runs_for_proposal(self, proposal_id: str) -> list[VerificationRun]:
+        runs: list[VerificationRun] = []
+        for record in self.session.query(VerificationArtifactRecord).all():
+            verification = VerificationRun.model_validate_json(record.payload_json)
+            if verification.proposal_id == proposal_id:
+                runs.append(verification)
+        return sorted(runs, key=lambda run: run.created_at)
 
     def list_repair_proposals_for_investigation(
         self, investigation_id: str

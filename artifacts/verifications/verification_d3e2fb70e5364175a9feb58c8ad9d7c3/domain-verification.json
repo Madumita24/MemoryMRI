@@ -1,0 +1,342 @@
+{
+  "verification_id": "verification_d3e2fb70e5364175a9feb58c8ad9d7c3",
+  "proposal_id": "proposal_bf551979f6ea4313893c45a505967b91",
+  "applied_version_id": "version_e5d391ef6ffe4d8396dc91ac84c1bf02",
+  "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+  "scenario_id": "cs_01",
+  "domain": "customer_support",
+  "model": "gpt-5.6",
+  "prompt_version": "v1",
+  "before_benchmark_id": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\gpt-baseline-summary.json",
+  "after_benchmark_id": "C:\\Users\\kmadu\\Downloads\\MemoryMRI\\artifacts\\verifications\\verification_d3e2fb70e5364175a9feb58c8ad9d7c3\\domain-after-summary.json",
+  "original_case_before": {
+    "scenario_id": "cs_01",
+    "selected_action": "ASK_FOR_INFORMATION",
+    "expected_action": "ISSUE_REFUND",
+    "passed": false,
+    "repaired": false,
+    "action_distribution": {
+      "ASK_FOR_INFORMATION": 1
+    },
+    "replay_stability": 1.0,
+    "supported_decision": false,
+    "infrastructure_errors": [],
+    "trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+    "needs_human_review": false,
+    "action_changed": false
+  },
+  "original_case_after": {
+    "scenario_id": "cs_01",
+    "selected_action": null,
+    "expected_action": "ISSUE_REFUND",
+    "passed": null,
+    "repaired": false,
+    "action_distribution": {},
+    "replay_stability": 0.0,
+    "supported_decision": false,
+    "infrastructure_errors": [
+      {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    ],
+    "trace_id": "trace_2ee613402a914915a85b9ba976b002a7",
+    "needs_human_review": false,
+    "action_changed": false
+  },
+  "domain_before": {
+    "domain": "customer_support",
+    "attempted": 10,
+    "evaluated": 10,
+    "passed": 9,
+    "failed": 1,
+    "infrastructure_errors": 0,
+    "changed_scenarios": [
+      "cs_01",
+      "cs_02",
+      "cs_03",
+      "cs_04",
+      "cs_05",
+      "cs_06",
+      "cs_07",
+      "cs_08",
+      "cs_09",
+      "cs_10"
+    ]
+  },
+  "domain_after": {
+    "domain": "customer_support",
+    "attempted": 10,
+    "evaluated": 0,
+    "passed": 0,
+    "failed": 0,
+    "infrastructure_errors": 10,
+    "changed_scenarios": [
+      "cs_01",
+      "cs_02",
+      "cs_03",
+      "cs_04",
+      "cs_05",
+      "cs_06",
+      "cs_07",
+      "cs_08",
+      "cs_09",
+      "cs_10"
+    ]
+  },
+  "full_before": {
+    "attempted_scenarios": 30,
+    "evaluated_scenarios": 30,
+    "passed_scenarios": 28,
+    "failed_scenarios": 2,
+    "infrastructure_errors": 0,
+    "pass_rate": 0.9333333333333333
+  },
+  "full_after": {
+    "attempted_scenarios": 10,
+    "evaluated_scenarios": 0,
+    "passed_scenarios": 0,
+    "failed_scenarios": 0,
+    "infrastructure_errors": 10,
+    "pass_rate": null
+  },
+  "repaired_failures": [],
+  "persistent_failures": [],
+  "new_regressions": [],
+  "unchanged_passes": [],
+  "unchanged_failures": [],
+  "action_changes": [
+    {
+      "scenario_id": "cs_01",
+      "before_action": "ASK_FOR_INFORMATION",
+      "after_action": null,
+      "before_passed": false,
+      "after_passed": null
+    },
+    {
+      "scenario_id": "cs_02",
+      "before_action": "REQUEST_MANAGER_APPROVAL",
+      "after_action": null,
+      "before_passed": true,
+      "after_passed": null
+    },
+    {
+      "scenario_id": "cs_03",
+      "before_action": "DENY_REFUND",
+      "after_action": null,
+      "before_passed": true,
+      "after_passed": null
+    },
+    {
+      "scenario_id": "cs_04",
+      "before_action": "ASK_FOR_INFORMATION",
+      "after_action": null,
+      "before_passed": true,
+      "after_passed": null
+    },
+    {
+      "scenario_id": "cs_05",
+      "before_action": "ISSUE_REFUND",
+      "after_action": null,
+      "before_passed": true,
+      "after_passed": null
+    },
+    {
+      "scenario_id": "cs_06",
+      "before_action": "DENY_REFUND",
+      "after_action": null,
+      "before_passed": true,
+      "after_passed": null
+    },
+    {
+      "scenario_id": "cs_07",
+      "before_action": "ASK_FOR_INFORMATION",
+      "after_action": null,
+      "before_passed": true,
+      "after_passed": null
+    },
+    {
+      "scenario_id": "cs_08",
+      "before_action": "ISSUE_REFUND",
+      "after_action": null,
+      "before_passed": true,
+      "after_passed": null
+    },
+    {
+      "scenario_id": "cs_09",
+      "before_action": "REQUEST_MANAGER_APPROVAL",
+      "after_action": null,
+      "before_passed": true,
+      "after_passed": null
+    },
+    {
+      "scenario_id": "cs_10",
+      "before_action": "ISSUE_REFUND",
+      "after_action": null,
+      "before_passed": true,
+      "after_passed": null
+    }
+  ],
+  "tool_call_changes": [
+    {
+      "scenario_id": "cs_01",
+      "before_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "after_trace_id": "trace_2ee613402a914915a85b9ba976b002a7"
+    },
+    {
+      "scenario_id": "cs_02",
+      "before_trace_id": "trace_12b21d5dd8c04e7eaeb0d677a9df2746",
+      "after_trace_id": "trace_3749cdf90089422197b5777f9482b3e3"
+    },
+    {
+      "scenario_id": "cs_03",
+      "before_trace_id": "trace_336c07ddb65d46d9bd22d40bdfd7c07c",
+      "after_trace_id": "trace_ec9fbd42b22b455a884106afc8f7faee"
+    },
+    {
+      "scenario_id": "cs_04",
+      "before_trace_id": "trace_8e5fecb8999548afa4d5b1fbd7a09f6e",
+      "after_trace_id": "trace_b69329146e674b2b935f1ca9085abba6"
+    },
+    {
+      "scenario_id": "cs_05",
+      "before_trace_id": "trace_c0d33546ddb145b290ac1d257bcb9feb",
+      "after_trace_id": "trace_5dfb6dc65907488da26a38cd40c1b330"
+    },
+    {
+      "scenario_id": "cs_06",
+      "before_trace_id": "trace_469f52fcad554fc0a1dbd48b70d0ab65",
+      "after_trace_id": "trace_8d081cc811324f4facb3fdb6472a2828"
+    },
+    {
+      "scenario_id": "cs_07",
+      "before_trace_id": "trace_b180567283f04f34906a3ac396ad7741",
+      "after_trace_id": "trace_95751704b440496c8e9a148045c4cd2d"
+    },
+    {
+      "scenario_id": "cs_08",
+      "before_trace_id": "trace_3cb9c22b0b73405f958c47d9848084c8",
+      "after_trace_id": "trace_a2f2075a66f64b93994156cd4d5bfbe0"
+    },
+    {
+      "scenario_id": "cs_09",
+      "before_trace_id": "trace_6fa2ea36ca124b48aad2cb1ac2eef478",
+      "after_trace_id": "trace_41e9ba28d3e64547a1587719e4ad2c7e"
+    },
+    {
+      "scenario_id": "cs_10",
+      "before_trace_id": "trace_5ce4ebea7f7d4fed9819e9c659558aae",
+      "after_trace_id": "trace_c74186ec10f643fbadc9f9ec9f7b39ce"
+    }
+  ],
+  "support_validity_result": {
+    "decision_still_supported": false,
+    "outcome_correct": false,
+    "requires_human_review": true,
+    "support_explanation": "The repaired version did not produce a supported correction."
+  },
+  "infrastructure_errors": [
+    {
+      "scenario_id": "cs_01",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_02",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_03",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_04",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_05",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_06",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_07",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_08",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_09",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    },
+    {
+      "scenario_id": "cs_10",
+      "error": {
+        "code": "transient_openai_error",
+        "message": "Connection error.",
+        "retryable": true,
+        "attempts": 3
+      }
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  },
+  "latency": {
+    "total_latency_ms": 0
+  },
+  "verdict": "VERIFICATION_INCONCLUSIVE",
+  "created_at": "2026-07-19T02:03:41.890393Z"
+}

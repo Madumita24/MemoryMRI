@@ -1,0 +1,748 @@
+{
+  "overall": {
+    "attempted_scenarios": 30,
+    "evaluated_scenarios": 30,
+    "passed_scenarios": 22,
+    "failed_scenarios": 8,
+    "infrastructure_errors": 0,
+    "pass_rate": 0.7333333333333333
+  },
+  "results_by_domain": {
+    "customer_support": {
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 7,
+      "failed": 3,
+      "infrastructure_errors": 0
+    },
+    "devops": {
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 8,
+      "failed": 2,
+      "infrastructure_errors": 0
+    },
+    "workplace_expense": {
+      "attempted": 10,
+      "evaluated": 10,
+      "passed": 7,
+      "failed": 3,
+      "infrastructure_errors": 0
+    }
+  },
+  "results_by_failure_category": {
+    "stale-memory": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "contradictory-memories": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 1,
+      "failed": 2,
+      "infrastructure_errors": 0
+    },
+    "wrong-user-memory": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "hallucinated-preference": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "obsolete-policy": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "missing-expiration": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "incorrect-retrieval-priority": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    },
+    "two-memory-interaction": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 0,
+      "failed": 3,
+      "infrastructure_errors": 0
+    },
+    "wrong-context-valid-memory": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 0,
+      "failed": 3,
+      "infrastructure_errors": 0
+    },
+    "newer-correct-memory-ignored": {
+      "attempted": 3,
+      "evaluated": 3,
+      "passed": 3,
+      "failed": 0,
+      "infrastructure_errors": 0
+    }
+  },
+  "scenario_results": [
+    {
+      "scenario_id": "cs_01",
+      "domain": "customer_support",
+      "failure_category": "stale-memory",
+      "trace_id": "trace_7fc2373a18394a14a27e82c35a093161",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_02",
+      "domain": "customer_support",
+      "failure_category": "contradictory-memories",
+      "trace_id": "trace_bb954824521e4d498ae05eb18c2175db",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_MANAGER_APPROVAL",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_03",
+      "domain": "customer_support",
+      "failure_category": "wrong-user-memory",
+      "trace_id": "trace_2d9f1af802d042f9b72e347af425f7e7",
+      "result_type": "evaluated",
+      "expected_action": "DENY_REFUND",
+      "actual_selected_action": "DENY_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_04",
+      "domain": "customer_support",
+      "failure_category": "hallucinated-preference",
+      "trace_id": "trace_d8db057b943d4e02a11e615b54941e0e",
+      "result_type": "evaluated",
+      "expected_action": "ASK_FOR_INFORMATION",
+      "actual_selected_action": "ASK_FOR_INFORMATION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_05",
+      "domain": "customer_support",
+      "failure_category": "obsolete-policy",
+      "trace_id": "trace_947c23ca43f1418fba84b605ef11ee17",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_06",
+      "domain": "customer_support",
+      "failure_category": "missing-expiration",
+      "trace_id": "trace_5e28773a56c7472594a67d9c24223d5c",
+      "result_type": "evaluated",
+      "expected_action": "DENY_REFUND",
+      "actual_selected_action": "DENY_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_07",
+      "domain": "customer_support",
+      "failure_category": "incorrect-retrieval-priority",
+      "trace_id": "trace_f87a0180bab94ca3a5c93a2ffd2a4057",
+      "result_type": "evaluated",
+      "expected_action": "ASK_FOR_INFORMATION",
+      "actual_selected_action": "ASK_FOR_INFORMATION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_08",
+      "domain": "customer_support",
+      "failure_category": "two-memory-interaction",
+      "trace_id": "trace_438630e0da2d4db9a2314c4a65eeea7f",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "DENY_REFUND",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_09",
+      "domain": "customer_support",
+      "failure_category": "wrong-context-valid-memory",
+      "trace_id": "trace_4112087f6e4741cd9d3402e14817a0ae",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_MANAGER_APPROVAL",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "cs_10",
+      "domain": "customer_support",
+      "failure_category": "newer-correct-memory-ignored",
+      "trace_id": "trace_bc3ac817944f4b4490b261a93ac554d6",
+      "result_type": "evaluated",
+      "expected_action": "ISSUE_REFUND",
+      "actual_selected_action": "ISSUE_REFUND",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_01",
+      "domain": "devops",
+      "failure_category": "stale-memory",
+      "trace_id": "trace_cda2d9a416554c06828ed2205cbf3a50",
+      "result_type": "evaluated",
+      "expected_action": "DEPLOY_PRODUCTION",
+      "actual_selected_action": "DEPLOY_PRODUCTION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_02",
+      "domain": "devops",
+      "failure_category": "contradictory-memories",
+      "trace_id": "trace_dad04ff93d654fcaa93211706d31bdeb",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_ENGINEER_REVIEW",
+      "actual_selected_action": "REQUEST_ENGINEER_REVIEW",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_03",
+      "domain": "devops",
+      "failure_category": "wrong-user-memory",
+      "trace_id": "trace_4fcc801a498b45eea58c738dc0486fa8",
+      "result_type": "evaluated",
+      "expected_action": "BLOCK_DEPLOYMENT",
+      "actual_selected_action": "BLOCK_DEPLOYMENT",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_04",
+      "domain": "devops",
+      "failure_category": "hallucinated-preference",
+      "trace_id": "trace_cb4871338f6848dd9ef076f2588f22fe",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_ENGINEER_REVIEW",
+      "actual_selected_action": "REQUEST_ENGINEER_REVIEW",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_05",
+      "domain": "devops",
+      "failure_category": "obsolete-policy",
+      "trace_id": "trace_e824812395114607a70ec64b3fbc512b",
+      "result_type": "evaluated",
+      "expected_action": "DEPLOY_PRODUCTION",
+      "actual_selected_action": "DEPLOY_PRODUCTION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_06",
+      "domain": "devops",
+      "failure_category": "missing-expiration",
+      "trace_id": "trace_01b58c23078440178d6ab600f5cd8f1c",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_ENGINEER_REVIEW",
+      "actual_selected_action": "REQUEST_ENGINEER_REVIEW",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_07",
+      "domain": "devops",
+      "failure_category": "incorrect-retrieval-priority",
+      "trace_id": "trace_b45d23c3830748cc8b6bc5ac1c2e5d92",
+      "result_type": "evaluated",
+      "expected_action": "DEPLOY_STAGING",
+      "actual_selected_action": "DEPLOY_STAGING",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_08",
+      "domain": "devops",
+      "failure_category": "two-memory-interaction",
+      "trace_id": "trace_4f0ad0e3dfa24b73bcfdf8204418a1f2",
+      "result_type": "evaluated",
+      "expected_action": "BLOCK_DEPLOYMENT",
+      "actual_selected_action": "DEPLOY_PRODUCTION",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_09",
+      "domain": "devops",
+      "failure_category": "wrong-context-valid-memory",
+      "trace_id": "trace_808e76c801854c8db3105a060079633a",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_ENGINEER_REVIEW",
+      "actual_selected_action": "DEPLOY_STAGING",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "dev_10",
+      "domain": "devops",
+      "failure_category": "newer-correct-memory-ignored",
+      "trace_id": "trace_1ef70886f9ff4837a29545d325001b22",
+      "result_type": "evaluated",
+      "expected_action": "DEPLOY_PRODUCTION",
+      "actual_selected_action": "DEPLOY_PRODUCTION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_01",
+      "domain": "workplace_expense",
+      "failure_category": "stale-memory",
+      "trace_id": "trace_c5c182fe95a449e581fb6aa0d1d3c157",
+      "result_type": "evaluated",
+      "expected_action": "AUTO_APPROVE",
+      "actual_selected_action": "AUTO_APPROVE",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_02",
+      "domain": "workplace_expense",
+      "failure_category": "contradictory-memories",
+      "trace_id": "trace_8b644dbb729a4340be1ba1fde43f270f",
+      "result_type": "evaluated",
+      "expected_action": "ESCALATE_MANAGER",
+      "actual_selected_action": "AUTO_APPROVE",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_03",
+      "domain": "workplace_expense",
+      "failure_category": "wrong-user-memory",
+      "trace_id": "trace_8551cf14919d4d89bebcdf9b8ee2b33e",
+      "result_type": "evaluated",
+      "expected_action": "DENY_EXPENSE",
+      "actual_selected_action": "DENY_EXPENSE",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_04",
+      "domain": "workplace_expense",
+      "failure_category": "hallucinated-preference",
+      "trace_id": "trace_927ba78c1cce47a893cfd4edfd239450",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_DOCUMENTATION",
+      "actual_selected_action": "REQUEST_DOCUMENTATION",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_05",
+      "domain": "workplace_expense",
+      "failure_category": "obsolete-policy",
+      "trace_id": "trace_630ede7bcd434c9087edce088d152211",
+      "result_type": "evaluated",
+      "expected_action": "ESCALATE_MANAGER",
+      "actual_selected_action": "ESCALATE_MANAGER",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_06",
+      "domain": "workplace_expense",
+      "failure_category": "missing-expiration",
+      "trace_id": "trace_47a82087363e4874b536a2807b3c4e92",
+      "result_type": "evaluated",
+      "expected_action": "DENY_EXPENSE",
+      "actual_selected_action": "DENY_EXPENSE",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_07",
+      "domain": "workplace_expense",
+      "failure_category": "incorrect-retrieval-priority",
+      "trace_id": "trace_09bc871a007944a2a541c331ddc5868c",
+      "result_type": "evaluated",
+      "expected_action": "ESCALATE_MANAGER",
+      "actual_selected_action": "ESCALATE_MANAGER",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_08",
+      "domain": "workplace_expense",
+      "failure_category": "two-memory-interaction",
+      "trace_id": "trace_05ece9afe3894f898bc85e89ff8f2e44",
+      "result_type": "evaluated",
+      "expected_action": "REQUEST_DOCUMENTATION",
+      "actual_selected_action": "AUTO_APPROVE",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_09",
+      "domain": "workplace_expense",
+      "failure_category": "wrong-context-valid-memory",
+      "trace_id": "trace_9f3e8183664647e1938544d1699457d2",
+      "result_type": "evaluated",
+      "expected_action": "DENY_EXPENSE",
+      "actual_selected_action": "AUTO_APPROVE",
+      "passed": false,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    },
+    {
+      "scenario_id": "exp_10",
+      "domain": "workplace_expense",
+      "failure_category": "newer-correct-memory-ignored",
+      "trace_id": "trace_a2bed3f0549142dbb682d35f8e85f645",
+      "result_type": "evaluated",
+      "expected_action": "AUTO_APPROVE",
+      "actual_selected_action": "AUTO_APPROVE",
+      "passed": true,
+      "cache_status": false,
+      "execution_source": "deterministic",
+      "latency_ms": 1,
+      "request_token_usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "cached_original_token_usage": null,
+      "billable_api_call": false,
+      "error": null
+    }
+  ],
+  "infrastructure_errors": [],
+  "totals": {
+    "token_usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0
+    },
+    "latency": {
+      "total_latency_ms": 30
+    }
+  }
+}
