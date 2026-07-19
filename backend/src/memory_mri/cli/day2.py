@@ -90,6 +90,33 @@ def main() -> None:
     export_proposal = subparsers.add_parser("export-proposal")
     export_proposal.add_argument("--proposal-id", required=True)
 
+    approve_proposal = subparsers.add_parser("approve-proposal")
+    approve_proposal.add_argument("--proposal-id", required=True)
+    approve_proposal.add_argument("--approval-reason", required=True)
+    approve_proposal.add_argument("--notes", default=None)
+
+    reject_proposal = subparsers.add_parser("reject-proposal")
+    reject_proposal.add_argument("--proposal-id", required=True)
+    reject_proposal.add_argument("--rejection-reason", required=True)
+    reject_proposal.add_argument("--notes", default=None)
+
+    apply_proposal = subparsers.add_parser("apply-proposal")
+    apply_proposal.add_argument("--proposal-id", required=True)
+
+    revert_proposal = subparsers.add_parser("revert-proposal")
+    revert_proposal.add_argument("--proposal-id", required=True)
+    revert_proposal.add_argument("--revert-reason", required=True)
+
+    list_versions = subparsers.add_parser("list-memory-versions")
+    list_versions.add_argument("--scenario-id", required=True)
+
+    show_version = subparsers.add_parser("show-memory-version")
+    show_version.add_argument("--version-id", required=True)
+
+    compare_versions = subparsers.add_parser("compare-memory-versions")
+    compare_versions.add_argument("--from", dest="from_version", required=True)
+    compare_versions.add_argument("--to", dest="to_version", required=True)
+
     args = parser.parse_args()
     data_dir = Path(args.data_dir).resolve()
     artifacts_dir = Path(args.artifacts_dir).resolve()
@@ -193,6 +220,50 @@ def main() -> None:
         return
     if args.command == "export-proposal":
         print(json.dumps(proposal_engine.export_proposal(args.proposal_id), indent=2))
+        return
+    if args.command == "approve-proposal":
+        print(
+            proposal_engine.approve_proposal(
+                args.proposal_id,
+                approval_reason=args.approval_reason,
+                notes=args.notes,
+            ).model_dump_json(indent=2)
+        )
+        return
+    if args.command == "reject-proposal":
+        print(
+            proposal_engine.reject_proposal(
+                args.proposal_id,
+                rejection_reason=args.rejection_reason,
+                notes=args.notes,
+            ).model_dump_json(indent=2)
+        )
+        return
+    if args.command == "apply-proposal":
+        print(proposal_engine.apply_proposal(args.proposal_id).model_dump_json(indent=2))
+        return
+    if args.command == "revert-proposal":
+        print(
+            proposal_engine.revert_proposal(
+                args.proposal_id,
+                revert_reason=args.revert_reason,
+            ).model_dump_json(indent=2)
+        )
+        return
+    if args.command == "list-memory-versions":
+        versions = proposal_engine.list_memory_versions(args.scenario_id)
+        print(json.dumps([version.model_dump(mode="json") for version in versions], indent=2))
+        return
+    if args.command == "show-memory-version":
+        print(proposal_engine.show_memory_version(args.version_id).model_dump_json(indent=2))
+        return
+    if args.command == "compare-memory-versions":
+        print(
+            json.dumps(
+                proposal_engine.compare_memory_versions(args.from_version, args.to_version),
+                indent=2,
+            )
+        )
         return
     raise SystemExit(f"Unsupported command: {args.command}")
 

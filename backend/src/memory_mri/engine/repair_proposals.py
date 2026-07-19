@@ -33,16 +33,23 @@ from memory_mri.prompts.loader import load_analysis_prompt
 from memory_mri.repositories.store import BenchmarkRepository
 from memory_mri.schemas import (
     AgentInputMemory,
+    ApprovalRecord,
+    AuditEventType,
+    AuditLogEntry,
     DecisionSupportAudit,
     ExecutionTrace,
     Investigation,
     MemoryControlsArtifact,
     MemoryDependenceClassification,
+    MemoryStatus,
+    MemoryStoreVersion,
+    MemoryVersionStatus,
     PairwiseReplayArtifact,
     ProposalContradictionEvidence,
     ProposalEvidenceReference,
     ProposalReplayEvidence,
     ProposalSuspicionEvidence,
+    RejectionRecord,
     RepairProposal,
     RepairStatus,
     RepairType,
@@ -284,6 +291,326 @@ class RepairProposalEngine:
         }:
             raise ValueError("proposal is not a no-repair or escalation outcome")
         return proposal.concise_explanation
+
+    def approve_proposal(
+        self,
+        proposal_id: str,
+        *,
+        approval_reason: str,
+        evidence_reviewed: list[str] | None = None,
+        acknowledged_risks: list[str] | None = None,
+        approver_id: str = "local_user",
+        notes: str | None = None,
+    ) -> RepairProposal:
+        proposal = self.get_proposal(proposal_id)
+        self._transition_or_error(proposal, RepairStatus.APPROVED, actor=approver_id)
+        approval_record = ApprovalRecord(
+            proposal_id=proposal.proposal_id,
+            approver_id=approver_id,
+            approval_reason=approval_reason,
+            approved_at=datetime.now(timezone.utc),
+            evidence_reviewed=evidence_reviewed or self._default_evidence_reviewed(proposal),
+            acknowledged_risks=acknowledged_risks or list(proposal.risks),
+            notes=notes,
+        )
+        updated = proposal.model_copy(
+            update={
+                "proposal_status": RepairStatus.APPROVED,
+                "approval_record": approval_record,
+            },
+            deep=True,
+        )
+        self.repository.save_repair_proposal(updated)
+        self.repository.save_approval_record(approval_record, updated.scenario_id)
+        self._record_audit(
+            proposal=updated,
+            event_type=AuditEventType.PROPOSAL_APPROVED,
+            actor=approver_id,
+            status_from=proposal.proposal_status,
+            status_to=updated.proposal_status,
+            details={"approval_reason": approval_reason},
+        )
+        self.session.commit()
+        self._write_proposal_artifacts(updated)
+        return updated
+
+    def reject_proposal(
+        self,
+        proposal_id: str,
+        *,
+        rejection_reason: str,
+        actor_id: str = "local_user",
+        notes: str | None = None,
+    ) -> RepairProposal:
+        proposal = self.get_proposal(proposal_id)
+        self._transition_or_error(proposal, RepairStatus.REJECTED, actor=actor_id)
+        rejection_record = RejectionRecord(
+            proposal_id=proposal.proposal_id,
+            actor_id=actor_id,
+            rejection_reason=rejection_reason,
+            rejected_at=datetime.now(timezone.utc),
+            notes=notes,
+        )
+        updated = proposal.model_copy(
+            update={
+                "proposal_status": RepairStatus.REJECTED,
+                "rejection_record": rejection_record,
+            },
+            deep=True,
+        )
+        self.repository.save_repair_proposal(updated)
+        self._record_audit(
+            proposal=updated,
+            event_type=AuditEventType.PROPOSAL_REJECTED,
+            actor=actor_id,
+            status_from=proposal.proposal_status,
+            status_to=updated.proposal_status,
+            details={"rejection_reason": rejection_reason},
+        )
+        self.session.commit()
+        self._write_proposal_artifacts(updated)
+        return updated
+
+    def apply_proposal(
+        self,
+        proposal_id: str,
+        *,
+        actor_id: str = "local_user",
+    ) -> MemoryStoreVersion:
+        proposal = self.get_proposal(proposal_id)
+        self._transition_or_error(proposal, RepairStatus.APPLIED, actor=actor_id)
+        if proposal.repair_type in {
+            RepairType.NO_MEMORY_REPAIR_RECOMMENDED,
+            RepairType.ESCALATE_PROMPT_OR_POLICY_REVIEW,
+        }:
+            self._failed_transition(
+                proposal,
+                actor=actor_id,
+                message="This proposal type must not modify memory or create a version.",
+            )
+            raise RepairProposalError(
+                RepairProposalFailure(
+                    code="non_applicable_repair_type",
+                    message="This proposal type must not modify memory or create a version.",
+                    retryable=False,
+                    attempts=1,
+                )
+            )
+        investigation = self.replay_engine.load_investigation(proposal.investigation_id)
+        self._validate_apply_readiness(proposal, investigation, actor_id)
+        current_version = self._get_or_create_base_version(investigation)
+        if current_version.snapshot_hash != proposal.evidence_references.memory_snapshot_hash:
+            self._failed_transition(
+                proposal,
+                actor=actor_id,
+                message="Proposal is stale because the current memory snapshot has changed.",
+            )
+            raise RepairProposalError(
+                RepairProposalFailure(
+                    code="stale_snapshot_hash",
+                    message="Proposal is stale because the current memory snapshot has changed.",
+                    retryable=False,
+                    attempts=1,
+                )
+            )
+        updated_snapshot = self._apply_repair_to_snapshot(
+            proposal=proposal,
+            snapshot=current_version.memory_snapshot,
+        )
+        current_version.status = MemoryVersionStatus.SUPERSEDED
+        self.repository.save_memory_version(current_version)
+        applied_version = MemoryStoreVersion(
+            version_id=f"version_{uuid4().hex}",
+            parent_version_id=current_version.version_id,
+            investigation_id=proposal.investigation_id,
+            proposal_id=proposal.proposal_id,
+            scenario_id=proposal.scenario_id,
+            created_at=datetime.now(timezone.utc),
+            created_by=actor_id,
+            memory_snapshot=updated_snapshot,
+            snapshot_hash=self._snapshot_hash(updated_snapshot),
+            change_summary=self._change_summary(proposal),
+            status=MemoryVersionStatus.ACTIVE,
+        )
+        self.repository.save_memory_version(applied_version)
+        updated_proposal = proposal.model_copy(
+            update={
+                "proposal_status": RepairStatus.APPLIED,
+                "applied_version_id": applied_version.version_id,
+            },
+            deep=True,
+        )
+        self.repository.save_repair_proposal(updated_proposal)
+        self._record_audit(
+            proposal=updated_proposal,
+            event_type=AuditEventType.PROPOSAL_APPLIED,
+            actor=actor_id,
+            status_from=proposal.proposal_status,
+            status_to=updated_proposal.proposal_status,
+            snapshot_hash=applied_version.snapshot_hash,
+            details={"version_id": applied_version.version_id},
+        )
+        self.session.commit()
+        self._write_proposal_artifacts(updated_proposal)
+        self._write_memory_version_artifact(applied_version)
+        self._write_audit_log_artifact(updated_proposal.investigation_id)
+        return applied_version
+
+    def revert_proposal(
+        self,
+        proposal_id: str,
+        *,
+        revert_reason: str,
+        actor_id: str = "local_user",
+    ) -> MemoryStoreVersion:
+        proposal = self.get_proposal(proposal_id)
+        self._transition_or_error(proposal, RepairStatus.REVERTED, actor=actor_id)
+        if proposal.applied_version_id is None:
+            self._failed_transition(
+                proposal,
+                actor=actor_id,
+                message="Proposal has no applied version to revert.",
+            )
+            raise RepairProposalError(
+                RepairProposalFailure(
+                    code="missing_applied_version",
+                    message="Proposal has no applied version to revert.",
+                    retryable=False,
+                    attempts=1,
+                )
+            )
+        applied_version = self.repository.get_memory_version(proposal.applied_version_id)
+        if applied_version is None:
+            raise RepairProposalError(
+                RepairProposalFailure(
+                    code="missing_applied_version",
+                    message="Applied version record is missing.",
+                    retryable=False,
+                    attempts=1,
+                )
+            )
+        if proposal.reverted_version_id is not None:
+            self._failed_transition(
+                proposal,
+                actor=actor_id,
+                message="Proposal has already been reverted.",
+            )
+            raise RepairProposalError(
+                RepairProposalFailure(
+                    code="duplicate_revert",
+                    message="Proposal has already been reverted.",
+                    retryable=False,
+                    attempts=1,
+                )
+            )
+        parent_version = (
+            self.repository.get_memory_version(applied_version.parent_version_id)
+            if applied_version.parent_version_id is not None
+            else None
+        )
+        if parent_version is None:
+            raise RepairProposalError(
+                RepairProposalFailure(
+                    code="missing_parent_version",
+                    message="Pre-repair parent version is missing.",
+                    retryable=False,
+                    attempts=1,
+                )
+            )
+        active_version = self._current_active_version(proposal.scenario_id)
+        if active_version is None or active_version.version_id != applied_version.version_id:
+            self._failed_transition(
+                proposal,
+                actor=actor_id,
+                message="Only the current active applied version can be reverted.",
+            )
+            raise RepairProposalError(
+                RepairProposalFailure(
+                    code="stale_revert",
+                    message="Only the current active applied version can be reverted.",
+                    retryable=False,
+                    attempts=1,
+                )
+            )
+        applied_version.status = MemoryVersionStatus.REVERTED
+        self.repository.save_memory_version(applied_version)
+        reverted_version = MemoryStoreVersion(
+            version_id=f"version_{uuid4().hex}",
+            parent_version_id=applied_version.version_id,
+            investigation_id=proposal.investigation_id,
+            proposal_id=proposal.proposal_id,
+            scenario_id=proposal.scenario_id,
+            created_at=datetime.now(timezone.utc),
+            created_by=actor_id,
+            memory_snapshot=[
+                memory.model_copy(deep=True) for memory in parent_version.memory_snapshot
+            ],
+            snapshot_hash=parent_version.snapshot_hash,
+            change_summary=f"Revert proposal {proposal.proposal_id}: {revert_reason}",
+            status=MemoryVersionStatus.ACTIVE,
+        )
+        self.repository.save_memory_version(reverted_version)
+        updated_proposal = proposal.model_copy(
+            update={
+                "proposal_status": RepairStatus.REVERTED,
+                "reverted_version_id": reverted_version.version_id,
+            },
+            deep=True,
+        )
+        self.repository.save_repair_proposal(updated_proposal)
+        self._record_audit(
+            proposal=updated_proposal,
+            event_type=AuditEventType.PROPOSAL_REVERTED,
+            actor=actor_id,
+            status_from=proposal.proposal_status,
+            status_to=updated_proposal.proposal_status,
+            snapshot_hash=reverted_version.snapshot_hash,
+            details={"revert_reason": revert_reason, "version_id": reverted_version.version_id},
+        )
+        self.session.commit()
+        self._write_proposal_artifacts(updated_proposal)
+        self._write_memory_version_artifact(reverted_version)
+        self._write_audit_log_artifact(updated_proposal.investigation_id)
+        return reverted_version
+
+    def list_memory_versions(self, scenario_id: str) -> list[MemoryStoreVersion]:
+        return self.repository.list_memory_versions_for_scenario(scenario_id)
+
+    def show_memory_version(self, version_id: str) -> MemoryStoreVersion:
+        version = self.repository.get_memory_version(version_id)
+        if version is None:
+            raise ValueError(f"unknown memory version: {version_id}")
+        return version
+
+    def compare_memory_versions(self, from_version_id: str, to_version_id: str) -> dict[str, Any]:
+        left = self.show_memory_version(from_version_id)
+        right = self.show_memory_version(to_version_id)
+        left_memories = {memory.memory_id: memory for memory in left.memory_snapshot}
+        right_memories = {memory.memory_id: memory for memory in right.memory_snapshot}
+        changed: list[dict[str, Any]] = []
+        for memory_id in sorted(set(left_memories) | set(right_memories)):
+            if left_memories.get(memory_id) == right_memories.get(memory_id):
+                continue
+            changed.append(
+                {
+                    "memory_id": memory_id,
+                    "from": (
+                        left_memories[memory_id].model_dump(mode="json")
+                        if memory_id in left_memories
+                        else None
+                    ),
+                    "to": (
+                        right_memories[memory_id].model_dump(mode="json")
+                        if memory_id in right_memories
+                        else None
+                    ),
+                }
+            )
+        return {
+            "from_version_id": from_version_id,
+            "to_version_id": to_version_id,
+            "changed_memories": changed,
+        }
 
     def _load_or_build_suspicion(self, investigation_id: str) -> SuspicionRankingArtifact:
         path = self._investigation_dir(investigation_id) / "suspicion-ranking.json"
@@ -796,19 +1123,261 @@ class RepairProposalEngine:
                 )
             )
 
+    def _allowed_transitions(self) -> dict[RepairStatus, set[RepairStatus]]:
+        return {
+            RepairStatus.PROPOSED: {RepairStatus.APPROVED, RepairStatus.REJECTED},
+            RepairStatus.APPROVED: {RepairStatus.APPLIED},
+            RepairStatus.APPLIED: {RepairStatus.REVERTED},
+            RepairStatus.REJECTED: set(),
+            RepairStatus.REVERTED: set(),
+        }
+
+    def _transition_or_error(
+        self,
+        proposal: RepairProposal,
+        target_status: RepairStatus,
+        *,
+        actor: str,
+    ) -> None:
+        allowed = self._allowed_transitions()[proposal.proposal_status]
+        if target_status not in allowed:
+            message = (
+                f"Invalid proposal state transition: {proposal.proposal_status.value} -> "
+                f"{target_status.value}"
+            )
+            self._failed_transition(proposal, actor=actor, message=message)
+            raise RepairProposalError(
+                RepairProposalFailure(
+                    code="invalid_state_transition",
+                    message=message,
+                    retryable=False,
+                    attempts=1,
+                )
+            )
+
+    def _failed_transition(self, proposal: RepairProposal, *, actor: str, message: str) -> None:
+        self._record_audit(
+            proposal=proposal,
+            event_type=AuditEventType.FAILED_TRANSITION,
+            actor=actor,
+            status_from=proposal.proposal_status,
+            status_to=proposal.proposal_status,
+            details={"message": message},
+        )
+        self.session.commit()
+        self._write_audit_log_artifact(proposal.investigation_id)
+
+    def _default_evidence_reviewed(self, proposal: RepairProposal) -> list[str]:
+        return [
+            *proposal.evidence_references.replay_artifact_ids,
+            *proposal.evidence_references.contradiction_artifact_ids,
+        ]
+
+    def _validate_apply_readiness(
+        self,
+        proposal: RepairProposal,
+        investigation: Investigation,
+        actor_id: str,
+    ) -> None:
+        if proposal.approval_record is None:
+            self._failed_transition(
+                proposal,
+                actor=actor_id,
+                message="Proposal must be explicitly approved before apply.",
+            )
+            raise RepairProposalError(
+                RepairProposalFailure(
+                    code="missing_approval",
+                    message="Proposal must be explicitly approved before apply.",
+                    retryable=False,
+                    attempts=1,
+                )
+            )
+        known_ids = {memory.memory_id for memory in investigation.original_memory_snapshot}
+        unknown_target_ids = [
+            memory_id for memory_id in proposal.target_memory_ids if memory_id not in known_ids
+        ]
+        if unknown_target_ids:
+            self._failed_transition(
+                proposal,
+                actor=actor_id,
+                message=f"Unknown target memory IDs: {unknown_target_ids}",
+            )
+            raise RepairProposalError(
+                RepairProposalFailure(
+                    code="invalid_target_memory_ids",
+                    message=f"Unknown target memory IDs: {unknown_target_ids}",
+                    retryable=False,
+                    attempts=1,
+                )
+            )
+        missing_artifacts = [
+            name
+            for name in (
+                proposal.evidence_references.replay_artifact_ids
+                + proposal.evidence_references.contradiction_artifact_ids
+            )
+            if not (self._investigation_dir(proposal.investigation_id) / name).exists()
+        ]
+        if missing_artifacts:
+            self._failed_transition(
+                proposal,
+                actor=actor_id,
+                message=f"Evidence artifacts are missing: {missing_artifacts}",
+            )
+            raise RepairProposalError(
+                RepairProposalFailure(
+                    code="missing_evidence_references",
+                    message=f"Evidence artifacts are missing: {missing_artifacts}",
+                    retryable=False,
+                    attempts=1,
+                )
+            )
+        if proposal.applied_version_id is not None:
+            self._failed_transition(
+                proposal,
+                actor=actor_id,
+                message="Proposal was already applied.",
+            )
+            raise RepairProposalError(
+                RepairProposalFailure(
+                    code="duplicate_apply",
+                    message="Proposal was already applied.",
+                    retryable=False,
+                    attempts=1,
+                )
+            )
+
+    def _get_or_create_base_version(self, investigation: Investigation) -> MemoryStoreVersion:
+        current = self._current_active_version(investigation.scenario_id)
+        if current is not None:
+            return current
+        base = MemoryStoreVersion(
+            version_id=f"version_{investigation.scenario_id}_root",
+            parent_version_id=None,
+            investigation_id=investigation.investigation_id,
+            proposal_id=None,
+            scenario_id=investigation.scenario_id,
+            created_at=investigation.created_at,
+            created_by="system",
+            memory_snapshot=[
+                memory.model_copy(deep=True) for memory in investigation.original_memory_snapshot
+            ],
+            snapshot_hash=self._snapshot_hash(investigation.original_memory_snapshot),
+            change_summary="Immutable original investigation snapshot.",
+            status=MemoryVersionStatus.ACTIVE,
+        )
+        self.repository.save_memory_version(base)
+        self.session.commit()
+        self._write_memory_version_artifact(base)
+        return base
+
+    def _current_active_version(self, scenario_id: str) -> MemoryStoreVersion | None:
+        active = [
+            version
+            for version in self.repository.list_memory_versions_for_scenario(scenario_id)
+            if version.status == MemoryVersionStatus.ACTIVE
+        ]
+        if not active:
+            return None
+        return active[-1]
+
+    def _apply_repair_to_snapshot(
+        self,
+        *,
+        proposal: RepairProposal,
+        snapshot: list[AgentInputMemory],
+    ) -> list[AgentInputMemory]:
+        updated = [memory.model_copy(deep=True) for memory in snapshot]
+        lookup = {memory.memory_id: memory for memory in updated}
+        targets = [lookup[memory_id] for memory_id in proposal.target_memory_ids]
+        for memory in targets:
+            if proposal.repair_type == RepairType.INVALIDATE_MEMORY:
+                memory.status = MemoryStatus.INVALID
+            elif proposal.repair_type == RepairType.ADD_EXPIRATION_DATE:
+                memory.valid_until = self._parse_datetime_field(
+                    proposal.proposed_after_state.get("valid_until")
+                )
+            elif proposal.repair_type == RepairType.MARK_SUPERSEDED:
+                memory.status = MemoryStatus.SUPERSEDED
+                superseded_by = proposal.proposed_after_state.get(
+                    "superseded_by", proposal.proposal_id
+                )
+                memory.operational_metadata["superseded_by"] = superseded_by
+            elif proposal.repair_type == RepairType.CORRECT_ENTITY_ASSOCIATION:
+                memory.operational_metadata["previous_entity_id"] = memory.entity_id
+                memory.entity_id = proposal.proposed_after_state.get("entity_id", memory.entity_id)
+            elif proposal.repair_type == RepairType.MERGE_CONTRADICTORY_MEMORIES:
+                memory.operational_metadata["merged_with"] = [
+                    target_id
+                    for target_id in proposal.target_memory_ids
+                    if target_id != memory.memory_id
+                ]
+                memory.operational_metadata["merge_summary"] = proposal.proposed_after_state.get(
+                    "merge_summary",
+                    "Merged contradictory memory context.",
+                )
+            elif proposal.repair_type == RepairType.LOWER_RETRIEVAL_PRIORITY:
+                memory.operational_metadata["previous_retrieval_priority"] = (
+                    memory.retrieval_priority
+                )
+                memory.retrieval_priority = int(
+                    proposal.proposed_after_state.get(
+                        "retrieval_priority", str(memory.retrieval_priority)
+                    )
+                )
+            elif proposal.repair_type == RepairType.REPLACE_WITH_CORRECTED_FACT:
+                memory.operational_metadata["previous_content"] = memory.content
+                memory.content = proposal.proposed_after_state.get("content", memory.content)
+            elif proposal.repair_type == RepairType.ADD_CONTEXT_CONSTRAINT:
+                memory.operational_metadata["context_constraint"] = (
+                    proposal.proposed_after_state.get(
+                        "context_constraint",
+                        "Requires additional contextual validation.",
+                    )
+                )
+            elif proposal.repair_type == RepairType.ADD_PRECEDENCE_METADATA:
+                memory.operational_metadata["precedence_note"] = proposal.proposed_after_state.get(
+                    "precedence_note",
+                    "Use explicit precedence review before applying this memory.",
+                )
+            elif proposal.repair_type == RepairType.REQUIRE_HUMAN_CONFIRMATION:
+                memory.operational_metadata["requires_human_confirmation"] = True
+                memory.operational_metadata["human_confirmation_note"] = (
+                    proposal.proposed_after_state.get(
+                        "repair_review_status",
+                        "Human confirmation required.",
+                    )
+                )
+        for memory in updated:
+            memory.model_validate(memory.model_dump())
+        return updated
+
+    def _parse_datetime_field(self, raw_value: str | None) -> datetime | None:
+        if raw_value is None:
+            return None
+        return datetime.fromisoformat(raw_value.replace("Z", "+00:00"))
+
+    def _change_summary(self, proposal: RepairProposal) -> str:
+        targets = (
+            ", ".join(proposal.target_memory_ids) if proposal.target_memory_ids else "no targets"
+        )
+        return f"{proposal.repair_type.value} applied to {targets}"
+
     def _persist_proposal(self, proposal: RepairProposal) -> None:
         self.repository.save_repair_proposal(proposal)
+        self._record_audit(
+            proposal=proposal,
+            event_type=AuditEventType.PROPOSAL_CREATED,
+            actor="system",
+            status_from=None,
+            status_to=proposal.proposal_status,
+            snapshot_hash=proposal.evidence_references.memory_snapshot_hash,
+            details={"repair_type": proposal.repair_type.value},
+        )
         self.session.commit()
-        proposal_dir = self._proposal_dir(proposal.investigation_id)
-        proposal_dir.mkdir(parents=True, exist_ok=True)
-        (proposal_dir / f"{proposal.proposal_id}.json").write_text(
-            proposal.model_dump_json(indent=2),
-            encoding="utf-8",
-        )
-        (proposal_dir / f"{proposal.proposal_id}.md").write_text(
-            self._render_proposal_markdown(proposal),
-            encoding="utf-8",
-        )
+        self._write_proposal_artifacts(proposal)
+        self._write_audit_log_artifact(proposal.investigation_id)
 
     def _render_proposal_markdown(self, proposal: RepairProposal) -> str:
         lines = [
@@ -842,6 +1411,61 @@ class RepairProposalEngine:
             ]
         )
         return "\n".join(lines)
+
+    def _record_audit(
+        self,
+        *,
+        proposal: RepairProposal,
+        event_type: AuditEventType,
+        actor: str,
+        status_from: RepairStatus | None,
+        status_to: RepairStatus | None,
+        snapshot_hash: str | None = None,
+        details: dict[str, Any] | None = None,
+    ) -> None:
+        self.repository.save_audit_log(
+            AuditLogEntry(
+                audit_id=f"audit_{uuid4().hex}",
+                investigation_id=proposal.investigation_id,
+                proposal_id=proposal.proposal_id,
+                scenario_id=proposal.scenario_id,
+                event_type=event_type,
+                actor=actor,
+                timestamp=datetime.now(timezone.utc),
+                status_from=status_from,
+                status_to=status_to,
+                snapshot_hash=snapshot_hash,
+                details=details or {},
+            )
+        )
+
+    def _write_proposal_artifacts(self, proposal: RepairProposal) -> None:
+        proposal_dir = self._proposal_dir(proposal.investigation_id)
+        proposal_dir.mkdir(parents=True, exist_ok=True)
+        (proposal_dir / f"{proposal.proposal_id}.json").write_text(
+            proposal.model_dump_json(indent=2),
+            encoding="utf-8",
+        )
+        (proposal_dir / f"{proposal.proposal_id}.md").write_text(
+            self._render_proposal_markdown(proposal),
+            encoding="utf-8",
+        )
+
+    def _write_memory_version_artifact(self, version: MemoryStoreVersion) -> None:
+        versions_dir = self._investigation_dir(version.investigation_id) / "memory-versions"
+        versions_dir.mkdir(parents=True, exist_ok=True)
+        (versions_dir / f"{version.version_id}.json").write_text(
+            version.model_dump_json(indent=2),
+            encoding="utf-8",
+        )
+
+    def _write_audit_log_artifact(self, investigation_id: str) -> None:
+        audit_entries = self.repository.list_audit_logs_for_investigation(investigation_id)
+        audit_path = self._investigation_dir(investigation_id) / "audit-log.json"
+        audit_path.write_text(
+            json.dumps([entry.model_dump(mode="json") for entry in audit_entries], indent=2),
+            encoding="utf-8",
+        )
 
     def _build_text_config(self, response_model: type[BaseModel]) -> dict[str, object]:
         config: dict[str, object] = {

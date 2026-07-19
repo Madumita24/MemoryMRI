@@ -1,0 +1,47 @@
+[
+  {
+    "audit_id": "audit_e73590b4a81e47d5b48d72bfabfa5223",
+    "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+    "proposal_id": "proposal_bf551979f6ea4313893c45a505967b91",
+    "scenario_id": "cs_01",
+    "event_type": "failed_transition",
+    "actor": "local_user",
+    "timestamp": "2026-07-19T01:33:02.080940Z",
+    "status_from": "proposed",
+    "status_to": "proposed",
+    "snapshot_hash": null,
+    "details": {
+      "message": "Invalid proposal state transition: proposed -> applied"
+    }
+  },
+  {
+    "audit_id": "audit_c6db6c6acdbc494f914e727cefd3a803",
+    "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+    "proposal_id": "proposal_bf551979f6ea4313893c45a505967b91",
+    "scenario_id": "cs_01",
+    "event_type": "proposal_approved",
+    "actor": "local_user",
+    "timestamp": "2026-07-19T01:33:02.106776Z",
+    "status_from": "proposed",
+    "status_to": "approved",
+    "snapshot_hash": null,
+    "details": {
+      "approval_reason": "Reviewed replay, contradiction, and support-validity evidence on July 19, 2026; safe only as a human-confirmation control."
+    }
+  },
+  {
+    "audit_id": "audit_0517a070ba6b43a18336dbd22f0e0cc8",
+    "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+    "proposal_id": "proposal_bf551979f6ea4313893c45a505967b91",
+    "scenario_id": "cs_01",
+    "event_type": "proposal_applied",
+    "actor": "local_user",
+    "timestamp": "2026-07-19T01:33:13.767897Z",
+    "status_from": "approved",
+    "status_to": "applied",
+    "snapshot_hash": "953935da8588a62aeda3b7b7ef6e99c4085912d82fc2a4bda8e16a5228a2a506",
+    "details": {
+      "version_id": "version_e5d391ef6ffe4d8396dc91ac84c1bf02"
+    }
+  }
+]

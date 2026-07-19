@@ -6,14 +6,24 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from memory_mri.db.models import (
+    ApprovalRecordModel,
+    AuditLogRecord,
     BenchmarkRunRecord,
     MemoryRecord,
+    MemoryVersionRecord,
     RepairProposalRecord,
     ScenarioRecord,
     TraceRecord,
     VerificationArtifactRecord,
 )
-from memory_mri.schemas import BenchmarkCase, ExecutionTrace, RepairProposal
+from memory_mri.schemas import (
+    ApprovalRecord,
+    AuditLogEntry,
+    BenchmarkCase,
+    ExecutionTrace,
+    MemoryStoreVersion,
+    RepairProposal,
+)
 
 
 class BenchmarkRepository:
@@ -74,6 +84,41 @@ class BenchmarkRepository:
             )
         )
 
+    def save_approval_record(self, approval: ApprovalRecord, scenario_id: str) -> None:
+        self.session.add(
+            ApprovalRecordModel(
+                approval_id=f"approval_{approval.proposal_id}",
+                proposal_id=approval.proposal_id,
+                scenario_id=scenario_id,
+                payload_json=approval.model_dump_json(),
+            )
+        )
+
+    def save_memory_version(self, version: MemoryStoreVersion) -> None:
+        self.session.merge(
+            MemoryVersionRecord(
+                version_id=version.version_id,
+                scenario_id=version.scenario_id,
+                investigation_id=version.investigation_id,
+                proposal_id=version.proposal_id,
+                status=version.status.value,
+                payload_json=version.model_dump_json(),
+            )
+        )
+
+    def save_audit_log(self, entry: AuditLogEntry) -> None:
+        self.session.add(
+            AuditLogRecord(
+                audit_id=entry.audit_id,
+                scenario_id=entry.scenario_id,
+                investigation_id=entry.investigation_id,
+                proposal_id=entry.proposal_id,
+                event_type=entry.event_type.value,
+                actor=entry.actor,
+                payload_json=entry.model_dump_json(),
+            )
+        )
+
     def get_trace(self, trace_id: str) -> ExecutionTrace | None:
         record = self.session.get(TraceRecord, trace_id)
         if record is None:
@@ -85,6 +130,12 @@ class BenchmarkRepository:
         if record is None:
             return None
         return RepairProposal.model_validate_json(record.payload_json)
+
+    def get_memory_version(self, version_id: str) -> MemoryStoreVersion | None:
+        record = self.session.get(MemoryVersionRecord, version_id)
+        if record is None:
+            return None
+        return MemoryStoreVersion.model_validate_json(record.payload_json)
 
     def list_traces(self) -> list[ExecutionTrace]:
         return [
@@ -116,6 +167,41 @@ class BenchmarkRepository:
             for record in self.session.query(RepairProposalRecord).all()
         ]
 
+    def list_memory_versions(self) -> list[MemoryStoreVersion]:
+        return [
+            MemoryStoreVersion.model_validate_json(record.payload_json)
+            for record in self.session.query(MemoryVersionRecord)
+            .order_by(MemoryVersionRecord.created_at)
+            .all()
+        ]
+
+    def list_memory_versions_for_scenario(self, scenario_id: str) -> list[MemoryStoreVersion]:
+        return [
+            MemoryStoreVersion.model_validate_json(record.payload_json)
+            for record in self.session.query(MemoryVersionRecord)
+            .filter(MemoryVersionRecord.scenario_id == scenario_id)
+            .order_by(MemoryVersionRecord.created_at)
+            .all()
+        ]
+
+    def list_audit_logs_for_proposal(self, proposal_id: str) -> list[AuditLogEntry]:
+        return [
+            AuditLogEntry.model_validate_json(record.payload_json)
+            for record in self.session.query(AuditLogRecord)
+            .filter(AuditLogRecord.proposal_id == proposal_id)
+            .order_by(AuditLogRecord.created_at)
+            .all()
+        ]
+
+    def list_audit_logs_for_investigation(self, investigation_id: str) -> list[AuditLogEntry]:
+        return [
+            AuditLogEntry.model_validate_json(record.payload_json)
+            for record in self.session.query(AuditLogRecord)
+            .filter(AuditLogRecord.investigation_id == investigation_id)
+            .order_by(AuditLogRecord.created_at)
+            .all()
+        ]
+
     def list_repair_proposals_for_investigation(
         self, investigation_id: str
     ) -> list[RepairProposal]:
@@ -132,6 +218,9 @@ class BenchmarkRepository:
             "scenarios": self.session.query(ScenarioRecord).count(),
             "traces": self.session.query(TraceRecord).count(),
             "repair_proposals": self.session.query(RepairProposalRecord).count(),
+            "approval_records": self.session.query(ApprovalRecordModel).count(),
+            "memory_versions": self.session.query(MemoryVersionRecord).count(),
+            "audit_logs": self.session.query(AuditLogRecord).count(),
             "benchmark_runs": self.session.query(BenchmarkRunRecord).count(),
             "verification_artifacts": self.session.query(VerificationArtifactRecord).count(),
         }

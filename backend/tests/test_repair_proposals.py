@@ -13,7 +13,7 @@ from memory_mri.config import OpenAISettings, SemanticAnalysisSettings
 from memory_mri.db.session import create_sqlite_session
 from memory_mri.engine.repair_proposals import RepairProposalEngine, RepairProposalError
 from memory_mri.repositories.store import BenchmarkRepository
-from memory_mri.schemas import RepairStatus, RepairType
+from memory_mri.schemas import AuditEventType, MemoryVersionStatus, RepairStatus, RepairType
 
 ROOT = Path(__file__).resolve().parents[2]
 ARTIFACTS_ROOT = ROOT / "artifacts" / "investigations"
@@ -361,3 +361,239 @@ def test_proposal_persistence_and_artifact_references_are_valid(
     export_paths = engine.export_proposal(proposal.proposal_id)
     assert Path(export_paths["proposal_json"]).exists()
     assert Path(export_paths["proposal_markdown"]).exists()
+
+
+def test_valid_state_transitions_and_version_creation(benchmark_cases, tmp_path: Path) -> None:
+    case = next(case for case in benchmark_cases if case.scenario.id == "cs_01")
+    investigation_id = "inv_6d6c10d634c140f3af029a3eb7826bde"
+    copy_investigation(tmp_path, investigation_id)
+    database_url = seed_trace(
+        tmp_path,
+        case,
+        trace_id="trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+        selected_action="ASK_FOR_INFORMATION",
+    )
+    engine = make_engine(
+        tmp_path,
+        database_url=database_url,
+        client=FakeClient(
+            [
+                draft_response(
+                    repair_type="REQUIRE_HUMAN_CONFIRMATION",
+                    target_memory_ids=["cs_01_mem_2"],
+                )
+            ]
+        ),
+    )
+    proposal = engine.generate_proposal(investigation_id)
+    approved = engine.approve_proposal(
+        proposal.proposal_id,
+        approval_reason="Reviewed replay and contradiction evidence.",
+    )
+    applied = engine.apply_proposal(proposal.proposal_id)
+    reverted = engine.revert_proposal(
+        proposal.proposal_id,
+        revert_reason="Rollback workflow verification.",
+    )
+    updated = engine.get_proposal(proposal.proposal_id)
+    versions = engine.list_memory_versions(case.scenario.id)
+
+    assert approved.proposal_status == RepairStatus.APPROVED
+    assert approved.approval_record is not None
+    assert applied.status == MemoryVersionStatus.ACTIVE
+    assert reverted.status == MemoryVersionStatus.ACTIVE
+    assert updated.proposal_status == RepairStatus.REVERTED
+    assert updated.applied_version_id is not None
+    assert updated.reverted_version_id == reverted.version_id
+    assert len(versions) == 3
+    assert versions[0].snapshot_hash == proposal.evidence_references.memory_snapshot_hash
+
+
+def test_proposal_cannot_apply_before_approval(benchmark_cases, tmp_path: Path) -> None:
+    case = next(case for case in benchmark_cases if case.scenario.id == "cs_01")
+    investigation_id = "inv_6d6c10d634c140f3af029a3eb7826bde"
+    copy_investigation(tmp_path, investigation_id)
+    database_url = seed_trace(
+        tmp_path,
+        case,
+        trace_id="trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+        selected_action="ASK_FOR_INFORMATION",
+    )
+    engine = make_engine(
+        tmp_path,
+        database_url=database_url,
+        client=FakeClient(
+            [
+                draft_response(
+                    repair_type="REQUIRE_HUMAN_CONFIRMATION",
+                    target_memory_ids=["cs_01_mem_2"],
+                )
+            ]
+        ),
+    )
+    proposal = engine.generate_proposal(investigation_id)
+
+    with pytest.raises(RepairProposalError) as exc_info:
+        engine.apply_proposal(proposal.proposal_id)
+
+    assert exc_info.value.failure.code == "invalid_state_transition"
+
+
+def test_rejected_proposal_cannot_apply_or_reapprove(benchmark_cases, tmp_path: Path) -> None:
+    case = next(case for case in benchmark_cases if case.scenario.id == "cs_01")
+    investigation_id = "inv_6d6c10d634c140f3af029a3eb7826bde"
+    copy_investigation(tmp_path, investigation_id)
+    database_url = seed_trace(
+        tmp_path,
+        case,
+        trace_id="trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+        selected_action="ASK_FOR_INFORMATION",
+    )
+    engine = make_engine(
+        tmp_path,
+        database_url=database_url,
+        client=FakeClient(
+            [
+                draft_response(
+                    repair_type="REQUIRE_HUMAN_CONFIRMATION",
+                    target_memory_ids=["cs_01_mem_2"],
+                )
+            ]
+        ),
+    )
+    proposal = engine.generate_proposal(investigation_id)
+    engine.reject_proposal(proposal.proposal_id, rejection_reason="Not comfortable applying.")
+
+    with pytest.raises(RepairProposalError):
+        engine.apply_proposal(proposal.proposal_id)
+    with pytest.raises(RepairProposalError):
+        engine.approve_proposal(proposal.proposal_id, approval_reason="Trying to reapprove.")
+
+
+def test_no_version_created_for_escalation_proposal(benchmark_cases, tmp_path: Path) -> None:
+    case = next(case for case in benchmark_cases if case.scenario.id == "exp_09")
+    investigation_id = "inv_ff4ed6ca0666440a85a758168e5ca9b4"
+    copy_investigation(tmp_path, investigation_id)
+    database_url = seed_trace(
+        tmp_path,
+        case,
+        trace_id="trace_0f0477f7cb5c497cb209414fce5e1016",
+        selected_action="REQUEST_DOCUMENTATION",
+    )
+    engine = make_engine(tmp_path, database_url=database_url, client=FakeClient([]))
+    proposal = engine.generate_proposal(investigation_id)
+    engine.approve_proposal(proposal.proposal_id, approval_reason="Reviewed prompt-level evidence.")
+
+    with pytest.raises(RepairProposalError) as exc_info:
+        engine.apply_proposal(proposal.proposal_id)
+
+    assert exc_info.value.failure.code == "non_applicable_repair_type"
+    assert engine.list_memory_versions(case.scenario.id) == []
+
+
+def test_duplicate_apply_and_duplicate_revert_are_rejected(benchmark_cases, tmp_path: Path) -> None:
+    case = next(case for case in benchmark_cases if case.scenario.id == "cs_01")
+    investigation_id = "inv_6d6c10d634c140f3af029a3eb7826bde"
+    copy_investigation(tmp_path, investigation_id)
+    database_url = seed_trace(
+        tmp_path,
+        case,
+        trace_id="trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+        selected_action="ASK_FOR_INFORMATION",
+    )
+    engine = make_engine(
+        tmp_path,
+        database_url=database_url,
+        client=FakeClient(
+            [
+                draft_response(
+                    repair_type="REQUIRE_HUMAN_CONFIRMATION",
+                    target_memory_ids=["cs_01_mem_2"],
+                )
+            ]
+        ),
+    )
+    proposal = engine.generate_proposal(investigation_id)
+    engine.approve_proposal(proposal.proposal_id, approval_reason="Approved.")
+    engine.apply_proposal(proposal.proposal_id)
+    with pytest.raises(RepairProposalError):
+        engine.apply_proposal(proposal.proposal_id)
+    engine.revert_proposal(proposal.proposal_id, revert_reason="Rollback verification.")
+    with pytest.raises(RepairProposalError):
+        engine.revert_proposal(proposal.proposal_id, revert_reason="Second rollback.")
+
+
+def test_concurrent_stale_proposal_protection(benchmark_cases, tmp_path: Path) -> None:
+    case = next(case for case in benchmark_cases if case.scenario.id == "cs_01")
+    investigation_id = "inv_6d6c10d634c140f3af029a3eb7826bde"
+    copy_investigation(tmp_path, investigation_id)
+    database_url = seed_trace(
+        tmp_path,
+        case,
+        trace_id="trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+        selected_action="ASK_FOR_INFORMATION",
+    )
+    engine = make_engine(
+        tmp_path,
+        database_url=database_url,
+        client=FakeClient(
+            [
+                draft_response(
+                    repair_type="REQUIRE_HUMAN_CONFIRMATION",
+                    target_memory_ids=["cs_01_mem_2"],
+                ),
+                draft_response(
+                    repair_type="ADD_CONTEXT_CONSTRAINT",
+                    target_memory_ids=["cs_01_mem_2"],
+                ),
+            ]
+        ),
+    )
+    first = engine.generate_proposal(investigation_id)
+    second = engine.generate_proposal(investigation_id)
+    engine.approve_proposal(first.proposal_id, approval_reason="First approval.")
+    engine.approve_proposal(second.proposal_id, approval_reason="Second approval.")
+    engine.apply_proposal(first.proposal_id)
+
+    with pytest.raises(RepairProposalError) as exc_info:
+        engine.apply_proposal(second.proposal_id)
+
+    assert exc_info.value.failure.code == "stale_snapshot_hash"
+
+
+def test_audit_log_and_version_compare(benchmark_cases, tmp_path: Path) -> None:
+    case = next(case for case in benchmark_cases if case.scenario.id == "cs_01")
+    investigation_id = "inv_6d6c10d634c140f3af029a3eb7826bde"
+    copy_investigation(tmp_path, investigation_id)
+    database_url = seed_trace(
+        tmp_path,
+        case,
+        trace_id="trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+        selected_action="ASK_FOR_INFORMATION",
+    )
+    engine = make_engine(
+        tmp_path,
+        database_url=database_url,
+        client=FakeClient(
+            [
+                draft_response(
+                    repair_type="REQUIRE_HUMAN_CONFIRMATION",
+                    target_memory_ids=["cs_01_mem_2"],
+                )
+            ]
+        ),
+    )
+    proposal = engine.generate_proposal(investigation_id)
+    engine.approve_proposal(proposal.proposal_id, approval_reason="Reviewed.")
+    applied = engine.apply_proposal(proposal.proposal_id)
+    base_version = engine.list_memory_versions(case.scenario.id)[0]
+    comparison = engine.compare_memory_versions(base_version.version_id, applied.version_id)
+    audit_entries = engine.repository.list_audit_logs_for_proposal(proposal.proposal_id)
+
+    assert comparison["changed_memories"]
+    assert audit_entries[0].event_type == AuditEventType.PROPOSAL_CREATED
+    assert {entry.event_type for entry in audit_entries} >= {
+        AuditEventType.PROPOSAL_CREATED,
+        AuditEventType.PROPOSAL_APPROVED,
+        AuditEventType.PROPOSAL_APPLIED,
+    }

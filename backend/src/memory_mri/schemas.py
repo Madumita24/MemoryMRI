@@ -28,6 +28,21 @@ class RepairStatus(StrEnum):
     REVERTED = "reverted"
 
 
+class MemoryVersionStatus(StrEnum):
+    ACTIVE = "active"
+    SUPERSEDED = "superseded"
+    REVERTED = "reverted"
+
+
+class AuditEventType(StrEnum):
+    PROPOSAL_CREATED = "proposal_created"
+    PROPOSAL_APPROVED = "proposal_approved"
+    PROPOSAL_REJECTED = "proposal_rejected"
+    PROPOSAL_APPLIED = "proposal_applied"
+    PROPOSAL_REVERTED = "proposal_reverted"
+    FAILED_TRANSITION = "failed_transition"
+
+
 class RepairType(StrEnum):
     INVALIDATE_MEMORY = "INVALIDATE_MEMORY"
     ADD_EXPIRATION_DATE = "ADD_EXPIRATION_DATE"
@@ -531,6 +546,60 @@ class SupportValidityResult(BaseModel):
     support_explanation: str
 
 
+class ApprovalRecord(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    proposal_id: str
+    approver_id: str = "local_user"
+    approval_reason: str = Field(min_length=1, max_length=400)
+    approved_at: datetime
+    evidence_reviewed: list[str] = Field(default_factory=list)
+    acknowledged_risks: list[str] = Field(default_factory=list)
+    notes: str | None = Field(default=None, max_length=400)
+
+
+class RejectionRecord(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    proposal_id: str
+    actor_id: str = "local_user"
+    rejection_reason: str = Field(min_length=1, max_length=400)
+    rejected_at: datetime
+    notes: str | None = Field(default=None, max_length=400)
+
+
+class MemoryStoreVersion(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    version_id: str
+    parent_version_id: str | None = None
+    investigation_id: str
+    proposal_id: str | None = None
+    scenario_id: str
+    created_at: datetime
+    created_by: str
+    memory_snapshot: list[AgentInputMemory]
+    snapshot_hash: str
+    change_summary: str
+    status: MemoryVersionStatus
+
+
+class AuditLogEntry(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    audit_id: str
+    investigation_id: str
+    proposal_id: str | None = None
+    scenario_id: str
+    event_type: AuditEventType
+    actor: str
+    timestamp: datetime
+    status_from: RepairStatus | None = None
+    status_to: RepairStatus | None = None
+    snapshot_hash: str | None = None
+    details: dict[str, Any] = Field(default_factory=dict)
+
+
 class RepairProposal(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -558,6 +627,10 @@ class RepairProposal(BaseModel):
     prompt_version: str
     created_at: datetime
     evidence_references: ProposalEvidenceReference
+    approval_record: ApprovalRecord | None = None
+    rejection_record: RejectionRecord | None = None
+    applied_version_id: str | None = None
+    reverted_version_id: str | None = None
 
     @field_validator("target_memory_ids", "expected_affected_scenarios")
     @classmethod
