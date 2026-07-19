@@ -13,7 +13,7 @@ from memory_mri.db.models import (
     TraceRecord,
     VerificationArtifactRecord,
 )
-from memory_mri.schemas import BenchmarkCase, ExecutionTrace
+from memory_mri.schemas import BenchmarkCase, ExecutionTrace, RepairProposal
 
 
 class BenchmarkRepository:
@@ -64,11 +64,27 @@ class BenchmarkRepository:
             )
         )
 
+    def save_repair_proposal(self, proposal: RepairProposal) -> None:
+        self.session.merge(
+            RepairProposalRecord(
+                proposal_id=proposal.proposal_id,
+                scenario_id=proposal.scenario_id,
+                status=proposal.proposal_status.value,
+                payload_json=proposal.model_dump_json(),
+            )
+        )
+
     def get_trace(self, trace_id: str) -> ExecutionTrace | None:
         record = self.session.get(TraceRecord, trace_id)
         if record is None:
             return None
         return ExecutionTrace.model_validate_json(record.payload_json)
+
+    def get_repair_proposal(self, proposal_id: str) -> RepairProposal | None:
+        record = self.session.get(RepairProposalRecord, proposal_id)
+        if record is None:
+            return None
+        return RepairProposal.model_validate_json(record.payload_json)
 
     def list_traces(self) -> list[ExecutionTrace]:
         return [
@@ -93,6 +109,22 @@ class BenchmarkRepository:
             .order_by(TraceRecord.created_at)
             .all()
         ]
+
+    def list_repair_proposals(self) -> list[RepairProposal]:
+        return [
+            RepairProposal.model_validate_json(record.payload_json)
+            for record in self.session.query(RepairProposalRecord).all()
+        ]
+
+    def list_repair_proposals_for_investigation(
+        self, investigation_id: str
+    ) -> list[RepairProposal]:
+        proposals = [
+            proposal
+            for proposal in self.list_repair_proposals()
+            if proposal.investigation_id == investigation_id
+        ]
+        return sorted(proposals, key=lambda proposal: proposal.created_at)
 
     def list_tables(self) -> dict[str, int]:
         return {

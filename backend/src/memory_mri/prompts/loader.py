@@ -13,6 +13,7 @@ PROMPT_FILES: dict[DomainName, str] = {
 ANALYSIS_PROMPT_FILES: dict[str, str] = {
     "memory_suspicion": "memory_suspicion_{version}.md",
     "memory_contradiction": "memory_contradiction_{version}.md",
+    "memory_repair_proposal": "memory_repair_proposal_{version}.md",
 }
 
 

@@ -15,6 +15,7 @@ from memory_mri.db.session import create_sqlite_session
 from memory_mri.engine.benchmark import BenchmarkService
 from memory_mri.engine.counterfactual_replay import CounterfactualReplayEngine
 from memory_mri.engine.gpt_baseline import GPTBaselineService
+from memory_mri.engine.repair_proposals import RepairProposalEngine
 from memory_mri.repositories.store import BenchmarkRepository
 from memory_mri.schemas import ReplayMode
 
@@ -74,6 +75,21 @@ def main() -> None:
     clear_cache.add_argument("--scenario-id", default=None)
     clear_cache.add_argument("--request-hash", default=None)
 
+    generate_proposal = subparsers.add_parser("generate-proposal")
+    generate_proposal.add_argument("--investigation-id", required=True)
+
+    list_proposals = subparsers.add_parser("list-proposals")
+    list_proposals.add_argument("--investigation-id", required=True)
+
+    show_proposal = subparsers.add_parser("show-proposal")
+    show_proposal.add_argument("--proposal-id", required=True)
+
+    explain_no_repair = subparsers.add_parser("explain-no-repair")
+    explain_no_repair.add_argument("--proposal-id", required=True)
+
+    export_proposal = subparsers.add_parser("export-proposal")
+    export_proposal.add_argument("--proposal-id", required=True)
+
     args = parser.parse_args()
     data_dir = Path(args.data_dir).resolve()
     artifacts_dir = Path(args.artifacts_dir).resolve()
@@ -100,6 +116,11 @@ def main() -> None:
     )
     analysis_engine = InvestigationAnalysisEngine(
         database_url=args.database_url,
+        artifacts_dir=artifacts_dir,
+    )
+    proposal_engine = RepairProposalEngine(
+        database_url=args.database_url,
+        data_dir=data_dir,
         artifacts_dir=artifacts_dir,
     )
 
@@ -156,6 +177,22 @@ def main() -> None:
             if args.request_hash is None:
                 raise SystemExit("--request-hash is required for request-hash mode")
             print(runner.clear_cache_for_request_hash(args.request_hash))
+        return
+    if args.command == "generate-proposal":
+        print(proposal_engine.generate_proposal(args.investigation_id).model_dump_json(indent=2))
+        return
+    if args.command == "list-proposals":
+        proposals = proposal_engine.list_proposals(args.investigation_id)
+        print(json.dumps([proposal.model_dump(mode="json") for proposal in proposals], indent=2))
+        return
+    if args.command == "show-proposal":
+        print(proposal_engine.get_proposal(args.proposal_id).model_dump_json(indent=2))
+        return
+    if args.command == "explain-no-repair":
+        print(proposal_engine.explain_no_repair(args.proposal_id))
+        return
+    if args.command == "export-proposal":
+        print(json.dumps(proposal_engine.export_proposal(args.proposal_id), indent=2))
         return
     raise SystemExit(f"Unsupported command: {args.command}")
 

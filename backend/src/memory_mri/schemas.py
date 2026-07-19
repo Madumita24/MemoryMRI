@@ -25,6 +25,22 @@ class RepairStatus(StrEnum):
     APPROVED = "approved"
     REJECTED = "rejected"
     APPLIED = "applied"
+    REVERTED = "reverted"
+
+
+class RepairType(StrEnum):
+    INVALIDATE_MEMORY = "INVALIDATE_MEMORY"
+    ADD_EXPIRATION_DATE = "ADD_EXPIRATION_DATE"
+    MARK_SUPERSEDED = "MARK_SUPERSEDED"
+    CORRECT_ENTITY_ASSOCIATION = "CORRECT_ENTITY_ASSOCIATION"
+    MERGE_CONTRADICTORY_MEMORIES = "MERGE_CONTRADICTORY_MEMORIES"
+    LOWER_RETRIEVAL_PRIORITY = "LOWER_RETRIEVAL_PRIORITY"
+    REQUIRE_HUMAN_CONFIRMATION = "REQUIRE_HUMAN_CONFIRMATION"
+    REPLACE_WITH_CORRECTED_FACT = "REPLACE_WITH_CORRECTED_FACT"
+    ADD_CONTEXT_CONSTRAINT = "ADD_CONTEXT_CONSTRAINT"
+    ADD_PRECEDENCE_METADATA = "ADD_PRECEDENCE_METADATA"
+    NO_MEMORY_REPAIR_RECOMMENDED = "NO_MEMORY_REPAIR_RECOMMENDED"
+    ESCALATE_PROMPT_OR_POLICY_REVIEW = "ESCALATE_PROMPT_OR_POLICY_REVIEW"
 
 
 class InterventionType(StrEnum):
@@ -461,19 +477,94 @@ class MemoryControlsArtifact(BaseModel):
     created_at: datetime
 
 
+class ProposalEvidenceReference(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    parent_trace_id: str
+    replay_artifact_ids: list[str] = Field(default_factory=list)
+    contradiction_artifact_ids: list[str] = Field(default_factory=list)
+    memory_snapshot_hash: str
+    git_commit_hash: str
+    prompt_hash: str | None = None
+
+
+class ProposalReplayEvidence(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    replay_evidence_exists: bool
+    behavior_change_observed: bool
+    memory_dependent_failure: bool
+    no_memory_control_preserved_wrong_action: bool
+    strongest_intervention_type: str | None = None
+    strongest_target_memory_ids: list[str] = Field(default_factory=list)
+    strongest_influence_delta: float | None = None
+    strongest_action_distribution: dict[str, int] = Field(default_factory=dict)
+    support_explanation: str
+    evidence_references: ProposalEvidenceReference
+
+
+class ProposalSuspicionEvidence(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    top_ranked_memory_ids: list[str] = Field(default_factory=list)
+    replay_supported_memory_ids: list[str] = Field(default_factory=list)
+    suspicious_without_observed_influence: list[str] = Field(default_factory=list)
+    semantic_hypotheses: list[str] = Field(default_factory=list)
+    evidence_references: ProposalEvidenceReference
+
+
+class ProposalContradictionEvidence(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    contradiction_pairs: list[str] = Field(default_factory=list)
+    contradictory_target_memory_ids: list[str] = Field(default_factory=list)
+    semantic_findings: list[str] = Field(default_factory=list)
+    evidence_references: ProposalEvidenceReference
+
+
+class SupportValidityResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    decision_still_supported: bool
+    outcome_correct: bool
+    requires_human_review: bool
+    support_explanation: str
+
+
 class RepairProposal(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     proposal_id: str
+    investigation_id: str
     scenario_id: str
-    repair_type: str
-    target_memory_ids: list[str]
-    before: dict[str, Any]
-    after: dict[str, Any]
-    explanation: str
+    domain: DomainName
+    repair_type: RepairType
+    target_memory_ids: list[str] = Field(default_factory=list)
+    before_state: dict[str, Any]
+    proposed_after_state: dict[str, Any]
+    replay_evidence: ProposalReplayEvidence
+    suspicion_evidence: ProposalSuspicionEvidence
+    contradiction_evidence: ProposalContradictionEvidence
+    support_validity_result: SupportValidityResult
+    expected_affected_scenarios: list[str] = Field(default_factory=list)
+    expected_behavior_change: str = Field(min_length=1, max_length=400)
+    risks: list[str] = Field(min_length=1)
+    rollback_plan: str = Field(min_length=1, max_length=400)
+    concise_explanation: str = Field(min_length=1, max_length=400)
     confidence: float = Field(ge=0.0, le=1.0)
     requires_human_approval: bool = True
-    status: RepairStatus = RepairStatus.PROPOSED
+    proposal_status: RepairStatus = RepairStatus.PROPOSED
+    model: str
+    prompt_version: str
+    created_at: datetime
+    evidence_references: ProposalEvidenceReference
+
+    @field_validator("target_memory_ids", "expected_affected_scenarios")
+    @classmethod
+    def unique_ids(cls, value: list[str]) -> list[str]:
+        if len(value) != len(set(value)):
+            raise ValueError("list values must be unique")
+        return value
 
 
 class VerificationArtifact(BaseModel):

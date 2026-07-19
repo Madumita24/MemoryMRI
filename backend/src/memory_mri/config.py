@@ -188,8 +188,9 @@ class SuspicionScoringConfig:
 
 @dataclass(frozen=True)
 class SemanticAnalysisSettings:
-    suspicion_prompt_version: str
-    contradiction_prompt_version: str
+    suspicion_prompt_version: str = "v1"
+    contradiction_prompt_version: str = "v1"
+    repair_prompt_version: str = "v1"
 
     @classmethod
     def from_env(cls) -> "SemanticAnalysisSettings":
@@ -201,6 +202,10 @@ class SemanticAnalysisSettings:
             ),
             contradiction_prompt_version=os.getenv(
                 "OPENAI_CONTRADICTION_PROMPT_VERSION",
+                "v1",
+            ),
+            repair_prompt_version=os.getenv(
+                "OPENAI_REPAIR_PROMPT_VERSION",
                 "v1",
             ),
         )

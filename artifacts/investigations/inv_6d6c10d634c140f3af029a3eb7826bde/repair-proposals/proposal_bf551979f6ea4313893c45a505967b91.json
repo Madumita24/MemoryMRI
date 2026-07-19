@@ -1,0 +1,152 @@
+{
+  "proposal_id": "proposal_bf551979f6ea4313893c45a505967b91",
+  "investigation_id": "inv_6d6c10d634c140f3af029a3eb7826bde",
+  "scenario_id": "cs_01",
+  "domain": "customer_support",
+  "repair_type": "REQUIRE_HUMAN_CONFIRMATION",
+  "target_memory_ids": [
+    "cs_01_mem_2"
+  ],
+  "before_state": {
+    "original_selected_action": "ASK_FOR_INFORMATION",
+    "expected_action": "ISSUE_REFUND",
+    "memory_ids": [
+      "cs_01_mem_1",
+      "cs_01_mem_2",
+      "cs_01_mem_3"
+    ],
+    "memory_dependence_classification": "individual-memory dependent",
+    "pairwise_memory_dependence_classification": "individual-memory dependent",
+    "evidence_gate_passed": true
+  },
+  "proposed_after_state": {
+    "repair_review_status": "Human confirmation required before modifying or removing this memory."
+  },
+  "replay_evidence": {
+    "replay_evidence_exists": true,
+    "behavior_change_observed": true,
+    "memory_dependent_failure": true,
+    "no_memory_control_preserved_wrong_action": true,
+    "strongest_intervention_type": "REMOVE_MEMORY",
+    "strongest_target_memory_ids": [
+      "cs_01_mem_2"
+    ],
+    "strongest_influence_delta": 1.0,
+    "strongest_action_distribution": {
+      "ISSUE_REFUND": 3
+    },
+    "support_explanation": "Intervention REMOVE_MEMORY on cs_01_mem_2 changed the action distribution to {'ISSUE_REFUND': 3}, but support must be checked separately before treating it as a valid repair.",
+    "evidence_references": {
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "replay_artifact_ids": [
+        "investigation.json",
+        "memory-controls.json",
+        "pairwise-replay.json",
+        "suspicion-ranking.json"
+      ],
+      "contradiction_artifact_ids": [
+        "contradictions.json"
+      ],
+      "memory_snapshot_hash": "a1bff8657db2c84231cf5e68ff288acc19ebc2c6269587c5ef532fc609aa8a4d",
+      "git_commit_hash": "fad35a2f9c54cc45b5499e02523cba5af8a84645",
+      "prompt_hash": "146b6c39f0df027da7f2294ba51e23f87835ecb8b59c2681c315fed51d2a8d11"
+    }
+  },
+  "suspicion_evidence": {
+    "top_ranked_memory_ids": [
+      "cs_01_mem_1",
+      "cs_01_mem_3",
+      "cs_01_mem_2"
+    ],
+    "replay_supported_memory_ids": [],
+    "suspicious_without_observed_influence": [
+      "cs_01_mem_1"
+    ],
+    "semantic_hypotheses": [
+      "cs_01_mem_1: Expired legacy policy is superseded by the current playbook but retains the highest retrieval priority.",
+      "cs_01_mem_3: Current ledger evidence supports two settled charges for the referenced order.",
+      "cs_01_mem_2: Active current policy directly states the applicable refund threshold and supersedes the legacy note."
+    ],
+    "evidence_references": {
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "replay_artifact_ids": [
+        "investigation.json",
+        "memory-controls.json",
+        "pairwise-replay.json",
+        "suspicion-ranking.json"
+      ],
+      "contradiction_artifact_ids": [
+        "contradictions.json"
+      ],
+      "memory_snapshot_hash": "a1bff8657db2c84231cf5e68ff288acc19ebc2c6269587c5ef532fc609aa8a4d",
+      "git_commit_hash": "fad35a2f9c54cc45b5499e02523cba5af8a84645",
+      "prompt_hash": "146b6c39f0df027da7f2294ba51e23f87835ecb8b59c2681c315fed51d2a8d11"
+    }
+  },
+  "contradiction_evidence": {
+    "contradiction_pairs": [
+      "cs_01_mem_1/cs_01_mem_2"
+    ],
+    "contradictory_target_memory_ids": [
+      "cs_01_mem_1",
+      "cs_01_mem_2"
+    ],
+    "semantic_findings": [
+      "cs_01_mem_1/cs_01_mem_2: The current playbook explicitly supersedes the outdated approval policy.",
+      "cs_01_mem_1/cs_01_mem_3: The legacy approval rule and duplicate-charge evidence can both be true.",
+      "cs_01_mem_2/cs_01_mem_3: The ledger verifies duplication, but the amount needed to apply the policy is absent."
+    ],
+    "evidence_references": {
+      "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+      "replay_artifact_ids": [
+        "investigation.json",
+        "memory-controls.json",
+        "pairwise-replay.json",
+        "suspicion-ranking.json"
+      ],
+      "contradiction_artifact_ids": [
+        "contradictions.json"
+      ],
+      "memory_snapshot_hash": "a1bff8657db2c84231cf5e68ff288acc19ebc2c6269587c5ef532fc609aa8a4d",
+      "git_commit_hash": "fad35a2f9c54cc45b5499e02523cba5af8a84645",
+      "prompt_hash": "146b6c39f0df027da7f2294ba51e23f87835ecb8b59c2681c315fed51d2a8d11"
+    }
+  },
+  "support_validity_result": {
+    "decision_still_supported": false,
+    "outcome_correct": true,
+    "requires_human_review": true,
+    "support_explanation": "Intervention REMOVE_MEMORY on cs_01_mem_2 changed the action distribution to {'ISSUE_REFUND': 3}, but support must be checked separately before treating it as a valid repair. No-memory control preserved the original wrong action: True."
+  },
+  "expected_affected_scenarios": [
+    "Duplicate-charge refunds where the charge amount is unavailable."
+  ],
+  "expected_behavior_change": "Prevent automatic removal of the current policy or unsupported refund issuance until the amount and policy applicability are confirmed.",
+  "risks": [
+    "May delay valid refunds.",
+    "Human review may add operational overhead."
+  ],
+  "rollback_plan": "Remove the confirmation requirement if human review or new replay evidence validates a supported automated repair.",
+  "concise_explanation": "Replay removal changed behavior, but ISSUE_REFUND remains unsupported because the amount is missing. V1 therefore recommends human confirmation rather than editing the policy memory.",
+  "confidence": 0.96,
+  "requires_human_approval": true,
+  "proposal_status": "proposed",
+  "model": "gpt-5.6",
+  "prompt_version": "v1",
+  "created_at": "2026-07-19T00:47:38.448789Z",
+  "evidence_references": {
+    "parent_trace_id": "trace_6e225da6d76a4ae0b76ec0ee5c11fc5c",
+    "replay_artifact_ids": [
+      "investigation.json",
+      "memory-controls.json",
+      "pairwise-replay.json",
+      "suspicion-ranking.json"
+    ],
+    "contradiction_artifact_ids": [
+      "contradictions.json"
+    ],
+    "memory_snapshot_hash": "a1bff8657db2c84231cf5e68ff288acc19ebc2c6269587c5ef532fc609aa8a4d",
+    "git_commit_hash": "fad35a2f9c54cc45b5499e02523cba5af8a84645",
+    "prompt_hash": "146b6c39f0df027da7f2294ba51e23f87835ecb8b59c2681c315fed51d2a8d11"
+  }
+}
