@@ -352,6 +352,126 @@ export type ScenarioDetailEvidence = {
   evidenceLinks: ScenarioEvidenceLink[];
 };
 
+export type ReplayLabComparisonCard = {
+  label: string;
+  status:
+    | "original"
+    | "intervention"
+    | "control"
+    | "warning"
+    | "inconclusive"
+    | "completed"
+    | "error";
+  summary: string;
+  actionDistribution: Record<string, number>;
+  supportValid: boolean | null;
+};
+
+export type ReplayLabEvidenceLink = {
+  label: string;
+  href: string | null;
+  status: "available" | "missing";
+};
+
+export type ReplayLabIndividualResult = {
+  memoryId: string;
+  interventionType: string;
+  runCount: number;
+  originalSuccessfulRuns: number;
+  originalTotalRuns: number;
+  originalSuccessRate: number;
+  interventionSuccessfulRuns: number;
+  interventionTotalRuns: number;
+  interventionSuccessRate: number;
+  influenceDelta: number;
+  wilsonLow: number;
+  wilsonHigh: number;
+  originalActionDistribution: Record<string, number>;
+  interventionActionDistribution: Record<string, number>;
+  originalReplayStability: number;
+  interventionReplayStability: number;
+  originalErrors: string[];
+  interventionErrors: string[];
+  supportValid: boolean | null;
+  requiresHumanReview: boolean | null;
+  supportExplanation: string | null;
+  tokenUsage: Record<string, number> | null;
+  traceLinks: ReplayLabEvidenceLink[];
+  artifactLinks: ReplayLabEvidenceLink[];
+};
+
+export type ReplayLabPairwiseResult = {
+  memoryIds: [string, string];
+  interventionType: string;
+  influenceA: number;
+  influenceB: number;
+  combinedInfluence: number;
+  interactionScore: number;
+  interactionSynergy: number;
+  combinedActionDistribution: Record<string, number>;
+  runCount: number;
+  supportValid: boolean;
+  requiresHumanReview: boolean;
+  supportExplanation: string;
+  evidenceClassification: string;
+  infrastructureErrorCount: number;
+  tokenUsage: Record<string, number> | null;
+  traceLinks: ReplayLabEvidenceLink[];
+  artifactLinks: ReplayLabEvidenceLink[];
+};
+
+export type ReplayLabControlResult = {
+  controlType: "no-memory" | "isolate-memory";
+  targetMemoryId: string | null;
+  runCount: number;
+  originalSuccessRate: number;
+  controlSuccessRate: number;
+  originalActionDistribution: Record<string, number>;
+  controlActionDistribution: Record<string, number>;
+  replayStability: number;
+  supportValid: boolean;
+  requiresHumanReview: boolean;
+  supportExplanation: string;
+  infrastructureErrorCount: number;
+  tokenUsage: Record<string, number> | null;
+  traceLinks: ReplayLabEvidenceLink[];
+};
+
+export type ReplayLabEvidence = {
+  investigationId: string;
+  scenarioId: string;
+  title: string;
+  domain: DomainName;
+  benchmarkMode: boolean;
+  originalAction: string | null;
+  expectedAction: string | null;
+  runnerLabel: string;
+  requestedModel: string;
+  responseModel: string;
+  promptVersion: string;
+  promptContentHash: string | null;
+  memoryDependenceClassification: string | null;
+  cachePolicy: string;
+  runCount: number;
+  parentTraceId: string;
+  latestTimestamp: string | null;
+  proposalId: string | null;
+  proposalSummary: string | null;
+  proposalStatus: string | null;
+  verificationVerdict: string | null;
+  artifactId: string | null;
+  supportValiditySummary: string | null;
+  suspiciousMemoryIds: string[];
+  contradictionPairs: string[];
+  scenarioLinks: ReplayLabEvidenceLink[];
+  snapshot: ScenarioMemoryView[];
+  individualResults: ReplayLabIndividualResult[];
+  pairwiseResults: ReplayLabPairwiseResult[];
+  noMemoryControl: ReplayLabControlResult | null;
+  isolationControls: ReplayLabControlResult[];
+  highlightedFindings: string[];
+};
+
 const DOMAIN_LABELS: Record<DomainName, string> = {
   customer_support: "Customer Support",
   devops: "DevOps Deployment",

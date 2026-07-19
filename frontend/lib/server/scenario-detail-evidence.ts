@@ -827,7 +827,7 @@ function buildEvidenceLinks(
     },
     {
       label: "Individual replay",
-      href: investigationId ? `/investigations?id=${investigationId}#individual-replay` : null,
+      href: investigationId ? `/investigations/${investigationId}/replay#individual-replay` : null,
       status: investigationId ? "available" : "missing",
     },
     {
@@ -837,12 +837,12 @@ function buildEvidenceLinks(
     },
     {
       label: "Contradictions",
-      href: investigationId ? `/investigations?id=${investigationId}#contradictions` : null,
+      href: investigationId ? `/investigations/${investigationId}/replay#investigation-findings` : null,
       status: investigationId ? "available" : "missing",
     },
     {
       label: "Pairwise replay",
-      href: investigationId ? `/investigations?id=${investigationId}#pairwise-replay` : null,
+      href: investigationId ? `/investigations/${investigationId}/replay#pairwise-replay` : null,
       status: investigationId ? "available" : "missing",
     },
     {

@@ -248,9 +248,9 @@ const baseData: ScenarioDetailEvidence = {
   influenceGraph: null,
   evidenceLinks: [
     { label: "Investigation", href: "/investigations?id=inv_cs_01", status: "available" },
-    { label: "Individual replay", href: "/investigations?id=inv_cs_01#individual-replay", status: "available" },
+    { label: "Individual replay", href: "/investigations/inv_cs_01/replay#individual-replay", status: "available" },
     { label: "Suspicion analysis", href: null, status: "missing" },
-    { label: "Contradictions", href: "/investigations?id=inv_cs_01#contradictions", status: "available" },
+    { label: "Contradictions", href: "/investigations/inv_cs_01/replay#investigation-findings", status: "available" },
     { label: "Pairwise replay", href: null, status: "missing" },
     { label: "Repair proposal", href: "/investigations?id=inv_cs_01#proposal-1", status: "available" },
     { label: "Verification artifact", href: "/artifacts?id=artifact_cs_01", status: "available" },

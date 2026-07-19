@@ -158,6 +158,39 @@ export const apiClient = {
       `/investigations/${investigationId}/results`,
       schemas.investigationResultsResponse,
     ),
+  runIndividualReplay: (
+    investigationId: string,
+    body: {
+      operation: "remove" | "disable" | "all";
+      memory_id?: string;
+    },
+  ) =>
+    request(
+      `/investigations/${investigationId}/individual-replay`,
+      schemas.publicInvestigation,
+      {
+        method: "POST",
+        body,
+      },
+    ),
+  runPairwiseReplay: (
+    investigationId: string,
+    body: {
+      memory_a?: string;
+      memory_b?: string;
+      all_pairs?: boolean;
+      shared_baseline_runs?: boolean;
+      fresh_baseline_per_pair?: boolean;
+    },
+  ) =>
+    request(
+      `/investigations/${investigationId}/pairwise-replay`,
+      z.unknown(),
+      {
+        method: "POST",
+        body,
+      },
+    ),
   getProposal: (proposalId: string) =>
     request(`/proposals/${proposalId}`, schemas.repairProposal),
   getProposalDiff: (proposalId: string) =>
