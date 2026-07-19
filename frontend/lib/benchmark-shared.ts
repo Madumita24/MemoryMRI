@@ -218,6 +218,106 @@ export type ScenarioEvidenceLink = {
   status: "available" | "missing";
 };
 
+export type MemoryInfluenceIndividualReplay = {
+  interventionType: string;
+  targetMemoryIds: string[];
+  successfulRuns: number;
+  totalRuns: number;
+  successRate: number;
+  influenceDelta: number;
+  actionDistribution: Record<string, number>;
+  supportValid: boolean | null;
+  requiresHumanReview: boolean | null;
+  supportExplanation: string | null;
+};
+
+export type MemoryInfluencePairwiseInteraction = {
+  memoryIds: [string, string];
+  interventionType: string;
+  combinedInfluence: number;
+  interactionScore: number;
+  interactionSynergy: number;
+  combinedActionDistribution: Record<string, number>;
+  supportValid: boolean;
+  requiresHumanReview: boolean;
+  supportExplanation: string;
+  evidenceClassification: string;
+};
+
+export type MemoryInfluenceContradiction = {
+  memoryIds: [string, string];
+  deterministicRelationship: {
+    relationship: string;
+    conciseReason: string;
+    confidence: number;
+    relevantFields: string[];
+  };
+  semanticRelationship: {
+    relationship: string;
+    conciseExplanation: string;
+    confidence: number;
+    requiresHumanReview: boolean;
+  };
+  relationshipsAgree: boolean;
+  pairwiseReplayPerformed: boolean;
+};
+
+export type MemoryInfluenceMemoryEvidence = {
+  memoryId: string;
+  shortContent: string;
+  content: string;
+  status: string;
+  freshnessState: string;
+  entityId: string;
+  retrievalPriority: number;
+  source: string;
+  createdAt: string;
+  validFrom: string | null;
+  validUntil: string | null;
+  confidence: number;
+  supersedes: string[];
+  tags: string[];
+  operationalMetadata: Record<string, unknown>;
+  observedRetrieval: boolean;
+  observedCitation: boolean;
+  suspicionRank: number | null;
+  suspiciousWithoutObservedInfluence: boolean;
+  deterministicSuspicionReasons: string[];
+  semanticIssueTypes: string[];
+  semanticHypotheses: string[];
+  semanticSuspicionReasons: string[];
+  strongestIndividualInfluence: number;
+  strongestInteractionInfluence: number;
+  individualReplayResults: MemoryInfluenceIndividualReplay[];
+  pairwiseParticipation: MemoryInfluencePairwiseInteraction[];
+  contradictionRelationships: MemoryInfluenceContradiction[];
+  proposalTargeted: boolean;
+  supportValidityAudit: string[];
+};
+
+export type MemoryInfluenceProposal = {
+  proposalId: string | null;
+  repairType: string | null;
+  status: string | null;
+  conciseExplanation: string | null;
+  targetMemoryIds: string[];
+};
+
+export type MemoryInfluenceGraphEvidence = {
+  scenarioId: string;
+  domain: DomainName;
+  selectedTraceId: string;
+  originalAction: string | null;
+  expectedAction: string | null;
+  classification: string | null;
+  noMemoryControlPreservedWrongAction: boolean;
+  supportValiditySummary: string | null;
+  proposal: MemoryInfluenceProposal | null;
+  memories: MemoryInfluenceMemoryEvidence[];
+  pairwiseInteractions: MemoryInfluencePairwiseInteraction[];
+  contradictions: MemoryInfluenceContradiction[];
+};
+
 export type ScenarioDetailEvidence = {
   scenarioId: string;
   title: string;
@@ -248,6 +348,7 @@ export type ScenarioDetailEvidence = {
   selectedTrace: ScenarioTraceView | null;
   traces: ScenarioTraceView[];
   traceNotice: string | null;
+  influenceGraph: MemoryInfluenceGraphEvidence | null;
   evidenceLinks: ScenarioEvidenceLink[];
 };
 

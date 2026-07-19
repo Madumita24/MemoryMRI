@@ -5,6 +5,11 @@ import path from "node:path";
 
 import type {
   BenchmarkSourceKey,
+  MemoryInfluenceContradiction,
+  MemoryInfluenceGraphEvidence,
+  MemoryInfluenceIndividualReplay,
+  MemoryInfluenceMemoryEvidence,
+  MemoryInfluencePairwiseInteraction,
   ScenarioDetailEvidence,
   ScenarioEvidenceLink,
   ScenarioMemoryView,
@@ -85,12 +90,93 @@ type ArtifactSummary = {
   verification_id: string;
 };
 
+type VerificationArtifact = {
+  scenario_id: string;
+  domain: DomainName;
+  original_action: string | null;
+  expected_action: string | null;
+  support_validity_result?: {
+    support_explanation?: string;
+  } | null;
+  individual_replay_evidence?: Array<{
+    intervention: {
+      intervention_type: string;
+      target_memory_ids: string[];
+    };
+    successful_runs: number;
+    total_runs: number;
+    success_rate: number;
+    influence_delta: number;
+    intervention_action_distribution: Record<string, number>;
+    support_validity?: {
+      decision_still_supported?: boolean;
+      requires_human_review?: boolean;
+      support_explanation?: string;
+    } | null;
+  }>;
+  pairwise_replay_evidence?: Array<{
+    intervention: {
+      intervention_type: string;
+      target_memory_ids: [string, string];
+    };
+    combined_influence: number;
+    interaction_score: number;
+    interaction_synergy: number;
+    combined_action_distribution: Record<string, number>;
+    support_validity: {
+      decision_still_supported: boolean;
+      requires_human_review: boolean;
+      support_explanation: string;
+    };
+    evidence_classification: string;
+  }>;
+  approved_repair?: {
+    proposal_id: string | null;
+    repair_type: string | null;
+    proposal_status: string | null;
+    concise_explanation: string | null;
+    target_memory_ids: string[];
+    before_state?: {
+      memory_dependence_classification?: string | null;
+    } | null;
+    replay_evidence?: {
+      no_memory_control_preserved_wrong_action?: boolean;
+    } | null;
+    suspicion_evidence?: {
+      top_ranked_memory_ids?: string[];
+      suspicious_without_observed_influence?: string[];
+      semantic_hypotheses?: string[];
+    } | null;
+  } | null;
+};
+
 type SuspicionRanking = {
   memories?: Array<{
     memory_id: string;
     semantic_hypothesis?: {
       suspected_issue_types?: string[];
     };
+  }>;
+};
+
+type ContradictionAnalysis = {
+  pair_results?: Array<{
+    memory_a_id: string;
+    memory_b_id: string;
+    deterministic_relationship: {
+      relationship: string;
+      concise_reason: string;
+      confidence: number;
+      relevant_fields: string[];
+    };
+    semantic_relationship: {
+      relationship: string;
+      concise_explanation: string;
+      confidence: number;
+      requires_human_review: boolean;
+    };
+    relationships_agree: boolean;
+    pairwise_replay_performed: boolean;
   }>;
 };
 
@@ -397,6 +483,296 @@ function buildTimeline(
   ];
 }
 
+function deriveFreshnessState(
+  memory: StoredTrace["memory_snapshot"][number],
+  referenceTime: string,
+): string {
+  if (memory.status === "invalid") {
+    return "invalid";
+  }
+
+  if (memory.status === "superseded") {
+    return "superseded";
+  }
+
+  if (memory.status === "stale") {
+    return "stale";
+  }
+
+  if (memory.status === "uncertain") {
+    return "uncertain";
+  }
+
+  if (memory.valid_until && new Date(memory.valid_until).getTime() < new Date(referenceTime).getTime()) {
+    return "expired";
+  }
+
+  return "active";
+}
+
+function parseSemanticHypothesesByMemory(hypotheses: string[] | undefined): Map<string, string[]> {
+  const result = new Map<string, string[]>();
+
+  for (const entry of hypotheses ?? []) {
+    const [rawMemoryId, ...rest] = entry.split(":");
+    const memoryId = rawMemoryId.trim();
+    const explanation = rest.join(":").trim();
+    if (!memoryId || !explanation) {
+      continue;
+    }
+    const existing = result.get(memoryId) ?? [];
+    existing.push(explanation);
+    result.set(memoryId, existing);
+  }
+
+  return result;
+}
+
+function buildDeterministicSuspicionReasons(
+  memory: StoredTrace["memory_snapshot"][number],
+  contradictionPairs: MemoryInfluenceContradiction[],
+  referenceTime: string,
+): string[] {
+  const reasons: string[] = [];
+  const freshness = deriveFreshnessState(memory, referenceTime);
+
+  if (freshness === "stale") {
+    reasons.push("Stale status in the operational memory snapshot.");
+  }
+  if (freshness === "expired") {
+    reasons.push("Validity window expired before the selected trace ran.");
+  }
+  if (freshness === "superseded") {
+    reasons.push("Operational metadata marks this memory as superseded.");
+  }
+  if (memory.supersedes.length) {
+    reasons.push(`Supersedes ${memory.supersedes.join(", ")} in metadata.`);
+  }
+  if (memory.retrieval_priority >= 95) {
+    reasons.push("Very high retrieval priority may outweigh more relevant evidence.");
+  }
+  if (memory.tags.includes("wrong-context")) {
+    reasons.push("Tagged as wrong-context in the stored memory metadata.");
+  }
+
+  for (const pair of contradictionPairs) {
+    if (
+      pair.memoryIds.includes(memory.memory_id) &&
+      pair.deterministicRelationship.relationship !== "unrelated"
+    ) {
+      reasons.push(pair.deterministicRelationship.conciseReason);
+    }
+  }
+
+  return Array.from(new Set(reasons));
+}
+
+function groupIndividualReplayByMemory(
+  artifact: VerificationArtifact | null,
+): Map<string, MemoryInfluenceIndividualReplay[]> {
+  const grouped = new Map<string, MemoryInfluenceIndividualReplay[]>();
+
+  for (const item of artifact?.individual_replay_evidence ?? []) {
+    const normalized: MemoryInfluenceIndividualReplay = {
+      interventionType: item.intervention.intervention_type,
+      targetMemoryIds: item.intervention.target_memory_ids,
+      successfulRuns: item.successful_runs,
+      totalRuns: item.total_runs,
+      successRate: item.success_rate,
+      influenceDelta: item.influence_delta,
+      actionDistribution: item.intervention_action_distribution,
+      supportValid: item.support_validity?.decision_still_supported ?? null,
+      requiresHumanReview: item.support_validity?.requires_human_review ?? null,
+      supportExplanation: item.support_validity?.support_explanation ?? null,
+    };
+
+    for (const memoryId of item.intervention.target_memory_ids) {
+      const existing = grouped.get(memoryId) ?? [];
+      existing.push(normalized);
+      grouped.set(memoryId, existing);
+    }
+  }
+
+  return grouped;
+}
+
+function buildPairwiseInteractions(
+  artifact: VerificationArtifact | null,
+): MemoryInfluencePairwiseInteraction[] {
+  return (artifact?.pairwise_replay_evidence ?? []).map((item) => ({
+    memoryIds: item.intervention.target_memory_ids,
+    interventionType: item.intervention.intervention_type,
+    combinedInfluence: item.combined_influence,
+    interactionScore: item.interaction_score,
+    interactionSynergy: item.interaction_synergy,
+    combinedActionDistribution: item.combined_action_distribution,
+    supportValid: item.support_validity.decision_still_supported,
+    requiresHumanReview: item.support_validity.requires_human_review,
+    supportExplanation: item.support_validity.support_explanation,
+    evidenceClassification: item.evidence_classification,
+  }));
+}
+
+function buildContradictions(
+  analysis: ContradictionAnalysis | null,
+): MemoryInfluenceContradiction[] {
+  return (analysis?.pair_results ?? []).map((pair) => ({
+    memoryIds: [pair.memory_a_id, pair.memory_b_id],
+    deterministicRelationship: {
+      relationship: pair.deterministic_relationship.relationship,
+      conciseReason: pair.deterministic_relationship.concise_reason,
+      confidence: pair.deterministic_relationship.confidence,
+      relevantFields: pair.deterministic_relationship.relevant_fields,
+    },
+    semanticRelationship: {
+      relationship: pair.semantic_relationship.relationship,
+      conciseExplanation: pair.semantic_relationship.concise_explanation,
+      confidence: pair.semantic_relationship.confidence,
+      requiresHumanReview: pair.semantic_relationship.requires_human_review,
+    },
+    relationshipsAgree: pair.relationships_agree,
+    pairwiseReplayPerformed: pair.pairwise_replay_performed,
+  }));
+}
+
+function buildInfluenceGraph(
+  selectedTrace: ScenarioTraceView | null,
+  artifact: VerificationArtifact | null,
+  contradictionAnalysis: ContradictionAnalysis | null,
+  suspicionRanking: SuspicionRanking | null,
+  domain: DomainName,
+): MemoryInfluenceGraphEvidence | null {
+  if (!selectedTrace) {
+    return null;
+  }
+
+  const contradictionPairs = buildContradictions(contradictionAnalysis);
+  const pairwiseInteractions = buildPairwiseInteractions(artifact);
+  const groupedReplay = groupIndividualReplayByMemory(artifact);
+  const semanticHypothesesByMemory = parseSemanticHypothesesByMemory(
+    artifact?.approved_repair?.suspicion_evidence?.semantic_hypotheses,
+  );
+  const rankedMemoryIds = artifact?.approved_repair?.suspicion_evidence?.top_ranked_memory_ids ?? [];
+  const suspiciousWithoutInfluence = new Set(
+    artifact?.approved_repair?.suspicion_evidence?.suspicious_without_observed_influence ?? [],
+  );
+  const semanticIssueTypes = new Map(
+    (suspicionRanking?.memories ?? []).map((memory) => [
+      memory.memory_id,
+      memory.semantic_hypothesis?.suspected_issue_types ?? [],
+    ]),
+  );
+
+  const memories: MemoryInfluenceMemoryEvidence[] = selectedTrace.memories.map((memory) => {
+    const replayResults = groupedReplay.get(memory.memoryId) ?? [];
+    const pairwiseParticipation = pairwiseInteractions.filter((pair) =>
+      pair.memoryIds.includes(memory.memoryId),
+    );
+    const contradictionRelationships = contradictionPairs.filter((pair) =>
+      pair.memoryIds.includes(memory.memoryId),
+    );
+    const matchingStoredMemory = {
+      memory_id: memory.memoryId,
+      entity_id: memory.entityId,
+      content: memory.content,
+      source: memory.source,
+      created_at: memory.createdAt,
+      valid_from: memory.validFrom,
+      valid_until: memory.validUntil,
+      status: memory.status,
+      confidence: memory.confidence,
+      retrieval_priority: memory.retrievalPriority,
+      supersedes: memory.supersedes,
+      tags: memory.tags,
+      operational_metadata: memory.operationalMetadata,
+    };
+    const strongestIndividualInfluence = replayResults.reduce(
+      (best, result) =>
+        Math.abs(result.influenceDelta) > Math.abs(best) ? result.influenceDelta : best,
+      0,
+    );
+    const strongestInteractionInfluence = pairwiseParticipation.reduce(
+      (best, result) =>
+        Math.abs(result.combinedInfluence) > Math.abs(best) ? result.combinedInfluence : best,
+      0,
+    );
+
+    return {
+      memoryId: memory.memoryId,
+      shortContent:
+        memory.content.length > 84 ? `${memory.content.slice(0, 81).trimEnd()}...` : memory.content,
+      content: memory.content,
+      status: memory.status,
+      freshnessState: deriveFreshnessState(matchingStoredMemory, selectedTrace.createdAt),
+      entityId: memory.entityId,
+      retrievalPriority: memory.retrievalPriority,
+      source: memory.source,
+      createdAt: memory.createdAt,
+      validFrom: memory.validFrom,
+      validUntil: memory.validUntil,
+      confidence: memory.confidence,
+      supersedes: memory.supersedes,
+      tags: memory.tags,
+      operationalMetadata: memory.operationalMetadata,
+      observedRetrieval: selectedTrace.retrievedMemoryIds.includes(memory.memoryId),
+      observedCitation: selectedTrace.citedMemoryIds.includes(memory.memoryId),
+      suspicionRank:
+        rankedMemoryIds.indexOf(memory.memoryId) >= 0
+          ? rankedMemoryIds.indexOf(memory.memoryId) + 1
+          : null,
+      suspiciousWithoutObservedInfluence: suspiciousWithoutInfluence.has(memory.memoryId),
+      deterministicSuspicionReasons: buildDeterministicSuspicionReasons(
+        matchingStoredMemory,
+        contradictionPairs,
+        selectedTrace.createdAt,
+      ),
+      semanticIssueTypes: semanticIssueTypes.get(memory.memoryId) ?? [],
+      semanticHypotheses: semanticHypothesesByMemory.get(memory.memoryId) ?? [],
+      semanticSuspicionReasons: memory.analysisFlags,
+      strongestIndividualInfluence,
+      strongestInteractionInfluence,
+      individualReplayResults: replayResults,
+      pairwiseParticipation,
+      contradictionRelationships,
+      proposalTargeted:
+        artifact?.approved_repair?.target_memory_ids.includes(memory.memoryId) ?? false,
+      supportValidityAudit: [
+        ...replayResults
+          .map((result) => result.supportExplanation)
+          .filter((value): value is string => Boolean(value)),
+        ...pairwiseParticipation.map((pair) => pair.supportExplanation),
+      ],
+    };
+  });
+
+  return {
+    scenarioId: selectedTrace.scenarioId,
+    domain,
+    selectedTraceId: selectedTrace.traceId,
+    originalAction: artifact?.original_action ?? selectedTrace.selectedAction,
+    expectedAction: artifact?.expected_action ?? null,
+    classification:
+      artifact?.approved_repair?.before_state?.memory_dependence_classification ?? null,
+    noMemoryControlPreservedWrongAction:
+      artifact?.approved_repair?.replay_evidence?.no_memory_control_preserved_wrong_action ??
+      false,
+    supportValiditySummary:
+      artifact?.support_validity_result?.support_explanation ?? null,
+    proposal: artifact?.approved_repair
+      ? {
+          proposalId: artifact.approved_repair.proposal_id,
+          repairType: artifact.approved_repair.repair_type,
+          status: artifact.approved_repair.proposal_status,
+          conciseExplanation: artifact.approved_repair.concise_explanation,
+          targetMemoryIds: artifact.approved_repair.target_memory_ids,
+        }
+      : null,
+    memories,
+    pairwiseInteractions,
+    contradictions: contradictionPairs,
+  };
+}
+
 function deriveRunnerLabel(trace: StoredTrace): string {
   if (trace.requested_model === "fake-deterministic" || trace.model.includes("fake")) {
     return "FakeAgentRunner";
@@ -628,6 +1004,22 @@ export async function loadScenarioDetailEvidence(
       ? "The frozen deterministic baseline stores summary results for this scenario, but no full fake-runner execution trace artifact is committed. The observable trace below is the nearest stored execution trace."
       : null;
 
+  const fullArtifact = artifactRef
+    ? await readJsonIfExists<VerificationArtifact>(
+        path.join(ARTIFACTS_DIR, "verification-artifacts", `${artifactRef.artifact_id}.json`),
+      )
+    : null;
+  const suspicionRanking = investigation?.investigation_id
+    ? await readJsonIfExists<SuspicionRanking>(
+        path.join(ARTIFACTS_DIR, "investigations", investigation.investigation_id, "suspicion-ranking.json"),
+      )
+    : null;
+  const contradictionAnalysis = investigation?.investigation_id
+    ? await readJsonIfExists<ContradictionAnalysis>(
+        path.join(ARTIFACTS_DIR, "investigations", investigation.investigation_id, "contradictions.json"),
+      )
+    : null;
+
   return {
     scenarioId,
     title: catalog.title,
@@ -643,6 +1035,13 @@ export async function loadScenarioDetailEvidence(
     selectedTrace,
     traces,
     traceNotice,
+    influenceGraph: buildInfluenceGraph(
+      selectedTrace,
+      fullArtifact,
+      contradictionAnalysis,
+      suspicionRanking,
+      catalog.domain,
+    ),
     evidenceLinks: buildEvidenceLinks(
       scenarioId,
       investigation?.investigation_id ?? null,

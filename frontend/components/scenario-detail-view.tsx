@@ -3,6 +3,7 @@ import Link from "next/link";
 import { DomainBadge } from "@/components/domain-badge";
 import { EvidenceTypeBadge } from "@/components/evidence-type-badge";
 import { IdentifierDisplay } from "@/components/identifier-display";
+import { MemoryInfluenceGraph } from "@/components/memory-influence-graph";
 import { PageHeader } from "@/components/page-header";
 import { SectionCard } from "@/components/section-card";
 import { StatusBadge } from "@/components/status-badge";
@@ -384,6 +385,8 @@ export function ScenarioDetailView({
           <p className="text-sm text-ink-200">No stored trace timeline is available for this scenario.</p>
         )}
       </SectionCard>
+
+      {data.influenceGraph ? <MemoryInfluenceGraph data={data.influenceGraph} /> : null}
 
       <SectionCard title="Memories Retrieved" eyebrow="Agent-visible memory snapshot">
         {trace ? (

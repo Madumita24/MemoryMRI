@@ -245,6 +245,7 @@ const baseData: ScenarioDetailEvidence = {
     },
   ],
   traceNotice: null,
+  influenceGraph: null,
   evidenceLinks: [
     { label: "Investigation", href: "/investigations?id=inv_cs_01", status: "available" },
     { label: "Individual replay", href: "/investigations?id=inv_cs_01#individual-replay", status: "available" },
