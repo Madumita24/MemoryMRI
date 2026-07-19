@@ -14,8 +14,25 @@
 - Implemented the GPT-backed OpenAI runner with versioned prompts, strict structured output validation, mocked retry and error-path tests, and a one-scenario smoke-test CLI.
 - Completed live GPT-5.6 smoke tests for one scenario in each domain and saved development trace artifacts under `artifacts/openai-smoke-*.json`.
 
+## 2026-07-18
+
+- Executed the official GPT baseline across all 30 scenarios and persisted the summary plus raw traces.
+- Confirmed the official GPT baseline result of `28/30` with no infrastructure errors.
+- Added response caching, observable traces, and cache invalidation controls.
+- Implemented individual-memory replay, suspicion ranking, contradiction analysis, and pairwise replay.
+- Persisted deep-dive investigation artifacts for `cs_01` and `exp_09`.
+
+## 2026-07-19
+
+- Added a public FastAPI app and strict API schemas for scenarios, traces, investigations, replay, ranking, contradiction analysis, pairwise replay, and cache clearing.
+- Added a unified Day 2 CLI surface for scenario runs, benchmark runs, trace inspection, investigations, replay, ranking, contradiction analysis, pairwise replay, and cache operations.
+- Added API contract tests and increased the backend automated suite to `74` passing tests.
+- Re-ran the deterministic regression benchmark and confirmed the mixed fake baseline remains `22/30`.
+- Verified the stored GPT baseline still matches `30` persisted scenario traces and remains `28/30`.
+- Ran a live Day 2H semantic verification pass for `exp_09` and generated the Day 2 summary artifacts.
+
 ## Remaining Day 2 risks
 
-- Repair proposal generation, replay interventions, pairwise interaction analysis, and verification artifacts are modeled but not yet orchestrated.
+- Day 3 still needs repair proposal generation, controlled repair application, and regression-safe repair verification workflows.
+- Some failures remain weakly explained by individual or pairwise ablation, especially `exp_09`.
 - The frontend dashboard has not started yet.
-- The full 30-scenario GPT benchmark has not been executed yet; only the three-scenario Day 2B smoke test is complete.

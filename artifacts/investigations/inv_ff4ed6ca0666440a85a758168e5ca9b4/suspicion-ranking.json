@@ -42,20 +42,20 @@
         "semantic": 0.5
       }
     },
-    "created_at": "2026-07-18T07:01:03.967791Z",
+    "created_at": "2026-07-19T00:03:52.215602Z",
     "api_usage": {
       "input_tokens": 1207,
-      "output_tokens": 398,
-      "total_tokens": 1605
+      "output_tokens": 388,
+      "total_tokens": 1595
     },
-    "git_commit_hash": "45621f99cc0d7dd94fd27cc66398cba6c6ac8af2"
+    "git_commit_hash": "2d0943fb74079292bf8473931a19fd71494d2140"
   },
   "memories": [
     {
       "memory_id": "exp_09_mem_1",
       "deterministic_score": 0.15503875968992248,
-      "semantic_score": 0.97,
-      "prioritization_score": 0.5625193798449613,
+      "semantic_score": 0.94,
+      "prioritization_score": 0.5475193798449612,
       "metadata_observations": [
         {
           "memory_id": "exp_09_mem_1",
@@ -137,16 +137,16 @@
       ],
       "semantic_hypothesis": {
         "memory_id": "exp_09_mem_1",
-        "semantic_suspicion_score": 0.97,
+        "semantic_suspicion_score": 0.94,
         "suspected_issue_types": [
           "wrong_context",
           "excessive_priority"
         ],
-        "concise_reason": "Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet it has the highest retrieval priority.",
+        "concise_reason": "Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet has highest retrieval priority.",
         "related_memory_ids": [
           "exp_09_mem_2"
         ],
-        "uncertainty": 0.05,
+        "uncertainty": 0.12,
         "requires_human_review": false
       },
       "replay_supported_evidence": {
@@ -166,7 +166,7 @@
         "The retrieval priority 98 meets or exceeds the configured high-priority threshold 95.",
         "Metadata indicates the memory may be outside the current decision context."
       ],
-      "semantic_reason": "Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet it has the highest retrieval priority."
+      "semantic_reason": "Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet has highest retrieval priority."
     },
     {
       "memory_id": "exp_09_mem_2",
@@ -258,12 +258,11 @@
         "suspected_issue_types": [
           "none"
         ],
-        "concise_reason": "Current meal policy directly addresses solo dinners during customer travel and documentation requirements.",
+        "concise_reason": "Current meal policy directly addresses documented per-diem requirements for solo dinners during customer travel.",
         "related_memory_ids": [
-          "exp_09_mem_1",
           "exp_09_mem_3"
         ],
-        "uncertainty": 0.03,
+        "uncertainty": 0.04,
         "requires_human_review": false
       },
       "replay_supported_evidence": {
@@ -283,7 +282,7 @@
         "The original agent cited this memory in its rationale.",
         "The memory is missing at least one validity boundary."
       ],
-      "semantic_reason": "Current meal policy directly addresses solo dinners during customer travel and documentation requirements."
+      "semantic_reason": "Current meal policy directly addresses documented per-diem requirements for solo dinners during customer travel."
     },
     {
       "memory_id": "exp_09_mem_3",
@@ -375,11 +374,11 @@
         "suspected_issue_types": [
           "none"
         ],
-        "concise_reason": "Receipt evidence is current, entity-matched, and directly relevant to the expense request.",
+        "concise_reason": "Current receipt evidence directly supports that the dinner was employee-only.",
         "related_memory_ids": [
           "exp_09_mem_2"
         ],
-        "uncertainty": 0.02,
+        "uncertainty": 0.03,
         "requires_human_review": false
       },
       "replay_supported_evidence": {
@@ -399,7 +398,7 @@
         "The original agent cited this memory in its rationale.",
         "The memory is missing at least one validity boundary."
       ],
-      "semantic_reason": "Receipt evidence is current, entity-matched, and directly relevant to the expense request."
+      "semantic_reason": "Current receipt evidence directly supports that the dinner was employee-only."
     }
   ],
   "summary": {
@@ -414,9 +413,9 @@
       "exp_09_mem_3: The original agent cited this memory in its rationale., The memory is missing at least one validity boundary."
     ],
     "semantic_concerns": [
-      "exp_09_mem_1: Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet it has the highest retrieval priority.",
-      "exp_09_mem_2: Current meal policy directly addresses solo dinners during customer travel and documentation requirements.",
-      "exp_09_mem_3: Receipt evidence is current, entity-matched, and directly relevant to the expense request."
+      "exp_09_mem_1: Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet has highest retrieval priority.",
+      "exp_09_mem_2: Current meal policy directly addresses documented per-diem requirements for solo dinners during customer travel.",
+      "exp_09_mem_3: Current receipt evidence directly supports that the dinner was employee-only."
     ],
     "contradictions_detected": [],
     "replay_supported_memories": [],

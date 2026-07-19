@@ -42,13 +42,13 @@
         "semantic": 0.5
       }
     },
-    "created_at": "2026-07-18T07:01:10.846603Z",
+    "created_at": "2026-07-19T00:03:59.883655Z",
     "api_usage": {
       "input_tokens": 1204,
-      "output_tokens": 330,
-      "total_tokens": 1534
+      "output_tokens": 407,
+      "total_tokens": 1611
     },
-    "git_commit_hash": "45621f99cc0d7dd94fd27cc66398cba6c6ac8af2"
+    "git_commit_hash": "2d0943fb74079292bf8473931a19fd71494d2140"
   },
   "pair_results": [
     {
@@ -67,8 +67,8 @@
         "memory_a_id": "exp_09_mem_1",
         "memory_b_id": "exp_09_mem_2",
         "relationship": "unrelated",
-        "concise_explanation": "Temporary relocation stipend eligibility is distinct from customer-travel meal policy.",
-        "confidence": 0.94,
+        "concise_explanation": "Relocation stipend eligibility does not address customer-travel meal policy.",
+        "confidence": 0.95,
         "requires_human_review": false
       },
       "relationships_agree": true,
@@ -91,8 +91,8 @@
         "memory_a_id": "exp_09_mem_1",
         "memory_b_id": "exp_09_mem_3",
         "relationship": "unrelated",
-        "concise_explanation": "Relocation stipend eligibility does not establish coverage for this customer-visit dinner.",
-        "confidence": 0.9,
+        "concise_explanation": "The relocation stipend does not establish eligibility for this customer-visit dinner.",
+        "confidence": 0.92,
         "requires_human_review": false
       },
       "relationships_agree": true,
@@ -115,8 +115,8 @@
         "memory_a_id": "exp_09_mem_2",
         "memory_b_id": "exp_09_mem_3",
         "relationship": "potentially_consistent",
-        "concise_explanation": "The solo-dinner receipt fits the policy scenario requiring documented per-diem eligibility.",
-        "confidence": 0.98,
+        "concise_explanation": "The solo-dinner receipt fits the policy condition requiring documented per-diem eligibility.",
+        "confidence": 0.99,
         "requires_human_review": false
       },
       "relationships_agree": false,
@@ -136,9 +136,9 @@
       "exp_09_mem_3: The original agent cited this memory in its rationale., The memory is missing at least one validity boundary."
     ],
     "semantic_concerns": [
-      "exp_09_mem_1: Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet it has the highest retrieval priority.",
-      "exp_09_mem_2: Current meal policy directly addresses solo dinners during customer travel and documentation requirements.",
-      "exp_09_mem_3: Receipt evidence is current, entity-matched, and directly relevant to the expense request."
+      "exp_09_mem_1: Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet has highest retrieval priority.",
+      "exp_09_mem_2: Current meal policy directly addresses documented per-diem requirements for solo dinners during customer travel.",
+      "exp_09_mem_3: Current receipt evidence directly supports that the dinner was employee-only."
     ],
     "contradictions_detected": [],
     "replay_supported_memories": [],

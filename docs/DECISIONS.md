@@ -29,3 +29,25 @@ The GPT-backed runner uses the OpenAI Responses API with a strict Pydantic respo
 ### SQLite first
 
 SQLite is sufficient for local benchmark imports, trace persistence, and artifact generation during the MVP foundation phase.
+
+## Day 2
+
+### Public API uses sanitized scenario and trace views
+
+The Day 2 API exposes only agent-visible scenario data and sanitized traces. Expected actions, failure labels, and other benchmark-private answer-key fields remain internal artifacts.
+
+### Cache keys depend on prompt content, not prompt version alone
+
+The OpenAI request hash includes the rendered prompt-content hash and the serializer schema version. This prevents stale cache hits when prompt text or serialization logic changes without a human-readable version bump.
+
+### Cache-hit accounting is separated from live-call accounting
+
+Cache lookup latency, original model latency, current request token usage, cached original usage, and billable-call status are stored separately. This avoids overcounting cost or making cache hits appear slow.
+
+### Day 2 summary is artifact-driven
+
+The final Day 2 rollup reads persisted benchmark, replay, and analysis artifacts instead of reconstructing results heuristically. This keeps the summary aligned with executed runs.
+
+### Repair workflows remain out of scope
+
+Day 2 stops at diagnosis, replay, ranking, contradiction analysis, and pairwise interaction analysis. Automated repair proposals are intentionally deferred to Day 3.

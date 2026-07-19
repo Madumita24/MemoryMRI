@@ -7,14 +7,14 @@
 ## Ranked Memories
 
 - `exp_09_mem_1`
-  deterministic=0.155, semantic=0.970, priority=0.563, replay=replay tested: no observed influence
-  semantic reason: Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet it has the highest retrieval priority.
+  deterministic=0.155, semantic=0.940, priority=0.548, replay=replay tested: no observed influence
+  semantic reason: Temporary relocation stipend eligibility does not establish per-diem eligibility for customer travel, yet has highest retrieval priority.
 - `exp_09_mem_2`
   deterministic=0.116, semantic=0.030, priority=0.073, replay=replay tested: no observed influence
-  semantic reason: Current meal policy directly addresses solo dinners during customer travel and documentation requirements.
+  semantic reason: Current meal policy directly addresses documented per-diem requirements for solo dinners during customer travel.
 - `exp_09_mem_3`
   deterministic=0.116, semantic=0.020, priority=0.068, replay=replay tested: no observed influence
-  semantic reason: Receipt evidence is current, entity-matched, and directly relevant to the expense request.
+  semantic reason: Current receipt evidence directly supports that the dinner was employee-only.
 
 ## Investigation Note
 

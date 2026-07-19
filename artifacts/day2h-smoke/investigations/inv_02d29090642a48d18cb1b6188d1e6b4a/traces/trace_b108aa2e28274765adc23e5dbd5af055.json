@@ -1,0 +1,346 @@
+{
+  "trace_id": "trace_b108aa2e28274765adc23e5dbd5af055",
+  "scenario_id": "cs_02",
+  "run_id": "run_073e89ad8acc4e50ac69f609d9aa8c6a",
+  "domain": "customer_support",
+  "user_input": "My annual subscription renewed after I cancelled it yesterday. Please reverse it.",
+  "agent_input": {
+    "schema_version": "day2a-v1",
+    "scenario_id": "cs_02",
+    "domain": "customer_support",
+    "user_input": "My annual subscription renewed after I cancelled it yesterday. Please reverse it.",
+    "allowed_actions": [
+      "ISSUE_REFUND",
+      "REQUEST_MANAGER_APPROVAL",
+      "DENY_REFUND",
+      "ASK_FOR_INFORMATION"
+    ],
+    "memories": [
+      {
+        "memory_id": "cs_02_mem_1",
+        "entity_id": "customer_5502",
+        "content": "Old retention script said any cancelled-renewal case can be refunded immediately.",
+        "source": "retention_script",
+        "created_at": "2025-03-12T00:00:00Z",
+        "valid_from": "2025-03-12T00:00:00Z",
+        "valid_until": null,
+        "status": "invalid",
+        "confidence": 0.6,
+        "retrieval_priority": 97,
+        "supersedes": [],
+        "tags": [
+          "contradiction"
+        ],
+        "operational_metadata": {
+          "memory_role": "history",
+          "entity_match": true,
+          "temporal_scope": "ambiguous",
+          "disabled_for_replay": true
+        }
+      },
+      {
+        "memory_id": "cs_02_mem_3",
+        "entity_id": "subscription_5502",
+        "content": "The renewal amount was $299 and the cancellation timestamp preceded the renewal.",
+        "source": "subscription_system",
+        "created_at": "2026-07-10T00:00:00Z",
+        "valid_from": "2026-07-10T00:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.98,
+        "retrieval_priority": 88,
+        "supersedes": [],
+        "tags": [
+          "amount",
+          "evidence"
+        ],
+        "operational_metadata": {
+          "memory_role": "evidence",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      },
+      {
+        "memory_id": "cs_02_mem_2",
+        "entity_id": "policy_refunds",
+        "content": "Current policy requires manager approval for subscription reversals above $250.",
+        "source": "policy_portal",
+        "created_at": "2026-03-01T00:00:00Z",
+        "valid_from": "2026-03-01T00:00:00Z",
+        "valid_until": null,
+        "status": "invalid",
+        "confidence": 0.95,
+        "retrieval_priority": 85,
+        "supersedes": [],
+        "tags": [
+          "current-policy"
+        ],
+        "operational_metadata": {
+          "memory_role": "policy",
+          "entity_match": true,
+          "temporal_scope": "current",
+          "disabled_for_replay": true
+        }
+      }
+    ]
+  },
+  "requested_model": "fake-deterministic",
+  "response_model": "fake-deterministic",
+  "model": "fake-deterministic",
+  "prompt_version": "day1-5-v1",
+  "prompt_content_hash": null,
+  "agent_input_schema_version": "day2a-v1",
+  "request_hash": null,
+  "retrieved_memory_ids": [
+    "cs_02_mem_1",
+    "cs_02_mem_3",
+    "cs_02_mem_2"
+  ],
+  "memory_snapshot": [
+    {
+      "memory_id": "cs_02_mem_1",
+      "entity_id": "customer_5502",
+      "content": "Old retention script said any cancelled-renewal case can be refunded immediately.",
+      "source": "retention_script",
+      "created_at": "2025-03-12T00:00:00Z",
+      "valid_from": "2025-03-12T00:00:00Z",
+      "valid_until": null,
+      "status": "invalid",
+      "confidence": 0.6,
+      "retrieval_priority": 97,
+      "supersedes": [],
+      "tags": [
+        "contradiction"
+      ],
+      "operational_metadata": {
+        "memory_role": "history",
+        "entity_match": true,
+        "temporal_scope": "ambiguous",
+        "disabled_for_replay": true
+      }
+    },
+    {
+      "memory_id": "cs_02_mem_3",
+      "entity_id": "subscription_5502",
+      "content": "The renewal amount was $299 and the cancellation timestamp preceded the renewal.",
+      "source": "subscription_system",
+      "created_at": "2026-07-10T00:00:00Z",
+      "valid_from": "2026-07-10T00:00:00Z",
+      "valid_until": null,
+      "status": "active",
+      "confidence": 0.98,
+      "retrieval_priority": 88,
+      "supersedes": [],
+      "tags": [
+        "amount",
+        "evidence"
+      ],
+      "operational_metadata": {
+        "memory_role": "evidence",
+        "entity_match": true,
+        "temporal_scope": "current"
+      }
+    },
+    {
+      "memory_id": "cs_02_mem_2",
+      "entity_id": "policy_refunds",
+      "content": "Current policy requires manager approval for subscription reversals above $250.",
+      "source": "policy_portal",
+      "created_at": "2026-03-01T00:00:00Z",
+      "valid_from": "2026-03-01T00:00:00Z",
+      "valid_until": null,
+      "status": "invalid",
+      "confidence": 0.95,
+      "retrieval_priority": 85,
+      "supersedes": [],
+      "tags": [
+        "current-policy"
+      ],
+      "operational_metadata": {
+        "memory_role": "policy",
+        "entity_match": true,
+        "temporal_scope": "current",
+        "disabled_for_replay": true
+      }
+    }
+  ],
+  "structured_response": {
+    "selected_action": "ISSUE_REFUND",
+    "action_arguments": {
+      "heuristic_version": "day1-5-v1",
+      "top_memory_ids": "cs_02_mem_1,cs_02_mem_3,cs_02_mem_2"
+    },
+    "cited_memory_ids": [
+      "cs_02_mem_1",
+      "cs_02_mem_3",
+      "cs_02_mem_2"
+    ],
+    "concise_rationale": "Deterministic heuristic selected the highest-scoring action.",
+    "uncertainty": 0.35,
+    "needs_human_review": false
+  },
+  "selected_action": "ISSUE_REFUND",
+  "action_arguments": {
+    "heuristic_version": "day1-5-v1",
+    "top_memory_ids": "cs_02_mem_1,cs_02_mem_3,cs_02_mem_2"
+  },
+  "cited_memory_ids": [
+    "cs_02_mem_1",
+    "cs_02_mem_3",
+    "cs_02_mem_2"
+  ],
+  "concise_rationale": "Deterministic heuristic selected the highest-scoring action.",
+  "uncertainty": 0.35,
+  "needs_human_review": false,
+  "tool_call": null,
+  "evaluation": {
+    "evaluator_result": {
+      "expected_action": "REQUEST_MANAGER_APPROVAL",
+      "selected_action": "ISSUE_REFUND",
+      "passed": false,
+      "reason": "selected action differed"
+    }
+  },
+  "passed": false,
+  "execution_source": "deterministic",
+  "cache_lookup_latency_ms": null,
+  "original_model_latency_ms": null,
+  "latency_ms": 1,
+  "token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  },
+  "request_token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  },
+  "cached_original_token_usage": null,
+  "billable_api_call": false,
+  "cache": {
+    "enabled": false,
+    "request_hash": null,
+    "hit": false,
+    "cache_path": null,
+    "cached_at": null
+  },
+  "parent_trace_id": "trace_a80d51a03c734f078e4b78fef084615b",
+  "investigation_id": "inv_02d29090642a48d18cb1b6188d1e6b4a",
+  "replay_intervention": {
+    "intervention_type": "DISABLE_MEMORIES",
+    "target_memory_ids": [
+      "cs_02_mem_1",
+      "cs_02_mem_2"
+    ],
+    "replacement_values": {},
+    "reason": "DISABLE_MEMORIES on cs_02_mem_1 + cs_02_mem_2",
+    "intervention_id": "intervention_0970da93b27c4a6b82c4c27ab67cd47e",
+    "before_states": {
+      "cs_02_mem_1": {
+        "memory_id": "cs_02_mem_1",
+        "entity_id": "customer_5502",
+        "content": "Old retention script said any cancelled-renewal case can be refunded immediately.",
+        "source": "retention_script",
+        "created_at": "2025-03-12T00:00:00Z",
+        "valid_from": "2025-03-12T00:00:00Z",
+        "valid_until": null,
+        "status": "uncertain",
+        "confidence": 0.6,
+        "retrieval_priority": 97,
+        "supersedes": [],
+        "tags": [
+          "contradiction"
+        ],
+        "operational_metadata": {
+          "memory_role": "history",
+          "entity_match": true,
+          "temporal_scope": "ambiguous"
+        }
+      },
+      "cs_02_mem_2": {
+        "memory_id": "cs_02_mem_2",
+        "entity_id": "policy_refunds",
+        "content": "Current policy requires manager approval for subscription reversals above $250.",
+        "source": "policy_portal",
+        "created_at": "2026-03-01T00:00:00Z",
+        "valid_from": "2026-03-01T00:00:00Z",
+        "valid_until": null,
+        "status": "active",
+        "confidence": 0.95,
+        "retrieval_priority": 85,
+        "supersedes": [],
+        "tags": [
+          "current-policy"
+        ],
+        "operational_metadata": {
+          "memory_role": "policy",
+          "entity_match": true,
+          "temporal_scope": "current"
+        }
+      }
+    },
+    "after_states": {
+      "cs_02_mem_1": {
+        "memory_id": "cs_02_mem_1",
+        "entity_id": "customer_5502",
+        "content": "Old retention script said any cancelled-renewal case can be refunded immediately.",
+        "source": "retention_script",
+        "created_at": "2025-03-12T00:00:00Z",
+        "valid_from": "2025-03-12T00:00:00Z",
+        "valid_until": null,
+        "status": "invalid",
+        "confidence": 0.6,
+        "retrieval_priority": 97,
+        "supersedes": [],
+        "tags": [
+          "contradiction"
+        ],
+        "operational_metadata": {
+          "memory_role": "history",
+          "entity_match": true,
+          "temporal_scope": "ambiguous",
+          "disabled_for_replay": true
+        }
+      },
+      "cs_02_mem_2": {
+        "memory_id": "cs_02_mem_2",
+        "entity_id": "policy_refunds",
+        "content": "Current policy requires manager approval for subscription reversals above $250.",
+        "source": "policy_portal",
+        "created_at": "2026-03-01T00:00:00Z",
+        "valid_from": "2026-03-01T00:00:00Z",
+        "valid_until": null,
+        "status": "invalid",
+        "confidence": 0.95,
+        "retrieval_priority": 85,
+        "supersedes": [],
+        "tags": [
+          "current-policy"
+        ],
+        "operational_metadata": {
+          "memory_role": "policy",
+          "entity_match": true,
+          "temporal_scope": "current",
+          "disabled_for_replay": true
+        }
+      }
+    },
+    "unchanged_input_hash": "12481ddea4e4d811cce91ca396e01fcd76356e12934d2f99ccc21512c93932f2",
+    "model": "fake-deterministic",
+    "prompt_version": "day1-5-v1",
+    "inference_configuration": {
+      "model": "gpt-5.6",
+      "timeout_seconds": 30.0,
+      "max_retries": 2,
+      "cache_enabled": false,
+      "prompt_version": "v1",
+      "reasoning_effort": null,
+      "verbosity": "low"
+    },
+    "created_at": "2026-07-19T00:03:23.410043Z"
+  },
+  "replay_role": "pairwise_intervention",
+  "error": null,
+  "created_at": "2026-07-19T00:03:23.419068Z"
+}

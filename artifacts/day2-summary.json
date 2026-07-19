@@ -1,0 +1,627 @@
+{
+  "git_commit_hash": "2d0943fb74079292bf8473931a19fd71494d2140",
+  "deterministic_baseline": {
+    "total_scenarios": 30,
+    "passed_scenarios": 22,
+    "failed_scenarios": 8,
+    "results_by_domain": {
+      "customer_support": {
+        "total": 10,
+        "passed": 7,
+        "failed": 3
+      },
+      "devops": {
+        "total": 10,
+        "passed": 8,
+        "failed": 2
+      },
+      "workplace_expense": {
+        "total": 10,
+        "passed": 7,
+        "failed": 3
+      }
+    },
+    "results_by_failure_category": {
+      "stale-memory": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "contradictory-memories": {
+        "total": 3,
+        "passed": 1,
+        "failed": 2
+      },
+      "wrong-user-memory": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "hallucinated-preference": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "obsolete-policy": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "missing-expiration": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "incorrect-retrieval-priority": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      },
+      "two-memory-interaction": {
+        "total": 3,
+        "passed": 0,
+        "failed": 3
+      },
+      "wrong-context-valid-memory": {
+        "total": 3,
+        "passed": 0,
+        "failed": 3
+      },
+      "newer-correct-memory-ignored": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      }
+    },
+    "scenario_results": [
+      {
+        "scenario_id": "cs_01",
+        "selected_action": "ISSUE_REFUND",
+        "expected_action": "ISSUE_REFUND",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "cs_01_mem_1",
+          "cs_01_mem_2",
+          "cs_01_mem_3"
+        ],
+        "trace_id": "trace_fbc7975a808e49be989d94e773302059",
+        "error": null
+      },
+      {
+        "scenario_id": "cs_02",
+        "selected_action": "ISSUE_REFUND",
+        "expected_action": "REQUEST_MANAGER_APPROVAL",
+        "passed": false,
+        "retrieved_memory_ids": [
+          "cs_02_mem_1",
+          "cs_02_mem_3",
+          "cs_02_mem_2"
+        ],
+        "trace_id": "trace_5411628614714e5da6ca8077990c3a72",
+        "error": null
+      },
+      {
+        "scenario_id": "cs_03",
+        "selected_action": "DENY_REFUND",
+        "expected_action": "DENY_REFUND",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "cs_03_mem_1",
+          "cs_03_mem_2",
+          "cs_03_mem_3"
+        ],
+        "trace_id": "trace_0a65a68928c74543baf27a50ebd380b5",
+        "error": null
+      },
+      {
+        "scenario_id": "cs_04",
+        "selected_action": "ASK_FOR_INFORMATION",
+        "expected_action": "ASK_FOR_INFORMATION",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "cs_04_mem_1",
+          "cs_04_mem_2",
+          "cs_04_mem_3"
+        ],
+        "trace_id": "trace_2cbe0d6bbfa04a9091456548102d08c8",
+        "error": null
+      },
+      {
+        "scenario_id": "cs_05",
+        "selected_action": "ISSUE_REFUND",
+        "expected_action": "ISSUE_REFUND",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "cs_05_mem_1",
+          "cs_05_mem_2",
+          "cs_05_mem_3"
+        ],
+        "trace_id": "trace_4dba63c176014e599f2548ca690bc8bc",
+        "error": null
+      },
+      {
+        "scenario_id": "cs_06",
+        "selected_action": "DENY_REFUND",
+        "expected_action": "DENY_REFUND",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "cs_06_mem_1",
+          "cs_06_mem_2",
+          "cs_06_mem_3"
+        ],
+        "trace_id": "trace_1971bbeab6084e3db292168a2c34b4fb",
+        "error": null
+      },
+      {
+        "scenario_id": "cs_07",
+        "selected_action": "ASK_FOR_INFORMATION",
+        "expected_action": "ASK_FOR_INFORMATION",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "cs_07_mem_1",
+          "cs_07_mem_2",
+          "cs_07_mem_3"
+        ],
+        "trace_id": "trace_f2701e269fbc4a41b10ef7af2a89b386",
+        "error": null
+      },
+      {
+        "scenario_id": "cs_08",
+        "selected_action": "DENY_REFUND",
+        "expected_action": "ISSUE_REFUND",
+        "passed": false,
+        "retrieved_memory_ids": [
+          "cs_08_mem_1",
+          "cs_08_mem_2",
+          "cs_08_mem_3"
+        ],
+        "trace_id": "trace_6b3dbe9476db46ed8d364aea0ca186f5",
+        "error": null
+      },
+      {
+        "scenario_id": "cs_09",
+        "selected_action": "ISSUE_REFUND",
+        "expected_action": "REQUEST_MANAGER_APPROVAL",
+        "passed": false,
+        "retrieved_memory_ids": [
+          "cs_09_mem_1",
+          "cs_09_mem_2",
+          "cs_09_mem_3"
+        ],
+        "trace_id": "trace_1af4b45721b64778bec09bff755ea317",
+        "error": null
+      },
+      {
+        "scenario_id": "cs_10",
+        "selected_action": "ISSUE_REFUND",
+        "expected_action": "ISSUE_REFUND",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "cs_10_mem_1",
+          "cs_10_mem_2",
+          "cs_10_mem_3"
+        ],
+        "trace_id": "trace_1c8048d891ab495cac812db294f90796",
+        "error": null
+      },
+      {
+        "scenario_id": "dev_01",
+        "selected_action": "DEPLOY_PRODUCTION",
+        "expected_action": "DEPLOY_PRODUCTION",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "dev_01_mem_1",
+          "dev_01_mem_2",
+          "dev_01_mem_3"
+        ],
+        "trace_id": "trace_afddeacdb3974c2c8188b70b2efe38a4",
+        "error": null
+      },
+      {
+        "scenario_id": "dev_02",
+        "selected_action": "REQUEST_ENGINEER_REVIEW",
+        "expected_action": "REQUEST_ENGINEER_REVIEW",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "dev_02_mem_1",
+          "dev_02_mem_2",
+          "dev_02_mem_3"
+        ],
+        "trace_id": "trace_0ccbfb32da794327ac15fa123f457fce",
+        "error": null
+      },
+      {
+        "scenario_id": "dev_03",
+        "selected_action": "BLOCK_DEPLOYMENT",
+        "expected_action": "BLOCK_DEPLOYMENT",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "dev_03_mem_1",
+          "dev_03_mem_2",
+          "dev_03_mem_3"
+        ],
+        "trace_id": "trace_2a27bb88359544dbb7b6d35d2f01c678",
+        "error": null
+      },
+      {
+        "scenario_id": "dev_04",
+        "selected_action": "REQUEST_ENGINEER_REVIEW",
+        "expected_action": "REQUEST_ENGINEER_REVIEW",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "dev_04_mem_1",
+          "dev_04_mem_2",
+          "dev_04_mem_3"
+        ],
+        "trace_id": "trace_7fad598fee614ea5900c95318d863876",
+        "error": null
+      },
+      {
+        "scenario_id": "dev_05",
+        "selected_action": "DEPLOY_PRODUCTION",
+        "expected_action": "DEPLOY_PRODUCTION",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "dev_05_mem_1",
+          "dev_05_mem_2",
+          "dev_05_mem_3"
+        ],
+        "trace_id": "trace_f7aa3933ecd24dbcb121a7d460a49fa2",
+        "error": null
+      },
+      {
+        "scenario_id": "dev_06",
+        "selected_action": "REQUEST_ENGINEER_REVIEW",
+        "expected_action": "REQUEST_ENGINEER_REVIEW",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "dev_06_mem_1",
+          "dev_06_mem_2",
+          "dev_06_mem_3"
+        ],
+        "trace_id": "trace_6340c7af87d2401c82d8c1d760096550",
+        "error": null
+      },
+      {
+        "scenario_id": "dev_07",
+        "selected_action": "DEPLOY_STAGING",
+        "expected_action": "DEPLOY_STAGING",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "dev_07_mem_1",
+          "dev_07_mem_2",
+          "dev_07_mem_3"
+        ],
+        "trace_id": "trace_8e4ecfae6a59430fb2b6d2bda51b36c4",
+        "error": null
+      },
+      {
+        "scenario_id": "dev_08",
+        "selected_action": "DEPLOY_PRODUCTION",
+        "expected_action": "BLOCK_DEPLOYMENT",
+        "passed": false,
+        "retrieved_memory_ids": [
+          "dev_08_mem_1",
+          "dev_08_mem_2",
+          "dev_08_mem_3"
+        ],
+        "trace_id": "trace_6c09bea864c54a59833c3a8d5ab2490b",
+        "error": null
+      },
+      {
+        "scenario_id": "dev_09",
+        "selected_action": "DEPLOY_STAGING",
+        "expected_action": "REQUEST_ENGINEER_REVIEW",
+        "passed": false,
+        "retrieved_memory_ids": [
+          "dev_09_mem_1",
+          "dev_09_mem_2",
+          "dev_09_mem_3"
+        ],
+        "trace_id": "trace_74c1782cf09b436bb00480e70a04eb6d",
+        "error": null
+      },
+      {
+        "scenario_id": "dev_10",
+        "selected_action": "DEPLOY_PRODUCTION",
+        "expected_action": "DEPLOY_PRODUCTION",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "dev_10_mem_1",
+          "dev_10_mem_2",
+          "dev_10_mem_3"
+        ],
+        "trace_id": "trace_6cc2eed7fd454e968da9a35da29e5477",
+        "error": null
+      },
+      {
+        "scenario_id": "exp_01",
+        "selected_action": "AUTO_APPROVE",
+        "expected_action": "AUTO_APPROVE",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "exp_01_mem_1",
+          "exp_01_mem_2",
+          "exp_01_mem_3"
+        ],
+        "trace_id": "trace_10f34c36efd04b8588b571d04044057f",
+        "error": null
+      },
+      {
+        "scenario_id": "exp_02",
+        "selected_action": "AUTO_APPROVE",
+        "expected_action": "ESCALATE_MANAGER",
+        "passed": false,
+        "retrieved_memory_ids": [
+          "exp_02_mem_1",
+          "exp_02_mem_2",
+          "exp_02_mem_3"
+        ],
+        "trace_id": "trace_416f6e0195f746409f5dfa25dffa3366",
+        "error": null
+      },
+      {
+        "scenario_id": "exp_03",
+        "selected_action": "DENY_EXPENSE",
+        "expected_action": "DENY_EXPENSE",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "exp_03_mem_1",
+          "exp_03_mem_2",
+          "exp_03_mem_3"
+        ],
+        "trace_id": "trace_c3452eda97ae4c59b7f46f003735a4b9",
+        "error": null
+      },
+      {
+        "scenario_id": "exp_04",
+        "selected_action": "REQUEST_DOCUMENTATION",
+        "expected_action": "REQUEST_DOCUMENTATION",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "exp_04_mem_1",
+          "exp_04_mem_2",
+          "exp_04_mem_3"
+        ],
+        "trace_id": "trace_c7f6fc8194f4427ab55b898126d7b52f",
+        "error": null
+      },
+      {
+        "scenario_id": "exp_05",
+        "selected_action": "ESCALATE_MANAGER",
+        "expected_action": "ESCALATE_MANAGER",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "exp_05_mem_1",
+          "exp_05_mem_2",
+          "exp_05_mem_3"
+        ],
+        "trace_id": "trace_71ea358ce4bf48d190a9ecd4e799af5b",
+        "error": null
+      },
+      {
+        "scenario_id": "exp_06",
+        "selected_action": "DENY_EXPENSE",
+        "expected_action": "DENY_EXPENSE",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "exp_06_mem_1",
+          "exp_06_mem_2",
+          "exp_06_mem_3"
+        ],
+        "trace_id": "trace_7f10db6d48fb434b892c29d8b615f495",
+        "error": null
+      },
+      {
+        "scenario_id": "exp_07",
+        "selected_action": "ESCALATE_MANAGER",
+        "expected_action": "ESCALATE_MANAGER",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "exp_07_mem_1",
+          "exp_07_mem_2",
+          "exp_07_mem_3"
+        ],
+        "trace_id": "trace_91b3c4f6d1784e8f9cc4f91c0810c6db",
+        "error": null
+      },
+      {
+        "scenario_id": "exp_08",
+        "selected_action": "AUTO_APPROVE",
+        "expected_action": "REQUEST_DOCUMENTATION",
+        "passed": false,
+        "retrieved_memory_ids": [
+          "exp_08_mem_1",
+          "exp_08_mem_2",
+          "exp_08_mem_3"
+        ],
+        "trace_id": "trace_e1d8ca70ca6e498296f01d0dfa94573a",
+        "error": null
+      },
+      {
+        "scenario_id": "exp_09",
+        "selected_action": "AUTO_APPROVE",
+        "expected_action": "DENY_EXPENSE",
+        "passed": false,
+        "retrieved_memory_ids": [
+          "exp_09_mem_1",
+          "exp_09_mem_2",
+          "exp_09_mem_3"
+        ],
+        "trace_id": "trace_f730094f2d624fdf803d78f9155c3afe",
+        "error": null
+      },
+      {
+        "scenario_id": "exp_10",
+        "selected_action": "AUTO_APPROVE",
+        "expected_action": "AUTO_APPROVE",
+        "passed": true,
+        "retrieved_memory_ids": [
+          "exp_10_mem_1",
+          "exp_10_mem_2",
+          "exp_10_mem_3"
+        ],
+        "trace_id": "trace_d52ae47f5724408c8866d02714bce5a1",
+        "error": null
+      }
+    ]
+  },
+  "gpt_baseline": {
+    "overall": {
+      "attempted_scenarios": 30,
+      "evaluated_scenarios": 30,
+      "passed_scenarios": 28,
+      "failed_scenarios": 2,
+      "infrastructure_errors": 0,
+      "pass_rate": 0.9333333333333333
+    },
+    "results_by_domain": {
+      "customer_support": {
+        "attempted": 10,
+        "evaluated": 10,
+        "passed": 9,
+        "failed": 1,
+        "infrastructure_errors": 0
+      },
+      "devops": {
+        "attempted": 10,
+        "evaluated": 10,
+        "passed": 10,
+        "failed": 0,
+        "infrastructure_errors": 0
+      },
+      "workplace_expense": {
+        "attempted": 10,
+        "evaluated": 10,
+        "passed": 9,
+        "failed": 1,
+        "infrastructure_errors": 0
+      }
+    },
+    "results_by_failure_category": {
+      "contradictory-memories": {
+        "attempted": 3,
+        "evaluated": 3,
+        "passed": 3,
+        "failed": 0,
+        "infrastructure_errors": 0
+      },
+      "hallucinated-preference": {
+        "attempted": 3,
+        "evaluated": 3,
+        "passed": 3,
+        "failed": 0,
+        "infrastructure_errors": 0
+      },
+      "incorrect-retrieval-priority": {
+        "attempted": 3,
+        "evaluated": 3,
+        "passed": 3,
+        "failed": 0,
+        "infrastructure_errors": 0
+      },
+      "missing-expiration": {
+        "attempted": 3,
+        "evaluated": 3,
+        "passed": 3,
+        "failed": 0,
+        "infrastructure_errors": 0
+      },
+      "newer-correct-memory-ignored": {
+        "attempted": 3,
+        "evaluated": 3,
+        "passed": 3,
+        "failed": 0,
+        "infrastructure_errors": 0
+      },
+      "obsolete-policy": {
+        "attempted": 3,
+        "evaluated": 3,
+        "passed": 3,
+        "failed": 0,
+        "infrastructure_errors": 0
+      },
+      "stale-memory": {
+        "attempted": 3,
+        "evaluated": 3,
+        "passed": 2,
+        "failed": 1,
+        "infrastructure_errors": 0
+      },
+      "two-memory-interaction": {
+        "attempted": 3,
+        "evaluated": 3,
+        "passed": 3,
+        "failed": 0,
+        "infrastructure_errors": 0
+      },
+      "wrong-context-valid-memory": {
+        "attempted": 3,
+        "evaluated": 3,
+        "passed": 2,
+        "failed": 1,
+        "infrastructure_errors": 0
+      },
+      "wrong-user-memory": {
+        "attempted": 3,
+        "evaluated": 3,
+        "passed": 3,
+        "failed": 0,
+        "infrastructure_errors": 0
+      }
+    },
+    "failed_scenario_ids": [
+      "cs_01",
+      "exp_09"
+    ],
+    "model": "gpt-5.6",
+    "prompt_versions": {
+      "customer_support": "v1",
+      "devops": "v1",
+      "workplace_expense": "v1"
+    }
+  },
+  "selected_deep_dive_case": {
+    "scenario_id": "exp_09",
+    "investigation_id": "inv_ff4ed6ca0666440a85a758168e5ca9b4"
+  },
+  "strongest_individual_replay_result": {
+    "scenario_id": "cs_01",
+    "memory_id": "cs_01_mem_2",
+    "intervention_type": "REMOVE_MEMORY",
+    "influence_delta": 1.0,
+    "action_distribution": {
+      "ISSUE_REFUND": 3
+    }
+  },
+  "strongest_pairwise_result": {
+    "scenario_id": "cs_01",
+    "target_memory_ids": [
+      "cs_01_mem_1",
+      "cs_01_mem_2"
+    ],
+    "intervention_type": "REMOVE_MEMORIES",
+    "combined_influence": 1.0,
+    "interaction_score": 0.0,
+    "interaction_synergy": 0.0,
+    "classification": "dominated by one memory"
+  },
+  "api_usage": {
+    "input_tokens": 77723,
+    "output_tokens": 12213,
+    "total_tokens": 89936
+  },
+  "approximate_api_cost_usd": 0.755005,
+  "pricing_reference": {
+    "model_alias": "gpt-5.6",
+    "priced_tier": "gpt-5.6-sol",
+    "input_per_1m_tokens_usd": 5.0,
+    "output_per_1m_tokens_usd": 30.0
+  },
+  "test_count": 74,
+  "known_limitations": [
+    "Pairwise and isolation evidence remain prompt-sensitive.",
+    "Correct outcomes after ablation may still be unsupported by remaining evidence.",
+    "Public API intentionally withholds benchmark answer-key fields."
+  ]
+}

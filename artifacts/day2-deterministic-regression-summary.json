@@ -1,0 +1,466 @@
+{
+  "total_scenarios": 30,
+  "passed_scenarios": 22,
+  "failed_scenarios": 8,
+  "results_by_domain": {
+    "customer_support": {
+      "total": 10,
+      "passed": 7,
+      "failed": 3
+    },
+    "devops": {
+      "total": 10,
+      "passed": 8,
+      "failed": 2
+    },
+    "workplace_expense": {
+      "total": 10,
+      "passed": 7,
+      "failed": 3
+    }
+  },
+  "results_by_failure_category": {
+    "stale-memory": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0
+    },
+    "contradictory-memories": {
+      "total": 3,
+      "passed": 1,
+      "failed": 2
+    },
+    "wrong-user-memory": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0
+    },
+    "hallucinated-preference": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0
+    },
+    "obsolete-policy": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0
+    },
+    "missing-expiration": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0
+    },
+    "incorrect-retrieval-priority": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0
+    },
+    "two-memory-interaction": {
+      "total": 3,
+      "passed": 0,
+      "failed": 3
+    },
+    "wrong-context-valid-memory": {
+      "total": 3,
+      "passed": 0,
+      "failed": 3
+    },
+    "newer-correct-memory-ignored": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0
+    }
+  },
+  "scenario_results": [
+    {
+      "scenario_id": "cs_01",
+      "selected_action": "ISSUE_REFUND",
+      "expected_action": "ISSUE_REFUND",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "cs_01_mem_1",
+        "cs_01_mem_2",
+        "cs_01_mem_3"
+      ],
+      "trace_id": "trace_6a80ee6af12c42f18d50f686599be3bd",
+      "error": null
+    },
+    {
+      "scenario_id": "cs_02",
+      "selected_action": "ISSUE_REFUND",
+      "expected_action": "REQUEST_MANAGER_APPROVAL",
+      "passed": false,
+      "retrieved_memory_ids": [
+        "cs_02_mem_1",
+        "cs_02_mem_3",
+        "cs_02_mem_2"
+      ],
+      "trace_id": "trace_a80d51a03c734f078e4b78fef084615b",
+      "error": null
+    },
+    {
+      "scenario_id": "cs_03",
+      "selected_action": "DENY_REFUND",
+      "expected_action": "DENY_REFUND",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "cs_03_mem_1",
+        "cs_03_mem_2",
+        "cs_03_mem_3"
+      ],
+      "trace_id": "trace_d0b7e6ed15084fc9ab0bbe6e3a4e9e80",
+      "error": null
+    },
+    {
+      "scenario_id": "cs_04",
+      "selected_action": "ASK_FOR_INFORMATION",
+      "expected_action": "ASK_FOR_INFORMATION",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "cs_04_mem_1",
+        "cs_04_mem_2",
+        "cs_04_mem_3"
+      ],
+      "trace_id": "trace_597d93f95b8d479982667a8460a229c8",
+      "error": null
+    },
+    {
+      "scenario_id": "cs_05",
+      "selected_action": "ISSUE_REFUND",
+      "expected_action": "ISSUE_REFUND",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "cs_05_mem_1",
+        "cs_05_mem_2",
+        "cs_05_mem_3"
+      ],
+      "trace_id": "trace_a1a2c0b28137400fa2cbd3a143788c04",
+      "error": null
+    },
+    {
+      "scenario_id": "cs_06",
+      "selected_action": "DENY_REFUND",
+      "expected_action": "DENY_REFUND",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "cs_06_mem_1",
+        "cs_06_mem_2",
+        "cs_06_mem_3"
+      ],
+      "trace_id": "trace_6bdb3d8416894624925df15ad789b2ee",
+      "error": null
+    },
+    {
+      "scenario_id": "cs_07",
+      "selected_action": "ASK_FOR_INFORMATION",
+      "expected_action": "ASK_FOR_INFORMATION",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "cs_07_mem_1",
+        "cs_07_mem_2",
+        "cs_07_mem_3"
+      ],
+      "trace_id": "trace_64c60086b4e74ac4a4300bd70e05a365",
+      "error": null
+    },
+    {
+      "scenario_id": "cs_08",
+      "selected_action": "DENY_REFUND",
+      "expected_action": "ISSUE_REFUND",
+      "passed": false,
+      "retrieved_memory_ids": [
+        "cs_08_mem_1",
+        "cs_08_mem_2",
+        "cs_08_mem_3"
+      ],
+      "trace_id": "trace_83d6d4085cad46bc9af4e3a55e4ffab5",
+      "error": null
+    },
+    {
+      "scenario_id": "cs_09",
+      "selected_action": "ISSUE_REFUND",
+      "expected_action": "REQUEST_MANAGER_APPROVAL",
+      "passed": false,
+      "retrieved_memory_ids": [
+        "cs_09_mem_1",
+        "cs_09_mem_2",
+        "cs_09_mem_3"
+      ],
+      "trace_id": "trace_b39a18ab2d67493c82351e990dba874e",
+      "error": null
+    },
+    {
+      "scenario_id": "cs_10",
+      "selected_action": "ISSUE_REFUND",
+      "expected_action": "ISSUE_REFUND",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "cs_10_mem_1",
+        "cs_10_mem_2",
+        "cs_10_mem_3"
+      ],
+      "trace_id": "trace_5360c54f9fbc4819aaad47cb475ad83d",
+      "error": null
+    },
+    {
+      "scenario_id": "dev_01",
+      "selected_action": "DEPLOY_PRODUCTION",
+      "expected_action": "DEPLOY_PRODUCTION",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "dev_01_mem_1",
+        "dev_01_mem_2",
+        "dev_01_mem_3"
+      ],
+      "trace_id": "trace_68ee15f722cf4e1196f9840ff38703f4",
+      "error": null
+    },
+    {
+      "scenario_id": "dev_02",
+      "selected_action": "REQUEST_ENGINEER_REVIEW",
+      "expected_action": "REQUEST_ENGINEER_REVIEW",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "dev_02_mem_1",
+        "dev_02_mem_2",
+        "dev_02_mem_3"
+      ],
+      "trace_id": "trace_caee07c113f04424a144e66c38738b5c",
+      "error": null
+    },
+    {
+      "scenario_id": "dev_03",
+      "selected_action": "BLOCK_DEPLOYMENT",
+      "expected_action": "BLOCK_DEPLOYMENT",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "dev_03_mem_1",
+        "dev_03_mem_2",
+        "dev_03_mem_3"
+      ],
+      "trace_id": "trace_2d17b719b9824eb9ad42dbe9726aa87d",
+      "error": null
+    },
+    {
+      "scenario_id": "dev_04",
+      "selected_action": "REQUEST_ENGINEER_REVIEW",
+      "expected_action": "REQUEST_ENGINEER_REVIEW",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "dev_04_mem_1",
+        "dev_04_mem_2",
+        "dev_04_mem_3"
+      ],
+      "trace_id": "trace_3ca4ef6d2cdb4e2392788edf35908735",
+      "error": null
+    },
+    {
+      "scenario_id": "dev_05",
+      "selected_action": "DEPLOY_PRODUCTION",
+      "expected_action": "DEPLOY_PRODUCTION",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "dev_05_mem_1",
+        "dev_05_mem_2",
+        "dev_05_mem_3"
+      ],
+      "trace_id": "trace_3039b1bb69ae47b997494ab016e10865",
+      "error": null
+    },
+    {
+      "scenario_id": "dev_06",
+      "selected_action": "REQUEST_ENGINEER_REVIEW",
+      "expected_action": "REQUEST_ENGINEER_REVIEW",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "dev_06_mem_1",
+        "dev_06_mem_2",
+        "dev_06_mem_3"
+      ],
+      "trace_id": "trace_e5751b4980ea4e7ab8cb24cdd80a26be",
+      "error": null
+    },
+    {
+      "scenario_id": "dev_07",
+      "selected_action": "DEPLOY_STAGING",
+      "expected_action": "DEPLOY_STAGING",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "dev_07_mem_1",
+        "dev_07_mem_2",
+        "dev_07_mem_3"
+      ],
+      "trace_id": "trace_8c5fabb101084992a9b59377853b55d6",
+      "error": null
+    },
+    {
+      "scenario_id": "dev_08",
+      "selected_action": "DEPLOY_PRODUCTION",
+      "expected_action": "BLOCK_DEPLOYMENT",
+      "passed": false,
+      "retrieved_memory_ids": [
+        "dev_08_mem_1",
+        "dev_08_mem_2",
+        "dev_08_mem_3"
+      ],
+      "trace_id": "trace_20e774992b634ddea841c4250c0358e8",
+      "error": null
+    },
+    {
+      "scenario_id": "dev_09",
+      "selected_action": "DEPLOY_STAGING",
+      "expected_action": "REQUEST_ENGINEER_REVIEW",
+      "passed": false,
+      "retrieved_memory_ids": [
+        "dev_09_mem_1",
+        "dev_09_mem_2",
+        "dev_09_mem_3"
+      ],
+      "trace_id": "trace_59d02208072d46a4a50ff3a6a190eebe",
+      "error": null
+    },
+    {
+      "scenario_id": "dev_10",
+      "selected_action": "DEPLOY_PRODUCTION",
+      "expected_action": "DEPLOY_PRODUCTION",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "dev_10_mem_1",
+        "dev_10_mem_2",
+        "dev_10_mem_3"
+      ],
+      "trace_id": "trace_31ded5a43aea410b87f893ef421fbd97",
+      "error": null
+    },
+    {
+      "scenario_id": "exp_01",
+      "selected_action": "AUTO_APPROVE",
+      "expected_action": "AUTO_APPROVE",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "exp_01_mem_1",
+        "exp_01_mem_2",
+        "exp_01_mem_3"
+      ],
+      "trace_id": "trace_62e195aad37e43be80616e2d25e524e3",
+      "error": null
+    },
+    {
+      "scenario_id": "exp_02",
+      "selected_action": "AUTO_APPROVE",
+      "expected_action": "ESCALATE_MANAGER",
+      "passed": false,
+      "retrieved_memory_ids": [
+        "exp_02_mem_1",
+        "exp_02_mem_2",
+        "exp_02_mem_3"
+      ],
+      "trace_id": "trace_23a22c25d26e422e9d68009769def742",
+      "error": null
+    },
+    {
+      "scenario_id": "exp_03",
+      "selected_action": "DENY_EXPENSE",
+      "expected_action": "DENY_EXPENSE",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "exp_03_mem_1",
+        "exp_03_mem_2",
+        "exp_03_mem_3"
+      ],
+      "trace_id": "trace_88457b865c9e4b9baead01c97e8ed9b4",
+      "error": null
+    },
+    {
+      "scenario_id": "exp_04",
+      "selected_action": "REQUEST_DOCUMENTATION",
+      "expected_action": "REQUEST_DOCUMENTATION",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "exp_04_mem_1",
+        "exp_04_mem_2",
+        "exp_04_mem_3"
+      ],
+      "trace_id": "trace_0647e0f87a3944d9acbe65bb05a7c2c6",
+      "error": null
+    },
+    {
+      "scenario_id": "exp_05",
+      "selected_action": "ESCALATE_MANAGER",
+      "expected_action": "ESCALATE_MANAGER",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "exp_05_mem_1",
+        "exp_05_mem_2",
+        "exp_05_mem_3"
+      ],
+      "trace_id": "trace_eed58b200d4f4330a0f8ef2a4c297eb5",
+      "error": null
+    },
+    {
+      "scenario_id": "exp_06",
+      "selected_action": "DENY_EXPENSE",
+      "expected_action": "DENY_EXPENSE",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "exp_06_mem_1",
+        "exp_06_mem_2",
+        "exp_06_mem_3"
+      ],
+      "trace_id": "trace_8d7093bfb660449f885db91b0608b043",
+      "error": null
+    },
+    {
+      "scenario_id": "exp_07",
+      "selected_action": "ESCALATE_MANAGER",
+      "expected_action": "ESCALATE_MANAGER",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "exp_07_mem_1",
+        "exp_07_mem_2",
+        "exp_07_mem_3"
+      ],
+      "trace_id": "trace_b2516d079f50478a90a5dcd99cecbcbb",
+      "error": null
+    },
+    {
+      "scenario_id": "exp_08",
+      "selected_action": "AUTO_APPROVE",
+      "expected_action": "REQUEST_DOCUMENTATION",
+      "passed": false,
+      "retrieved_memory_ids": [
+        "exp_08_mem_1",
+        "exp_08_mem_2",
+        "exp_08_mem_3"
+      ],
+      "trace_id": "trace_6bd679923a4b48f996d571e832e6366c",
+      "error": null
+    },
+    {
+      "scenario_id": "exp_09",
+      "selected_action": "AUTO_APPROVE",
+      "expected_action": "DENY_EXPENSE",
+      "passed": false,
+      "retrieved_memory_ids": [
+        "exp_09_mem_1",
+        "exp_09_mem_2",
+        "exp_09_mem_3"
+      ],
+      "trace_id": "trace_204768aff5f4453bb75d016d7edcf0d1",
+      "error": null
+    },
+    {
+      "scenario_id": "exp_10",
+      "selected_action": "AUTO_APPROVE",
+      "expected_action": "AUTO_APPROVE",
+      "passed": true,
+      "retrieved_memory_ids": [
+        "exp_10_mem_1",
+        "exp_10_mem_2",
+        "exp_10_mem_3"
+      ],
+      "trace_id": "trace_63e79a24e52c4f8ab0e673ea49505ef1",
+      "error": null
+    }
+  ]
+}
